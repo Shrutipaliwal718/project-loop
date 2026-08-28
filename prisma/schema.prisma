@@ -1,0 +1,112 @@
+// Prisma Schema for Project LOOP (Supabase PostgreSQL)
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [pgvector(map: "vector")]
+}
+
+enum Role {
+  ADMIN
+  ANALYST
+  VIEWER
+}
+
+enum FeedbackStatus {
+  NEW
+  REVIEWED
+  ACTIONED
+}
+
+enum Sentiment {
+  Positive
+  Negative
+  Neutral
+  Mixed
+}
+
+model Workspace {
+  id          String     @id @default(cuid())
+  name        String
+  slug        String     @unique
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  users       User[]
+  feedbacks   Feedback[]
+  vocReports  VoCReport[]
+
+  @@map("workspaces")
+}
+
+model User {
+  id          String     @id @default(cuid())
+  name        String
+  email       String     @unique
+  password    String
+  role        Role       @default(ANALYST)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  workspaceId String
+  workspace   Workspace  @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@map("users")
+}
+
+model Feedback {
+  id              String         @id @default(cuid())
+  title           String
+  content         String
+  channel         String         // CSV, Manual, Zendesk, Intercom, App Store, Play Store, Trustpilot
+  customerSegment String?        @default("Pro") // Enterprise, Pro, Free, SMB
+  status          FeedbackStatus @default(NEW)
+  
+  // AI Auto-Classification Fields
+  sentiment       Sentiment      @default(Neutral)
+  sentimentScore  Float          @default(0.0) // -1.0 to 1.0
+  category        String         @default("General") // Billing, UX/UI, Performance, Bug, Feature Request
+
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  workspaceId     String
+  workspace       Workspace      @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  embeddings      VectorEmbedding[]
+
+  @@map("feedbacks")
+}
+
+model VectorEmbedding {
+  id          String   @id @default(cuid())
+  content     String
+  embedding   Unsupported("vector(1536)")? // 1536 dimension for OpenAI/Claude RAG vector search
+
+  feedbackId  String
+  feedback    Feedback @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime @default(now())
+
+  @@map("vector_embeddings")
+}
+
+model VoCReport {
+  id          String    @id @default(cuid())
+  title       String
+  summary     String
+  keyMetrics  String    // JSON stringified summary metrics
+  pdfUrl      String?
+  
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime  @default(now())
+
+  @@map("voc_reports")
+}
