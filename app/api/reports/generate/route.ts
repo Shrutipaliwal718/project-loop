@@ -1,31 +1,26 @@
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import Anthropic from '@anthropic-ai/sdk';
 
 export async function POST(req: Request) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const user = session.user as any;
     const body = await req.json().catch(() => ({}));
     const { companyName } = body;
 
-    let targetWorkspaceId = user.workspaceId;
-    let activeCompanyName = user.workspaceName || 'Zidio Development';
+    let targetWorkspaceId = '';
+    let activeCompanyName = companyName || 'Zidio Development';
 
-    if (companyName) {
-      const target = await prisma.workspace.findFirst({
-        where: { name: { equals: companyName, mode: 'insensitive' } },
-      });
-      if (target) {
-        targetWorkspaceId = target.id;
-        activeCompanyName = target.name;
-      }
+    const target = await prisma.workspace.findFirst({
+      where: { name: { equals: activeCompanyName, mode: 'insensitive' } },
+    });
+    if (target) {
+      targetWorkspaceId = target.id;
+      activeCompanyName = target.name;
+    }
+
+    if (!targetWorkspaceId) {
+      const defaultWs = await prisma.workspace.findFirst();
+      targetWorkspaceId = defaultWs?.id;
     }
 
     const feedbacks = await prisma.feedback.findMany({

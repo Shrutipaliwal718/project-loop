@@ -86,7 +86,7 @@ model Feedback {
 model VectorEmbedding {
   id          String   @id @default(cuid())
   content     String
-  embedding   Unsupported("vector(1536)")? // 1536 dimension for OpenAI/Claude RAG vector search
+  embedding   Unsupported("vector(384)")? // 384 dimension for all-MiniLM-L6-v2 local transformer
 
   feedbackId  String
   feedback    Feedback @relation(fields: [feedbackId], references: [id], onDelete: Cascade)

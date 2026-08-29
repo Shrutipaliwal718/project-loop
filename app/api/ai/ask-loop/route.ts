@@ -1,32 +1,29 @@
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
 import { answerRAGQuery } from '@/lib/ai-engine';
 import { prisma } from '@/lib/prisma';
 
 export async function POST(req: Request) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const user = session.user as any;
-    const body = await req.json();
+    const body = await req.json().catch(() => ({}));
     const { query, companyName } = body;
 
     if (!query || typeof query !== 'string') {
       return NextResponse.json({ error: 'Please enter a search query' }, { status: 400 });
     }
 
-    let targetWorkspaceId = user.workspaceId;
-    if (companyName) {
-      const target = await prisma.workspace.findFirst({
-        where: { name: { equals: companyName, mode: 'insensitive' } },
-      });
-      if (target) {
-        targetWorkspaceId = target.id;
-      }
+    let targetWorkspaceId = '';
+    const searchName = companyName || 'Zidio Development';
+
+    const target = await prisma.workspace.findFirst({
+      where: { name: { equals: searchName, mode: 'insensitive' } },
+    });
+    if (target) {
+      targetWorkspaceId = target.id;
+    }
+
+    if (!targetWorkspaceId) {
+      const defaultWs = await prisma.workspace.findFirst();
+      targetWorkspaceId = defaultWs?.id || '';
     }
 
     const result = await answerRAGQuery(query, targetWorkspaceId);

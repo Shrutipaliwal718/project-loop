@@ -1,12 +1,52 @@
 import { Sentiment } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 import Anthropic from '@anthropic-ai/sdk';
+import { pipeline } from '@xenova/transformers';
 
 export interface ClassificationResult {
   sentiment: Sentiment;
   sentimentScore: number;
   category: string;
   keyQuote?: string;
+}
+
+let embedder: any = null;
+
+/**
+ * Generate 384-dimensional vector embedding using Local Transformers
+ */
+export async function generateEmbedding(text: string): Promise<number[] | null> {
+  try {
+    if (!embedder) {
+      embedder = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2');
+    }
+    const output = await embedder(text.replace(/\n/g, ' '), { pooling: 'mean', normalize: true });
+    return Array.from(output.data);
+  } catch (error) {
+    console.error('Error generating embedding:', error);
+    return null;
+  }
+}
+
+/**
+ * Helper to generate and store embedding in the database
+ */
+export async function storeFeedbackEmbedding(feedbackId: string, title: string, content: string, category: string) {
+  
+  const textToEmbed = `Title: ${title}\nContent: ${content}\nCategory: ${category}`;
+  const embedding = await generateEmbedding(textToEmbed);
+  
+  if (embedding) {
+    const embeddingString = `[${embedding.join(',')}]`;
+    try {
+      await prisma.$executeRawUnsafe(`
+        INSERT INTO vector_embeddings (id, content, embedding, "feedbackId", "createdAt")
+        VALUES (gen_random_uuid(), $1, $2::vector, $3, NOW())
+      `, textToEmbed, embeddingString, feedbackId);
+    } catch (err) {
+      console.error('Failed to insert vector embedding:', err);
+    }
+  }
 }
 
 /**
@@ -62,25 +102,50 @@ JSON structure:
 }
 
 /**
- * Ask LOOP RAG Q&A Engine using REAL Anthropic Claude API
+ * Ask LOOP RAG Q&A Engine using pgvector Semantic Search + Anthropic Claude API
  */
 export async function answerRAGQuery(query: string, workspaceId: string) {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+  const claudeApiKey = process.env.ANTHROPIC_API_KEY;
 
-  // Retrieve workspace feedback items from Supabase Postgres
-  const allFeedbacks = await prisma.feedback.findMany({
-    where: { workspaceId },
-    orderBy: { createdAt: 'desc' },
-    take: 40,
-  });
+  let topFeedbacks: any[] = [];
 
-  const contextText = allFeedbacks
+  // Step 1 & 2: Generate Query Embedding & Perform Vector Search
+  const queryEmbedding = await generateEmbedding(query);
+  if (queryEmbedding) {
+      const embeddingString = `[${queryEmbedding.join(',')}]`;
+      
+      try {
+        // Find top 10 most semantically similar feedbacks in the workspace
+        topFeedbacks = await prisma.$queryRawUnsafe(`
+          SELECT f.id, f.title, f.channel, f.category, f.sentiment, f.content,
+                 (v.embedding <=> $1::vector) as distance
+          FROM vector_embeddings v
+          JOIN feedbacks f ON v."feedbackId" = f.id
+          WHERE f."workspaceId" = $2
+          ORDER BY distance ASC
+          LIMIT 10;
+        `, embeddingString, workspaceId);
+      } catch (err) {
+        console.error('Vector search error:', err);
+      }
+    }
+
+  // Fallback if vector search failed or keys are missing: just grab recent 10
+  if (!topFeedbacks || topFeedbacks.length === 0) {
+    topFeedbacks = await prisma.feedback.findMany({
+      where: { workspaceId },
+      orderBy: { createdAt: 'desc' },
+      take: 10,
+    });
+  }
+
+  const contextText = topFeedbacks
     .map((fb) => `[Ticket ID: ${fb.id}] Title: ${fb.title} | Channel: ${fb.channel} | Category: ${fb.category} | Sentiment: ${fb.sentiment} | Content: ${fb.content}`)
     .join('\n');
 
-  if (apiKey) {
+  if (claudeApiKey) {
     try {
-      const anthropic = new Anthropic({ apiKey });
+      const anthropic = new Anthropic({ apiKey: claudeApiKey });
       const response = await anthropic.messages.create({
         model: 'claude-3-5-sonnet-20240620',
         max_tokens: 500,
@@ -93,7 +158,7 @@ ${contextText}
 
 User Question: "${query}"
 
-Synthesize a clear, executive-grade factual answer citing specific trends, customer sentiments, and ticket IDs.`,
+Synthesize a clear, executive-grade factual answer citing specific trends, customer sentiments, and ticket IDs. If the context doesn't contain the answer, politely state that.`,
           },
         ],
       });
@@ -102,7 +167,7 @@ Synthesize a clear, executive-grade factual answer citing specific trends, custo
 
       return {
         answer,
-        sources: allFeedbacks.slice(0, 4).map((s) => ({
+        sources: topFeedbacks.map((s) => ({
           id: s.id,
           title: s.title,
           channel: s.channel,
@@ -117,8 +182,8 @@ Synthesize a clear, executive-grade factual answer citing specific trends, custo
   }
 
   return {
-    answer: `Based on customer feedback dataset analysis: Key themes include billing friction on checkout payments and praise for dark mode UI aesthetics.`,
-    sources: allFeedbacks.slice(0, 4).map((s) => ({
+    answer: `Based on semantic similarity search: The system retrieved relevant tickets, but AI text generation failed. Please check your API keys.`,
+    sources: topFeedbacks.map((s) => ({
       id: s.id,
       title: s.title,
       channel: s.channel,

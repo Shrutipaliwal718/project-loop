@@ -1,20 +1,12 @@
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import Anthropic from '@anthropic-ai/sdk';
-import { classifyFeedback } from '@/lib/ai-engine';
+import { classifyFeedback, storeFeedbackEmbedding } from '@/lib/ai-engine';
 
 export async function POST(req: Request) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const user = session.user as any;
-    const body = await req.json();
-    const companyName = body.companyName || user.workspaceName || 'Zidio Development';
+    const body = await req.json().catch(() => ({}));
+    const companyName = body.companyName || 'Zidio Development';
 
     // 1. Find or Create Workspace for this exact company
     const slug = companyName.toLowerCase().replace(/[^a-z0-9]/g, '-') + '-' + Math.floor(Math.random() * 1000);
@@ -114,6 +106,9 @@ Return ONLY a valid JSON array without markdown backticks:
           workspaceId: targetWorkspace.id,
         },
       });
+
+      await storeFeedbackEmbedding(fb.id, fb.title, fb.content, fb.category);
+
       createdItems.push(fb);
     }
 

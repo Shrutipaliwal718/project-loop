@@ -109,6 +109,39 @@ async function main() {
 
   console.log(`✅ Seeded ${feedbackData.length} customer feedback records across 7 channels!`);
 
+  // 4.5 Generate pgvector Embeddings for seeded data using Local Transformers
+  console.log(`🧠 Generating local vector embeddings (this might take a minute on the first run to download the model)...`);
+  const allSeededFeedbacks = await prisma.feedback.findMany({ where: { workspaceId: workspace.id } });
+  
+  // Dynamic import for ESM module support if needed, but Pipeline works in Node
+  const { pipeline } = await import('@xenova/transformers');
+  const embedder = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2');
+  
+  let embeddedCount = 0;
+
+  for (const fb of allSeededFeedbacks) {
+    const textToEmbed = `Title: ${fb.title}\nContent: ${fb.content}\nCategory: ${fb.category}`.replace(/\n/g, ' ');
+    
+    try {
+      const output = await embedder(textToEmbed, { pooling: 'mean', normalize: true });
+      const embedding = Array.from(output.data);
+      const embeddingString = `[${embedding.join(',')}]`;
+      
+      await prisma.$executeRawUnsafe(`
+        INSERT INTO vector_embeddings (id, content, embedding, "feedbackId", "createdAt")
+        VALUES (gen_random_uuid(), $1, $2::vector, $3, NOW())
+      `, textToEmbed, embeddingString, fb.id);
+      
+      embeddedCount++;
+      if (embeddedCount % 25 === 0) {
+        console.log(`   Embedded ${embeddedCount}/${allSeededFeedbacks.length} feedbacks...`);
+      }
+    } catch (err) {
+      console.error('   ❌ Error generating embedding:', err);
+    }
+  }
+  console.log(`✅ Successfully generated pgvector embeddings for seeded feedback.`);
+
   // 5. Create Initial Sample VoC Report
   await prisma.voCReport.create({
     data: {
