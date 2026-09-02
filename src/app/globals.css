@@ -2,22 +2,434 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* =========================================================
+   LOOP — GLOBAL THEME SYSTEM
+   Dark + Light mode controlled from <html class="dark/light">
+   ========================================================= */
+
+/* =========================================================
+   DARK MODE — DEFAULT
+   ========================================================= */
+
+:root,
+html.dark {
+  --loop-bg: #030912;
+  --loop-bg-secondary: #050b14;
+
+  --loop-surface: #091523;
+  --loop-surface-secondary: #0c1929;
+  --loop-card: #0b1726;
+  --loop-card-hover: #102033;
+
+  --loop-text: #f8fafc;
+  --loop-text-secondary: #cbd5e1;
+  --loop-text-muted: #94a3b8;
+  --loop-text-subtle: #64748b;
+
+  --loop-border: rgba(255, 255, 255, 0.08);
+  --loop-border-strong: rgba(255, 255, 255, 0.14);
+
+  --loop-cyan: #19e6d1;
+  --loop-blue: #28a9ff;
+  --loop-purple: #8b5cf6;
+  --loop-violet: #c45cff;
+
+  --loop-green: #35e879;
+  --loop-amber: #f6a723;
+  --loop-red: #ff4d72;
+
+  /* Dark-mode glows */
+  --loop-cyan-glow: rgba(25, 230, 209, 0.14);
+  --loop-blue-glow: rgba(40, 169, 255, 0.14);
+  --loop-purple-glow: rgba(139, 92, 246, 0.14);
+  --loop-red-glow: rgba(255, 77, 114, 0.12);
+
+  /* Shadows */
+  --loop-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+
+  --loop-shadow-small: 0 8px 25px rgba(0, 0, 0, 0.25);
+
+  --loop-shadow-cyan: 0 0 35px rgba(25, 230, 209, 0.14);
+
+  --loop-shadow-purple: 0 0 35px rgba(139, 92, 246, 0.14);
+
+  /* Dashboard */
+  --loop-chart-grid: rgba(255, 255, 255, 0.06);
+  --loop-chart-text: #64748b;
+
+  /* Logo */
+  --loop-logo-primary: #19e6d1;
+  --loop-logo-secondary: #28a9ff;
 }
+
+/* =========================================================
+   LIGHT MODE
+   Dark surfaces → White / very light surfaces
+   Light text → Dark text
+   Grey text → Stronger dark grey
+   Bright cyan/purple → Deeper versions
+   Glows → Much softer
+   ========================================================= */
+
+html.light {
+  --loop-bg: #f8fafc;
+  --loop-bg-secondary: #f1f5f9;
+
+  --loop-surface: #ffffff;
+  --loop-surface-secondary: #f8fafc;
+  --loop-card: #ffffff;
+  --loop-card-hover: #f1f5f9;
+
+  /* IMPORTANT:
+     Don't use light grey text in light mode.
+     These are intentionally darker. */
+
+  --loop-text: #0f172a;
+  --loop-text-secondary: #1e293b;
+  --loop-text-muted: #334155;
+  --loop-text-subtle: #475569;
+
+  /* Darker borders for visibility */
+  --loop-border: rgba(15, 23, 42, 0.1);
+  --loop-border-strong: rgba(15, 23, 42, 0.18);
+
+  /*
+    Darker accent colors for light backgrounds.
+    Bright cyan from dark mode becomes deeper teal.
+  */
+
+  --loop-cyan: #008f83;
+  --loop-blue: #0878c9;
+  --loop-purple: #6d3fd1;
+  --loop-violet: #a43fc4;
+
+  --loop-green: #15803d;
+  --loop-amber: #b45309;
+  --loop-red: #dc3157;
+
+  /* Very subtle light-mode glow */
+  --loop-cyan-glow: rgba(0, 143, 131, 0.08);
+  --loop-blue-glow: rgba(8, 120, 201, 0.08);
+  --loop-purple-glow: rgba(109, 63, 209, 0.08);
+  --loop-red-glow: rgba(220, 49, 87, 0.07);
+
+  /* Light-mode shadows */
+  --loop-shadow: 0 20px 50px rgba(15, 23, 42, 0.1);
+
+  --loop-shadow-small: 0 8px 25px rgba(15, 23, 42, 0.08);
+
+  --loop-shadow-cyan: 0 0 30px rgba(0, 143, 131, 0.08);
+
+  --loop-shadow-purple: 0 0 30px rgba(109, 63, 209, 0.08);
+
+  /* Dashboard */
+  --loop-chart-grid: rgba(15, 23, 42, 0.08);
+  --loop-chart-text: #475569;
+
+  /* Darker logo */
+  --loop-logo-primary: #008f83;
+  --loop-logo-secondary: #0878c9;
+}
+
+/* =========================================================
+   BASE
+   ========================================================= */
 
 * {
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(25, 230, 209, 0.25) transparent;
+}
+
 html,
 body {
-  margin: 0;
-  padding: 0;
+  min-height: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  margin: 0;
+  padding: 0;
+
+  background: var(--loop-bg);
+  color: var(--loop-text);
+
+  font-family: Arial, Helvetica, sans-serif;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease;
+}
+
+/* =========================================================
+   FORM ELEMENTS
+   ========================================================= */
+
+body,
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+}
+
+button {
+  font: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+input,
+textarea,
+select {
+  color: var(--loop-text);
+  background: var(--loop-surface);
+  border-color: var(--loop-border);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--loop-text-subtle);
+}
+
+/* =========================================================
+   LINKS
+   ========================================================= */
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* =========================================================
+   MEDIA
+   ========================================================= */
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* =========================================================
+   FOCUS
+   ========================================================= */
+
+button,
+a {
+  outline: none;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--loop-cyan);
+  outline-offset: 3px;
+}
+
+/* =========================================================
+   TEXT SELECTION
+   ========================================================= */
+
+::selection {
+  background: var(--loop-cyan-glow);
+  color: var(--loop-text);
+}
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+html::-webkit-scrollbar {
+  width: 7px;
+}
+
+html::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+html::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(25, 230, 209, 0.25);
+}
+
+html.light::-webkit-scrollbar-thumb {
+  background: rgba(0, 143, 131, 0.25);
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background: rgba(25, 230, 209, 0.45);
+}
+
+html.light::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 143, 131, 0.45);
+}
+
+/* =========================================================
+   COMMON LOOP COMPONENT HELPERS
+   These allow components to use the global theme.
+   ========================================================= */
+
+@layer components {
+  .loop-page {
+    min-height: 100vh;
+    background: var(--loop-bg);
+    color: var(--loop-text);
+
+    transition:
+      background-color 0.25s ease,
+      color 0.25s ease;
+  }
+
+  .loop-surface {
+    background: var(--loop-surface);
+    border-color: var(--loop-border);
+  }
+
+  .loop-card {
+    background: var(--loop-card);
+    border: 1px solid var(--loop-border);
+
+    box-shadow: var(--loop-shadow-small);
+
+    transition:
+      background-color 0.25s ease,
+      border-color 0.25s ease,
+      box-shadow 0.25s ease,
+      transform 0.25s ease;
+  }
+
+  .loop-card:hover {
+    background: var(--loop-card-hover);
+    border-color: var(--loop-border-strong);
+    box-shadow: var(--loop-shadow);
+    transform: translateY(-2px);
+  }
+
+  .loop-text {
+    color: var(--loop-text);
+  }
+
+  .loop-text-secondary {
+    color: var(--loop-text-secondary);
+  }
+
+  .loop-text-muted {
+    color: var(--loop-text-muted);
+  }
+
+  .loop-border {
+    border-color: var(--loop-border);
+  }
+}
+
+/* =========================================================
+   LIGHT MODE — COMMON DARK TAILWIND OVERRIDES
+   ---------------------------------------------------------
+   This helps existing LOOP components that still contain
+   some hard-coded dark Tailwind classes.
+   ========================================================= */
+
+html.light .bg-\[\#030912\],
+html.light .bg-\[\#050b14\],
+html.light .bg-\[\#060d17\],
+html.light .bg-\[\#07101c\],
+html.light .bg-\[\#091523\] {
+  background-color: var(--loop-surface) !important;
+}
+
+html.light .text-slate-100 {
+  color: var(--loop-text) !important;
+}
+
+html.light .text-slate-200 {
+  color: var(--loop-text-secondary) !important;
+}
+
+html.light .text-slate-300 {
+  color: var(--loop-text-secondary) !important;
+}
+
+html.light .text-slate-400 {
+  color: var(--loop-text-muted) !important;
+}
+
+html.light .text-slate-500 {
+  color: var(--loop-text-subtle) !important;
+}
+
+/* =========================================================
+   LIGHT MODE — WHITE BORDER OVERRIDES
+   ========================================================= */
+
+html.light .border-white\/5 {
+  border-color: rgba(15, 23, 42, 0.06) !important;
+}
+
+html.light .border-white\/10 {
+  border-color: rgba(15, 23, 42, 0.1) !important;
+}
+
+html.light .border-white\/15 {
+  border-color: rgba(15, 23, 42, 0.15) !important;
+}
+
+html.light .border-white\/20 {
+  border-color: rgba(15, 23, 42, 0.2) !important;
+}
+
+/* =========================================================
+   LIGHT MODE — WHITE BACKGROUNDS
+   Keep pure white elements white.
+   ========================================================= */
+
+html.light .bg-white\/5 {
+  background-color: rgba(15, 23, 42, 0.035) !important;
+}
+
+html.light .bg-white\/10 {
+  background-color: rgba(15, 23, 42, 0.055) !important;
+}
+
+html.light .bg-white\/20 {
+  background-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+/* =========================================================
+   LIGHT MODE — GLOW REDUCTION
+   Bright dark-mode neon effects should become subtle.
+   ========================================================= */
+
+html.light [class*="shadow-[0_0_"] {
+  filter: saturate(0.85);
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
