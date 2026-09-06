@@ -1,0 +1,97 @@
+{
+  "success": true,
+  "filters": {
+    "startDate": null,
+    "endDate": null,
+    "channel": null,
+    "sentiment": null,
+    "status": null
+  },
+  "analytics": {
+    "totalFeedback": 12480,
+    "negativePercentage": 11,
+    "newThisWeek": 580,
+    "sentimentBreakdown": {
+      "POS": 68,
+      "NEU": 21,
+      "NEG": 11
+    },
+    "volumeOverTime": [
+      {
+        "date": "2026-09-01",
+        "count": 320
+      },
+      {
+        "date": "2026-09-02",
+        "count": 410
+      },
+      {
+        "date": "2026-09-03",
+        "count": 380
+      },
+      {
+        "date": "2026-09-04",
+        "count": 520
+      },
+      {
+        "date": "2026-09-05",
+        "count": 460
+      },
+      {
+        "date": "2026-09-06",
+        "count": 610
+      },
+      {
+        "date": "2026-09-07",
+        "count": 580
+      },
+      {
+        "date": "2026-09-08",
+        "count": 690
+      },
+      {
+        "date": "2026-09-09",
+        "count": 620
+      },
+      {
+        "date": "2026-09-10",
+        "count": 760
+      },
+      {
+        "date": "2026-09-11",
+        "count": 710
+      },
+      {
+        "date": "2026-09-12",
+        "count": 820
+      }
+    ],
+    "topThemes": [
+      {
+        "name": "Product Quality",
+        "count": 420,
+        "percentage": 82
+      },
+      {
+        "name": "Customer Support",
+        "count": 290,
+        "percentage": 64
+      },
+      {
+        "name": "Pricing",
+        "count": 210,
+        "percentage": 48
+      },
+      {
+        "name": "User Experience",
+        "count": 180,
+        "percentage": 41
+      },
+      {
+        "name": "Performance",
+        "count": 145,
+        "percentage": 34
+      }
+    ]
+  }
+}

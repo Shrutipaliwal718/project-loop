@@ -270,41 +270,6 @@ function ThemeVisual() {
 }
 
 /* =========================================================
-   TREND VISUAL
-   ========================================================= */
-
-function TrendVisual() {
-  return (
-    <svg
-      viewBox="0 0 280 48"
-      preserveAspectRatio="none"
-      className="h-12 w-full"
-      aria-hidden="true"
-    >
-      <path
-        d="M0 39 L25 36 L50 38 L75 29 L100 32 L125 22 L150 25 L175 17 L200 20 L225 12 L250 15 L280 4"
-        fill="none"
-        stroke="#c45cff"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        pathLength="1"
-        strokeDasharray="1"
-        strokeDashoffset="1"
-      >
-        <animate
-          attributeName="stroke-dashoffset"
-          from="1"
-          to="0"
-          dur="1.5s"
-          fill="freeze"
-        />
-      </path>
-    </svg>
-  );
-}
-
-/* =========================================================
    ASK LOOP VISUAL
    ========================================================= */
 
@@ -584,3 +549,4 @@ export default function AIInsights() {
     </section>
   );
 }
+
