@@ -296,30 +296,50 @@ const FeedbackInbox = () => {
             <button
               type="button"
               disabled
+              aria-label="Previous page"
               className="flex h-7 w-7 items-center justify-center rounded-md border border-white/[0.05] text-slate-700 disabled:cursor-not-allowed"
             >
-              ←
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                className="h-3.5 w-3.5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15 18l-6-6 6-6"
+                />
+              </svg>
             </button>
 
             <button
               type="button"
-              className="flex h-7 w-7 items-center justify-center rounded-md border border-cyan-400/15 bg-cyan-400/[0.06] text-[9px] text-cyan-300"
+              className="flex h-7 min-w-7 items-center justify-center rounded-md border border-cyan-400/15 bg-cyan-400/[0.06] px-2 text-[9px] font-medium text-cyan-300"
             >
               1
             </button>
 
             <button
               type="button"
-              className="flex h-7 w-7 items-center justify-center rounded-md border border-white/[0.05] text-[9px] text-slate-600 transition hover:border-white/[0.1] hover:text-slate-300"
+              disabled
+              aria-label="Next page"
+              className="flex h-7 w-7 items-center justify-center rounded-md border border-white/[0.05] text-slate-700 disabled:cursor-not-allowed"
             >
-              2
-            </button>
-
-            <button
-              type="button"
-              className="flex h-7 w-7 items-center justify-center rounded-md border border-white/[0.05] text-slate-500 transition hover:border-white/[0.1] hover:text-slate-300"
-            >
-              →
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                className="h-3.5 w-3.5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M9 18l6-6 6 6"
+                />
+              </svg>
             </button>
           </div>
         </div>
