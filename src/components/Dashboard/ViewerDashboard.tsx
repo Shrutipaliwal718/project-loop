@@ -1,9 +1,14 @@
+import type { DashboardAnalytics } from "@/types/dashboard";
 import ViewerStats from "./ViewerStats";
 import FeedbackVolume from "./FeedbackVolume";
 import SentimentAnalytics from "./SentimentAnalytics";
 import ThemesSection from "./ThemesSection";
 
-const ViewerDashboard = () => {
+type ViewerDashboardProps = {
+  analytics: DashboardAnalytics;
+};
+
+const ViewerDashboard = ({ analytics }: ViewerDashboardProps) => {
   return (
     <div className="relative min-h-[calc(100vh-58px)] overflow-hidden bg-[#030912] px-4 py-5 sm:px-6 lg:px-7 lg:py-6">
       {/* Background glow */}
@@ -28,18 +33,18 @@ const ViewerDashboard = () => {
 
         {/* KPI Statistics */}
         <div className="mt-5">
-          <ViewerStats />
+          <ViewerStats analytics={analytics} />
         </div>
 
         {/* Feedback Volume + Sentiment */}
         <div className="mt-5 grid grid-cols-1 gap-4 xl:grid-cols-[1.65fr_0.85fr]">
-          <FeedbackVolume />
-          <SentimentAnalytics />
+          <FeedbackVolume analytics={analytics} />
+          <SentimentAnalytics analytics={analytics} />
         </div>
 
         {/* Top Themes */}
         <div className="mt-4">
-          <ThemesSection />
+          <ThemesSection analytics={analytics} />
         </div>
 
         {/* Read-only notice */}

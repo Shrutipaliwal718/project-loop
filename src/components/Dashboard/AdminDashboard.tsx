@@ -1,3 +1,4 @@
+import type { DashboardAnalytics } from "@/types/dashboard";
 import DashboardStats from "./DashboardStats";
 import FeedbackVolume from "./FeedbackVolume";
 import SentimentAnalytics from "./SentimentAnalytics";
@@ -6,7 +7,11 @@ import EmergingIssues from "./EmergingIssues";
 import ActionSignals from "./ActionSignals";
 import AdminWorkspace from "./AdminWorkspace";
 
-const AdminDashboard = () => {
+type AdminDashboardProps = {
+  analytics: DashboardAnalytics;
+};
+
+const AdminDashboard = ({ analytics }: AdminDashboardProps) => {
   return (
     <div className="relative min-h-[calc(100vh-58px)] overflow-hidden bg-[#030912] px-4 py-5 sm:px-6 lg:px-7 lg:py-6">
       {/* Background glow */}
@@ -52,17 +57,17 @@ const AdminDashboard = () => {
           </div>
 
           {/* KPI Statistics */}
-          <DashboardStats />
+          <DashboardStats analytics={analytics} />
 
           {/* Feedback Volume + Sentiment */}
           <div className="mt-5 grid grid-cols-1 gap-4 xl:grid-cols-[1.65fr_0.85fr]">
-            <FeedbackVolume />
-            <SentimentAnalytics />
+            <FeedbackVolume analytics={analytics} />
+            <SentimentAnalytics analytics={analytics} />
           </div>
 
           {/* Themes + Issues + Actions */}
           <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-3">
-            <ThemesSection />
+            <ThemesSection analytics={analytics} />
             <EmergingIssues />
             <ActionSignals />
           </div>

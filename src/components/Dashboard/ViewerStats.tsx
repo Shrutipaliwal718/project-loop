@@ -1,8 +1,10 @@
-import dashboardData from "@/data/dashboard.json";
+﻿import type { DashboardAnalytics } from "@/types/dashboard";
 
-const ViewerStats = () => {
-  const { analytics } = dashboardData;
+type ViewerStatsProps = {
+  analytics: DashboardAnalytics;
+};
 
+const ViewerStats = ({ analytics }: ViewerStatsProps) => {
   const stats = [
     {
       label: "Total Feedback",
@@ -15,6 +17,7 @@ const ViewerStats = () => {
           fill="none"
           stroke="currentColor"
           strokeWidth="1.8"
+          aria-hidden="true"
         >
           <path
             strokeLinecap="round"
@@ -37,6 +40,7 @@ const ViewerStats = () => {
           fill="none"
           stroke="currentColor"
           strokeWidth="1.8"
+          aria-hidden="true"
         >
           <path
             strokeLinecap="round"
@@ -64,6 +68,7 @@ const ViewerStats = () => {
           fill="none"
           stroke="currentColor"
           strokeWidth="1.8"
+          aria-hidden="true"
         >
           <path
             strokeLinecap="round"

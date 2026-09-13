@@ -1,8 +1,12 @@
-import dashboardData from "@/data/dashboard.json";
+﻿import type { DashboardAnalytics } from "@/types/dashboard";
 import styles from "./dashboard.module.css";
 
-const SentimentAnalytics = () => {
-  const sentiment = dashboardData.analytics.sentimentBreakdown;
+type SentimentAnalyticsProps = {
+  analytics: DashboardAnalytics;
+};
+
+const SentimentAnalytics = ({ analytics }: SentimentAnalyticsProps) => {
+  const sentiment = analytics.sentimentBreakdown;
 
   const items = [
     {
@@ -24,6 +28,15 @@ const SentimentAnalytics = () => {
       glow: "shadow-[0_0_12px_rgba(251,113,133,.2)]",
     },
   ];
+
+  const strongestSentiment = items.reduce((strongest, current) =>
+    current.value > strongest.value ? current : strongest,
+  );
+
+  const aiSignal =
+    strongestSentiment.value > 0
+      ? `${strongestSentiment.label} sentiment is currently the strongest customer signal.`
+      : "There is not enough sentiment data to identify a dominant customer signal.";
 
   return (
     <section className={`${styles.fadeUp} ${styles.delay2}`}>
@@ -69,6 +82,7 @@ const SentimentAnalytics = () => {
                 stroke="currentColor"
                 strokeWidth="1.7"
                 className="h-4 w-4"
+                aria-hidden="true"
               >
                 <path
                   strokeLinecap="round"
@@ -84,7 +98,7 @@ const SentimentAnalytics = () => {
               </p>
 
               <p className="mt-1 text-[11px] leading-5 text-slate-400">
-                Positive sentiment is currently the strongest customer signal.
+                {aiSignal}
               </p>
             </div>
           </div>

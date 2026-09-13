@@ -1,14 +1,16 @@
-import dashboardData from "@/data/dashboard.json";
+﻿import type { DashboardAnalytics } from "@/types/dashboard";
 import styles from "./dashboard.module.css";
 
-const DashboardStats = () => {
-  const { analytics } = dashboardData;
+type DashboardStatsProps = {
+  analytics: DashboardAnalytics;
+};
 
+const DashboardStats = ({ analytics }: DashboardStatsProps) => {
   const stats = [
     {
       label: "Total feedback",
       value: analytics.totalFeedback.toLocaleString(),
-      change: "+18.4%",
+      change: "Live data",
       type: "positive",
 
       className:
@@ -100,9 +102,9 @@ const DashboardStats = () => {
 
     {
       label: "Action signals",
-      value: "3",
-      change: "Recommended actions",
-      type: "urgent",
+      value: "—",
+      change: "Not available",
+      type: "neutral",
 
       className:
         "from-red-500/[0.16] via-rose-500/[0.05] to-transparent border-red-400/25",

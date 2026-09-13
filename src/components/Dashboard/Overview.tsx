@@ -1,3 +1,4 @@
+import type { DashboardAnalytics } from "@/types/dashboard";
 import DashboardStats from "./DashboardStats";
 import FeedbackVolume from "./FeedbackVolume";
 import SentimentAnalytics from "./SentimentAnalytics";
@@ -6,7 +7,11 @@ import EmergingIssues from "./EmergingIssues";
 import ActionSignals from "./ActionSignals";
 import styles from "./dashboard.module.css";
 
-const Overview = () => {
+type OverviewProps = {
+  analytics: DashboardAnalytics;
+};
+
+const Overview = ({ analytics }: OverviewProps) => {
   return (
     <div className="relative min-h-[calc(100vh-58px)] overflow-hidden bg-[#030912] px-4 py-5 sm:px-6 lg:px-7 lg:py-6">
       {/* Ambient cyan glow */}
@@ -33,19 +38,19 @@ const Overview = () => {
 
         {/* 4 KPI cards */}
         <div className="mt-5">
-          <DashboardStats />
+          <DashboardStats analytics={analytics} />
         </div>
 
         {/* Main analytics row */}
         <div className="mt-5 grid grid-cols-1 gap-4 xl:grid-cols-[1.65fr_0.85fr]">
-          <FeedbackVolume />
+          <FeedbackVolume analytics={analytics} />
 
-          <SentimentAnalytics />
+          <SentimentAnalytics analytics={analytics} />
         </div>
 
         {/* Bottom insight row */}
         <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-3">
-          <ThemesSection />
+          <ThemesSection analytics={analytics} />
 
           <EmergingIssues />
 

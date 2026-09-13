@@ -1,10 +1,22 @@
-import dashboardData from "@/data/dashboard.json";
+﻿import type { DashboardAnalytics } from "@/types/dashboard";
 import styles from "./dashboard.module.css";
 
-const FeedbackVolume = () => {
-  const data = dashboardData.analytics.volumeOverTime;
+type FeedbackVolumeProps = {
+  analytics: DashboardAnalytics;
+};
+
+const FeedbackVolume = ({ analytics }: FeedbackVolumeProps) => {
+  const data = analytics.volumeOverTime;
 
   const maxCount = Math.max(...data.map((item) => item.count), 1);
+
+  const yAxisValues = [
+    maxCount,
+    Math.round(maxCount * 0.75),
+    Math.round(maxCount * 0.5),
+    Math.round(maxCount * 0.25),
+    0,
+  ];
 
   return (
     <section className={`${styles.fadeUp} ${styles.delay2}`}>
@@ -21,8 +33,8 @@ const FeedbackVolume = () => {
             </p>
           </div>
 
-          <span className="shrink-0 rounded-full border border-emerald-400/10 bg-emerald-400/[0.08] px-3 py-1.5 text-[10px] font-semibold text-emerald-400">
-            Improving ↗
+          <span className="shrink-0 rounded-full border border-cyan-400/10 bg-cyan-400/[0.08] px-3 py-1.5 text-[10px] font-semibold text-cyan-400">
+            Live data
           </span>
         </div>
 
@@ -30,11 +42,9 @@ const FeedbackVolume = () => {
         <div className="mt-5 flex h-[230px] gap-3">
           {/* Y axis */}
           <div className="flex flex-col justify-between pb-5 text-[10px] text-slate-600">
-            <span>100%</span>
-            <span>75%</span>
-            <span>50%</span>
-            <span>25%</span>
-            <span>0%</span>
+            {yAxisValues.map((value) => (
+              <span key={value}>{value.toLocaleString()}</span>
+            ))}
           </div>
 
           <div className="relative flex flex-1 flex-col">
@@ -64,7 +74,7 @@ const FeedbackVolume = () => {
 
                     {/* Tooltip */}
                     <div className="pointer-events-none absolute bottom-full left-1/2 mb-2 hidden -translate-x-1/2 rounded-md border border-white/10 bg-[#091523] px-2 py-1 text-[9px] text-slate-300 shadow-xl group-hover:block">
-                      {item.count}
+                      {item.count.toLocaleString()}
                     </div>
                   </div>
                 );
