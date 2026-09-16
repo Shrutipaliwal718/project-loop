@@ -54,6 +54,7 @@ export async function GET() {
         email: user.email,
         role: user.role,
         workspaceId: user.workspaceId,
+        profileImage: user.profileImage,
       },
     });
   } catch (error) {

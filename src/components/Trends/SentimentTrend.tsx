@@ -1,18 +1,133 @@
-"use client";
+﻿"use client";
 
-import { useState } from "react";
-import dashboardData from "@/data/dashboard.json";
+import { useEffect, useState } from "react";
 
 type SentimentType = "Positive" | "Neutral" | "Negative" | null;
 
+type DashboardData = {
+  totalFeedback: number;
+  sentimentBreakdown: {
+    POS: number;
+    NEU: number;
+    NEG: number;
+  };
+};
+
 const SentimentTrend = () => {
-  const { sentimentBreakdown, totalFeedback } = dashboardData.analytics;
+  const [analytics, setAnalytics] = useState<DashboardData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [hoveredSegment, setHoveredSegment] =
+    useState<SentimentType>(null);
 
-  const positive = sentimentBreakdown.POS;
-  const neutral = sentimentBreakdown.NEU;
-  const negative = sentimentBreakdown.NEG;
+  useEffect(() => {
+    const fetchDashboard = async () => {
+      try {
+        setLoading(true);
+        setError(null);
 
-  const [hoveredSegment, setHoveredSegment] = useState<SentimentType>(null);
+        const response = await fetch("/api/dashboard", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success || !data.analytics) {
+          throw new Error(
+            data.message ?? "Failed to load sentiment analytics.",
+          );
+        }
+
+        setAnalytics({
+          totalFeedback: data.analytics.totalFeedback,
+          sentimentBreakdown: data.analytics.sentimentBreakdown,
+        });
+      } catch (err) {
+        setError(
+          err instanceof Error
+            ? err.message
+            : "Failed to load sentiment analytics.",
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboard();
+  }, []);
+
+  if (loading) {
+    return (
+      <section className="h-full rounded-2xl border border-white/[0.08] bg-[#091523]/75 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.16)] backdrop-blur-xl">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-cyan-400">
+              Sentiment
+            </p>
+
+            <h2 className="mt-1.5 text-lg font-semibold tracking-tight text-white">
+              Sentiment distribution
+            </h2>
+
+            <p className="mt-1 text-xs text-slate-500">
+              Overall customer sentiment across all feedback
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-6 flex min-h-[260px] items-center justify-center">
+          <p className="text-xs text-slate-500">
+            Loading sentiment data...
+          </p>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="h-full rounded-2xl border border-white/[0.08] bg-[#091523]/75 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.16)] backdrop-blur-xl">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-cyan-400">
+          Sentiment
+        </p>
+
+        <h2 className="mt-1.5 text-lg font-semibold tracking-tight text-white">
+          Sentiment distribution
+        </h2>
+
+        <div className="mt-6 rounded-xl border border-rose-400/10 bg-rose-400/[0.03] p-4">
+          <p className="text-xs font-medium text-rose-300">
+            Unable to load sentiment data
+          </p>
+
+          <p className="mt-1 text-[11px] text-slate-500">
+            {error}
+          </p>
+        </div>
+      </section>
+    );
+  }
+
+  const totalFeedback = analytics?.totalFeedback ?? 0;
+
+  const sentimentBreakdown = analytics?.sentimentBreakdown ?? {
+    POS: 0,
+    NEU: 0,
+    NEG: 0,
+  };
+
+  const positive = totalFeedback
+    ? Math.round((sentimentBreakdown.POS / totalFeedback) * 100)
+    : 0;
+
+  const neutral = totalFeedback
+    ? Math.round((sentimentBreakdown.NEU / totalFeedback) * 100)
+    : 0;
+
+  const negative = totalFeedback
+    ? Math.round((sentimentBreakdown.NEG / totalFeedback) * 100)
+    : 0;
 
   const sentimentData = [
     {
@@ -20,21 +135,21 @@ const SentimentTrend = () => {
       value: positive,
       color: "#19e6d1",
       textColor: "text-cyan-300",
-      count: Math.round((totalFeedback * positive) / 100),
+      count: sentimentBreakdown.POS,
     },
     {
       label: "Neutral" as const,
       value: neutral,
       color: "#94a3b8",
       textColor: "text-slate-300",
-      count: Math.round((totalFeedback * neutral) / 100),
+      count: sentimentBreakdown.NEU,
     },
     {
       label: "Negative" as const,
       value: negative,
       color: "#ff4d72",
       textColor: "text-rose-300",
-      count: Math.round((totalFeedback * negative) / 100),
+      count: sentimentBreakdown.NEG,
     },
   ];
 
@@ -82,7 +197,9 @@ const SentimentTrend = () => {
           <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(25,230,209,0.8)]" />
 
           <div>
-            <p className="text-[10px] font-medium text-cyan-300">Current mix</p>
+            <p className="text-[10px] font-medium text-cyan-300">
+              Current mix
+            </p>
 
             <p className="mt-0.5 text-[9px] text-slate-500">
               Workspace overview
@@ -135,9 +252,12 @@ const SentimentTrend = () => {
                     filter: isHovered
                       ? `drop-shadow(0 0 8px ${item.color}80)`
                       : "none",
-                    opacity: hoveredSegment && !isHovered ? 0.4 : 1,
+                    opacity:
+                      hoveredSegment && !isHovered ? 0.4 : 1,
                   }}
-                  onMouseEnter={() => setHoveredSegment(item.label)}
+                  onMouseEnter={() =>
+                    setHoveredSegment(item.label)
+                  }
                   onMouseLeave={() => setHoveredSegment(null)}
                 />
               );
@@ -186,7 +306,9 @@ const SentimentTrend = () => {
               <div
                 key={item.label}
                 className="cursor-default transition-all duration-200"
-                onMouseEnter={() => setHoveredSegment(item.label)}
+                onMouseEnter={() =>
+                  setHoveredSegment(item.label)
+                }
                 onMouseLeave={() => setHoveredSegment(null)}
               >
                 {/* Label + Percentage + Faded Count */}
@@ -204,7 +326,9 @@ const SentimentTrend = () => {
 
                     <span
                       className={`text-xs font-medium transition-colors ${
-                        isHovered ? "text-white" : "text-slate-200"
+                        isHovered
+                          ? "text-white"
+                          : "text-slate-200"
                       }`}
                     >
                       {item.label}
@@ -212,12 +336,12 @@ const SentimentTrend = () => {
                   </div>
 
                   <div className="flex items-center gap-2">
-                    {/* Percentage */}
-                    <span className={`text-sm font-semibold ${item.textColor}`}>
+                    <span
+                      className={`text-sm font-semibold ${item.textColor}`}
+                    >
                       {item.value}%
                     </span>
 
-                    {/* Faded Feedback Count */}
                     <span className="text-[10px] text-slate-600">
                       {item.count.toLocaleString()}
                     </span>

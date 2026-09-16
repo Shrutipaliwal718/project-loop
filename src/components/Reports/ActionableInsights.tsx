@@ -1,12 +1,126 @@
-import dashboardData from "@/data/dashboard.json";
+"use client";
+
+import { useEffect, useState } from "react";
+
+type Theme = {
+  name: string;
+  count: number;
+  percentage: number;
+};
+
+type DashboardData = {
+  negativePercentage: number;
+  volumeOverTime: {
+    date: string;
+    count: number;
+  }[];
+  topThemes: Theme[];
+};
 
 const ActionableInsights = () => {
-  const { analytics } = dashboardData;
+  const [analytics, setAnalytics] = useState<DashboardData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchDashboard = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const response = await fetch("/api/dashboard", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success || !data.analytics) {
+          throw new Error(
+            data.message ?? "Failed to load actionable insights.",
+          );
+        }
+
+        setAnalytics({
+          negativePercentage: data.analytics.negativePercentage ?? 0,
+          volumeOverTime: data.analytics.volumeOverTime ?? [],
+          topThemes: data.analytics.topThemes ?? [],
+        });
+      } catch (err) {
+        setError(
+          err instanceof Error
+            ? err.message
+            : "Failed to load actionable insights.",
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboard();
+  }, []);
+
+  if (loading) {
+    return (
+      <section className="rounded-2xl border border-white/[0.08] bg-[#091523]/75 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.16)] backdrop-blur-xl">
+        <div>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-amber-400">
+            Decision support
+          </p>
+
+          <h2 className="mt-1.5 text-lg font-semibold tracking-tight text-white">
+            Actionable insights
+          </h2>
+
+          <p className="mt-1 text-xs text-slate-500">
+            Signals worth investigating from the available feedback data.
+          </p>
+        </div>
+
+        <div className="mt-5 flex min-h-[180px] items-center justify-center">
+          <p className="text-xs text-slate-500">
+            Loading actionable insights...
+          </p>
+        </div>
+      </section>
+    );
+  }
+
+  if (error || !analytics) {
+    return (
+      <section className="rounded-2xl border border-white/[0.08] bg-[#091523]/75 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.16)] backdrop-blur-xl">
+        <div>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-amber-400">
+            Decision support
+          </p>
+
+          <h2 className="mt-1.5 text-lg font-semibold tracking-tight text-white">
+            Actionable insights
+          </h2>
+
+          <p className="mt-1 text-xs text-slate-500">
+            Signals worth investigating from the available feedback data.
+          </p>
+        </div>
+
+        <div className="mt-5 rounded-xl border border-rose-400/10 bg-rose-400/[0.03] p-4">
+          <p className="text-xs font-medium text-rose-300">
+            Unable to load actionable insights
+          </p>
+
+          <p className="mt-1 text-[11px] text-slate-500">
+            {error ?? "No analytics data available."}
+          </p>
+        </div>
+      </section>
+    );
+  }
 
   const topTheme = analytics.topThemes[0];
   const secondTheme = analytics.topThemes[1];
 
   const firstVolume = analytics.volumeOverTime[0]?.count ?? 0;
+
   const lastVolume =
     analytics.volumeOverTime[analytics.volumeOverTime.length - 1]?.count ?? 0;
 
@@ -89,7 +203,7 @@ const ActionableInsights = () => {
           >
             <div className="flex items-start gap-3">
               <div
-                className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border text-xs font-semibold ${insight.iconClass}`}
+                className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border text-xs font-semibold${insight.iconClass}`}
               >
                 {insight.icon}
               </div>

@@ -1,4 +1,12 @@
-const ReportsHeader = () => {
+type ReportsHeaderProps = {
+  onGenerate: () => void;
+  isGenerating: boolean;
+};
+
+const ReportsHeader = ({
+  onGenerate,
+  isGenerating,
+}: ReportsHeaderProps) => {
   return (
     <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
       <div>
@@ -33,9 +41,11 @@ const ReportsHeader = () => {
 
         <button
           type="button"
-          className="rounded-xl border border-white/[0.08] bg-white/[0.025] px-3 py-2 text-[10px] font-medium text-slate-400 transition-all duration-200 hover:border-cyan-400/15 hover:bg-cyan-400/[0.04] hover:text-cyan-300"
+          onClick={onGenerate}
+          disabled={isGenerating}
+          className="rounded-xl border border-white/[0.08] bg-white/[0.025] px-3 py-2 text-[10px] font-medium text-slate-400 transition-all duration-200 hover:border-cyan-400/15 hover:bg-cyan-400/[0.04] hover:text-cyan-300 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          Generate report
+          {isGenerating ? "Generating..." : "Generate report"}
         </button>
       </div>
     </div>

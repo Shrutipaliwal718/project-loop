@@ -44,6 +44,7 @@ model User {
   email        String @unique
   passwordHash String
   role         Role   @default(ANALYST)
+  profileImage String?
 
   workspaceId String
   workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
@@ -61,6 +62,7 @@ model Feedback {
   customerLabel  String?
   sentiment      Sentiment?
   sentimentScore Float?
+  featureArea    String?
   status         FeedbackStatus @default(NEW)
   createdAt      DateTime       @default(now())
 

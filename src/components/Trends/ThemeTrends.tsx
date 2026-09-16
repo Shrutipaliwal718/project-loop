@@ -1,9 +1,101 @@
 "use client";
 
-import dashboardData from "@/data/dashboard.json";
+import { useEffect, useState } from "react";
+
+type Theme = {
+  name: string;
+  count: number;
+  percentage: number;
+};
+
+type ThemeAnalytics = {
+  topThemes: Theme[];
+};
 
 const ThemeTrends = () => {
-  const themes = dashboardData.analytics.topThemes;
+  const [analytics, setAnalytics] = useState<ThemeAnalytics | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchDashboard = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const response = await fetch("/api/dashboard", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success || !data.analytics) {
+          throw new Error(data.message ?? "Failed to load theme analytics.");
+        }
+
+        setAnalytics({
+          topThemes: data.analytics.topThemes ?? [],
+        });
+      } catch (err) {
+        setError(
+          err instanceof Error
+            ? err.message
+            : "Failed to load theme analytics.",
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboard();
+  }, []);
+
+  if (loading) {
+    return (
+      <section className="rounded-2xl border border-white/[0.08] bg-[#091523]/75 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.16)] backdrop-blur-xl">
+        <div>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+            Themes
+          </p>
+
+          <h2 className="mt-1 text-base font-semibold text-white">
+            Top customer themes
+          </h2>
+        </div>
+
+        <div className="mt-5 flex min-h-[220px] items-center justify-center">
+          <p className="text-xs text-slate-500">Loading theme data...</p>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="rounded-2xl border border-white/[0.08] bg-[#091523]/75 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.16)] backdrop-blur-xl">
+        <div>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+            Themes
+          </p>
+
+          <h2 className="mt-1 text-base font-semibold text-white">
+            Top customer themes
+          </h2>
+        </div>
+
+        <div className="mt-5 rounded-xl border border-rose-400/10 bg-rose-400/[0.03] p-4">
+          <p className="text-xs font-medium text-rose-300">
+            Unable to load theme data
+          </p>
+
+          <p className="mt-1 text-[11px] text-slate-500">{error}</p>
+        </div>
+      </section>
+    );
+  }
+
+  const themes = analytics?.topThemes ?? [];
 
   return (
     <section className="rounded-2xl border border-white/[0.08] bg-[#091523]/75 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.16)] backdrop-blur-xl transition-all duration-300 hover:border-violet-400/[0.14]">
@@ -33,37 +125,48 @@ const ThemeTrends = () => {
       </div>
 
       <div className="mt-5 space-y-3">
-        {themes.map((theme, index) => (
-          <div
-            key={theme.name}
-            className="group rounded-xl border border-white/[0.06] bg-white/[0.015] p-3 transition-all duration-300 hover:border-violet-400/15 hover:bg-violet-400/[0.025]"
-          >
-            <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-violet-400/[0.07] text-[11px] font-semibold text-violet-300">
-                {String(index + 1).padStart(2, "0")}
-              </div>
-
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center justify-between gap-3">
-                  <p className="truncate text-xs font-medium text-slate-200">
-                    {theme.name}
-                  </p>
-
-                  <span className="shrink-0 text-[11px] font-medium text-slate-500">
-                    {theme.count}
-                  </span>
+        {themes.length === 0 ? (
+          <div className="rounded-xl border border-white/[0.06] bg-white/[0.015] p-5 text-center">
+            <p className="text-xs text-slate-500">No themes available yet.</p>
+          </div>
+        ) : (
+          themes.map((theme, index) => (
+            <div
+              key={theme.name}
+              className="group rounded-xl border border-white/[0.06] bg-white/[0.015] p-3 transition-all duration-300 hover:border-violet-400/15 hover:bg-violet-400/[0.025]"
+            >
+              <div className="flex items-center gap-3">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-violet-400/[0.07] text-[11px] font-semibold text-violet-300">
+                  {String(index + 1).padStart(2, "0")}
                 </div>
 
-                <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/[0.05]">
-                  <div
-                    className="h-full rounded-full bg-gradient-to-r from-violet-500/80 to-cyan-400/80 transition-all duration-700 group-hover:from-violet-400 group-hover:to-cyan-300"
-                    style={{ width: `${theme.percentage}%` }}
-                  />
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="truncate text-xs font-medium text-slate-200">
+                      {theme.name}
+                    </p>
+
+                    <span className="shrink-0 text-[11px] font-medium text-slate-500">
+                      {theme.count}
+                    </span>
+                  </div>
+
+                  <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/[0.05]">
+                    <div
+                      className="h-full rounded-full bg-gradient-to-r from-violet-500/80 to-cyan-400/80 transition-all duration-700 group-hover:from-violet-400 group-hover:to-cyan-300"
+                      style={{
+                        width: `${Math.min(
+                          Math.max(theme.percentage, 0),
+                          100,
+                        )}%`,
+                      }}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </section>
   );

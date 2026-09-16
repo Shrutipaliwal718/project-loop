@@ -25,29 +25,7 @@ const AskLoopShell = () => {
   const [question, setQuestion] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const getMockResponse = (input: string) => {
-    const normalized = input.toLowerCase();
-
-    if (normalized.includes("complaint") || normalized.includes("problem")) {
-      return "Based on the current workspace data, Product Quality is the leading theme, followed by Customer Support and Pricing. These areas represent the strongest signals in the available feedback.";
-    }
-
-    if (normalized.includes("theme") || normalized.includes("themes")) {
-      return "The leading themes are Product Quality, Customer Support, Pricing, User Experience, and Performance. Product Quality currently has the strongest signal in the workspace.";
-    }
-
-    if (normalized.includes("negative") || normalized.includes("sentiment")) {
-      return "Negative sentiment currently represents 11% of analyzed feedback, while positive sentiment accounts for 68% and neutral sentiment for 21%. Negative feedback should be examined alongside the strongest themes to identify the underlying issues.";
-    }
-
-    if (normalized.includes("prioritize") || normalized.includes("priority")) {
-      return "A reasonable priority would be to investigate Product Quality first, followed by Customer Support and Pricing. Combining these themes with negative-feedback examples would help identify the highest-impact opportunities.";
-    }
-
-    return "I can help you explore customer sentiment, feedback volume, themes, complaints, and potential priorities. Try asking about the top complaints, negative sentiment, or the most important themes.";
-  };
-
-  const submitQuestion = () => {
+  const submitQuestion = async () => {
     const trimmedQuestion = question.trim();
 
     if (!trimmedQuestion || isLoading) {
@@ -64,16 +42,51 @@ const AskLoopShell = () => {
     setQuestion("");
     setIsLoading(true);
 
-    setTimeout(() => {
+    try {
+      const response = await fetch("/api/ai/ask-loop", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          query: trimmedQuestion,
+        }),
+      });
+
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok || !data.success) {
+        throw new Error(
+          data.error || data.message || "Unable to get an answer from LOOP.",
+        );
+      }
+
       const assistantMessage: Message = {
         id: Date.now() + 1,
         role: "assistant",
-        content: getMockResponse(trimmedQuestion),
+        content:
+          data.answer ||
+          "I couldn't generate an answer from the available feedback.",
       };
 
       setMessages((current) => [...current, assistantMessage]);
+    } catch (error) {
+      console.error("Ask LOOP request error:", error);
+
+      const errorMessage: Message = {
+        id: Date.now() + 1,
+        role: "assistant",
+        content:
+          error instanceof Error
+            ? `I couldn't complete that request: ${error.message}`
+            : "I couldn't complete that request. Please try again.",
+      };
+
+      setMessages((current) => [...current, errorMessage]);
+    } finally {
       setIsLoading(false);
-    }, 800);
+    }
   };
 
   const handleSuggestedQuestion = (selectedQuestion: string) => {
@@ -100,10 +113,6 @@ const AskLoopShell = () => {
           isLoading={isLoading}
         />
       </div>
-
-      <p className="mt-3 text-center text-[9px] text-slate-700">
-        LOOP responses are currently using demonstration data.
-      </p>
     </div>
   );
 };

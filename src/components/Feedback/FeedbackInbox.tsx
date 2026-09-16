@@ -1,73 +1,146 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import styles from "./feedback.module.css";
 
+type ApiFeedback = {
+  id: string;
+  content: string;
+  channel: string;
+  sentiment: "POS" | "NEU" | "NEG" | null;
+  status: "NEW" | "REVIEWED" | "ACTIONED";
+  createdAt: string;
+};
+
 type FeedbackItem = {
-  id: number;
+  id: string;
   content: string;
   channel: string;
   sentiment: "POSITIVE" | "NEUTRAL" | "NEGATIVE";
   status: "OPEN" | "REVIEWING" | "RESOLVED";
   time: string;
+  createdAt: string;
 };
 
-const feedbackData: FeedbackItem[] = [
-  {
-    id: 1,
-    content: "The checkout process is too slow and confusing.",
-    channel: "MANUAL",
-    sentiment: "NEGATIVE",
-    status: "OPEN",
-    time: "2 min ago",
-  },
-  {
-    id: 2,
-    content: "I really like how quickly the new dashboard loads.",
-    channel: "CHAT",
-    sentiment: "POSITIVE",
-    status: "RESOLVED",
-    time: "18 min ago",
-  },
-  {
-    id: 3,
-    content: "Customer support helped me solve the issue quickly.",
-    channel: "EMAIL",
-    sentiment: "POSITIVE",
-    status: "RESOLVED",
-    time: "42 min ago",
-  },
-  {
-    id: 4,
-    content: "The pricing page is difficult to understand.",
-    channel: "SURVEY",
-    sentiment: "NEGATIVE",
-    status: "REVIEWING",
-    time: "1 hr ago",
-  },
-  {
-    id: 5,
-    content: "The product works well, but the mobile experience could improve.",
-    channel: "CHAT",
-    sentiment: "NEUTRAL",
-    status: "OPEN",
-    time: "2 hrs ago",
-  },
-  {
-    id: 6,
-    content: "The latest update made the navigation much easier.",
-    channel: "EMAIL",
-    sentiment: "POSITIVE",
-    status: "RESOLVED",
-    time: "3 hrs ago",
-  },
-];
+const PAGE_SIZE = 10;
+
+const mapSentiment = (
+  sentiment: ApiFeedback["sentiment"],
+): FeedbackItem["sentiment"] => {
+  switch (sentiment) {
+    case "POS":
+      return "POSITIVE";
+    case "NEG":
+      return "NEGATIVE";
+    case "NEU":
+    default:
+      return "NEUTRAL";
+  }
+};
+
+const mapStatus = (status: ApiFeedback["status"]): FeedbackItem["status"] => {
+  switch (status) {
+    case "ACTIONED":
+      return "RESOLVED";
+    case "REVIEWED":
+      return "REVIEWING";
+    case "NEW":
+    default:
+      return "OPEN";
+  }
+};
+
+const formatRelativeTime = (dateString: string) => {
+  const createdAt = new Date(dateString);
+  const now = new Date();
+
+  const differenceInSeconds = Math.floor(
+    (now.getTime() - createdAt.getTime()) / 1000,
+  );
+
+  if (differenceInSeconds < 60) {
+    return `${Math.max(differenceInSeconds, 0)} sec ago`;
+  }
+
+  const differenceInMinutes = Math.floor(differenceInSeconds / 60);
+
+  if (differenceInMinutes < 60) {
+    return `${differenceInMinutes} min ago`;
+  }
+
+  const differenceInHours = Math.floor(differenceInMinutes / 60);
+
+  if (differenceInHours < 24) {
+    return `${differenceInHours} hr ago`;
+  }
+
+  const differenceInDays = Math.floor(differenceInHours / 24);
+
+  if (differenceInDays < 7) {
+    return `${differenceInDays} day${differenceInDays === 1 ? "" : "s"} ago`;
+  }
+
+  return createdAt.toLocaleDateString();
+};
 
 const FeedbackInbox = () => {
+  const [feedbackData, setFeedbackData] = useState<FeedbackItem[]>([]);
   const [search, setSearch] = useState("");
   const [channel, setChannel] = useState("ALL");
   const [sentiment, setSentiment] = useState("ALL");
   const [status, setStatus] = useState("ALL");
+
+  // Date range filters
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchFeedback = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const response = await fetch("/api/feedback", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          throw new Error(data.message ?? "Failed to load feedback.");
+        }
+
+        const mappedFeedback: FeedbackItem[] = (
+          data.feedbacks as ApiFeedback[]
+        ).map((item) => ({
+          id: item.id,
+          content: item.content,
+          channel: item.channel,
+          sentiment: mapSentiment(item.sentiment),
+          status: mapStatus(item.status),
+          time: formatRelativeTime(item.createdAt),
+          createdAt: item.createdAt,
+        }));
+
+        setFeedbackData(mappedFeedback);
+      } catch (err) {
+        setError(
+          err instanceof Error
+            ? err.message
+            : "Something went wrong while loading feedback.",
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFeedback();
+  }, []);
 
   const filteredFeedback = useMemo(() => {
     return feedbackData.filter((item) => {
@@ -82,11 +155,59 @@ const FeedbackInbox = () => {
 
       const matchesStatus = status === "ALL" || item.status === status;
 
+      // Compare only the calendar date so the selected
+      // range behaves naturally with <input type="date">.
+      const feedbackDate = new Date(item.createdAt);
+
+      const feedbackDateKey = [
+        feedbackDate.getFullYear(),
+        String(feedbackDate.getMonth() + 1).padStart(2, "0"),
+        String(feedbackDate.getDate()).padStart(2, "0"),
+      ].join("-");
+
+      const matchesFromDate = !fromDate || feedbackDateKey >= fromDate;
+
+      const matchesToDate = !toDate || feedbackDateKey <= toDate;
+
       return (
-        matchesSearch && matchesChannel && matchesSentiment && matchesStatus
+        matchesSearch &&
+        matchesChannel &&
+        matchesSentiment &&
+        matchesStatus &&
+        matchesFromDate &&
+        matchesToDate
       );
     });
-  }, [search, channel, sentiment, status]);
+  }, [feedbackData, search, channel, sentiment, status, fromDate, toDate]);
+
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredFeedback.length / PAGE_SIZE),
+  );
+
+  const paginatedFeedback = useMemo(() => {
+    const startIndex = (currentPage - 1) * PAGE_SIZE;
+
+    return filteredFeedback.slice(startIndex, startIndex + PAGE_SIZE);
+  }, [filteredFeedback, currentPage]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search, channel, sentiment, status, fromDate, toDate]);
+
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
+
+  const firstVisibleItem =
+    filteredFeedback.length === 0 ? 0 : (currentPage - 1) * PAGE_SIZE + 1;
+
+  const lastVisibleItem = Math.min(
+    currentPage * PAGE_SIZE,
+    filteredFeedback.length,
+  );
 
   return (
     <section className={`${styles.fadeUpDelayed} mt-8`}>
@@ -114,6 +235,7 @@ const FeedbackInbox = () => {
         className={`${styles.filterBar} rounded-2xl border border-white/[0.07] bg-[#07111e]/90 p-3 shadow-2xl shadow-black/15`}
       >
         <div className="flex flex-col gap-2 xl:flex-row">
+          {/* Search */}
           <div className="relative min-w-0 flex-1">
             <svg
               viewBox="0 0 24 24"
@@ -134,6 +256,7 @@ const FeedbackInbox = () => {
             />
           </div>
 
+          {/* Channel */}
           <select
             value={channel}
             onChange={(event) => setChannel(event.target.value)}
@@ -146,6 +269,7 @@ const FeedbackInbox = () => {
             <option value="SURVEY">Survey</option>
           </select>
 
+          {/* Sentiment */}
           <select
             value={sentiment}
             onChange={(event) => setSentiment(event.target.value)}
@@ -157,6 +281,7 @@ const FeedbackInbox = () => {
             <option value="NEGATIVE">Negative</option>
           </select>
 
+          {/* Status */}
           <select
             value={status}
             onChange={(event) => setStatus(event.target.value)}
@@ -167,12 +292,56 @@ const FeedbackInbox = () => {
             <option value="REVIEWING">Reviewing</option>
             <option value="RESOLVED">Resolved</option>
           </select>
+
+          {/* From date */}
+          <div className="flex h-10 items-center rounded-lg border border-white/[0.06] bg-[#030912]/70 px-3">
+            <span className="mr-2 whitespace-nowrap text-[9px] text-slate-600">
+              From
+            </span>
+
+            <input
+              type="date"
+              value={fromDate}
+              max={toDate || undefined}
+              onChange={(event) => setFromDate(event.target.value)}
+              className="min-w-0 bg-transparent text-xs text-slate-400 outline-none"
+              aria-label="Filter from date"
+            />
+          </div>
+
+          {/* To date */}
+          <div className="flex h-10 items-center rounded-lg border border-white/[0.06] bg-[#030912]/70 px-3">
+            <span className="mr-2 whitespace-nowrap text-[9px] text-slate-600">
+              To
+            </span>
+
+            <input
+              type="date"
+              value={toDate}
+              min={fromDate || undefined}
+              onChange={(event) => setToDate(event.target.value)}
+              className="min-w-0 bg-transparent text-xs text-slate-400 outline-none"
+              aria-label="Filter to date"
+            />
+          </div>
         </div>
       </div>
 
       {/* List */}
       <div className="mt-3 overflow-hidden rounded-2xl border border-white/[0.07] bg-[#07111e]/90 shadow-2xl shadow-black/15">
-        {filteredFeedback.length === 0 ? (
+        {loading ? (
+          <div className="px-6 py-16 text-center">
+            <p className="text-xs text-slate-500">Loading feedback...</p>
+          </div>
+        ) : error ? (
+          <div className="px-6 py-16 text-center">
+            <p className="text-xs font-medium text-red-300">
+              Unable to load feedback
+            </p>
+
+            <p className="mt-1 text-[10px] text-slate-600">{error}</p>
+          </div>
+        ) : filteredFeedback.length === 0 ? (
           <div className={`${styles.emptyState} px-6 py-16 text-center`}>
             <div
               className={`${styles.emptyStateIcon} mx-auto flex h-10 w-10 items-center justify-center rounded-xl border border-white/[0.07] bg-white/[0.025] text-slate-600`}
@@ -198,11 +367,11 @@ const FeedbackInbox = () => {
             </p>
           </div>
         ) : (
-          filteredFeedback.map((item, index) => (
+          paginatedFeedback.map((item, index) => (
             <div
               key={item.id}
               className={`${styles.feedbackRow} ${
-                index !== filteredFeedback.length - 1
+                index !== paginatedFeedback.length - 1
                   ? "border-b border-white/[0.05]"
                   : ""
               } px-4 py-4 sm:px-5`}
@@ -289,15 +458,17 @@ const FeedbackInbox = () => {
         {/* Pagination */}
         <div className="flex items-center justify-between border-t border-white/[0.05] px-4 py-3 sm:px-5">
           <span className="text-[9px] text-slate-600">
-            Showing {filteredFeedback.length} of {feedbackData.length} feedback
+            Showing {firstVisibleItem}–{lastVisibleItem} of{" "}
+            {filteredFeedback.length} feedback
           </span>
 
           <div className="flex items-center gap-1">
             <button
               type="button"
-              disabled
+              disabled={currentPage === 1 || loading}
+              onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
               aria-label="Previous page"
-              className="flex h-7 w-7 items-center justify-center rounded-md border border-white/[0.05] text-slate-700 disabled:cursor-not-allowed"
+              className="flex h-7 w-7 items-center justify-center rounded-md border border-white/[0.05] text-slate-700 transition hover:border-white/[0.1] hover:text-slate-400 disabled:cursor-not-allowed disabled:opacity-40"
             >
               <svg
                 viewBox="0 0 24 24"
@@ -314,18 +485,18 @@ const FeedbackInbox = () => {
               </svg>
             </button>
 
-            <button
-              type="button"
-              className="flex h-7 min-w-7 items-center justify-center rounded-md border border-cyan-400/15 bg-cyan-400/[0.06] px-2 text-[9px] font-medium text-cyan-300"
-            >
-              1
-            </button>
+            <span className="flex h-7 min-w-7 items-center justify-center rounded-md border border-cyan-400/15 bg-cyan-400/[0.06] px-2 text-[9px] font-medium text-cyan-300">
+              {currentPage} / {totalPages}
+            </span>
 
             <button
               type="button"
-              disabled
+              disabled={currentPage === totalPages || loading}
+              onClick={() =>
+                setCurrentPage((page) => Math.min(totalPages, page + 1))
+              }
               aria-label="Next page"
-              className="flex h-7 w-7 items-center justify-center rounded-md border border-white/[0.05] text-slate-700 disabled:cursor-not-allowed"
+              className="flex h-7 w-7 items-center justify-center rounded-md border border-white/[0.05] text-slate-700 transition hover:border-white/[0.1] hover:text-slate-400 disabled:cursor-not-allowed disabled:opacity-40"
             >
               <svg
                 viewBox="0 0 24 24"
@@ -337,7 +508,7 @@ const FeedbackInbox = () => {
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  d="M9 18l6-6 6 6"
+                  d="M9 18l6 6 6-6"
                 />
               </svg>
             </button>

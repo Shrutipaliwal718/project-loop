@@ -1,9 +1,152 @@
-import dashboardData from "@/data/dashboard.json";
+"use client";
+
+import { useEffect, useState } from "react";
+
+type Theme = {
+  name: string;
+  count: number;
+  percentage: number;
+};
+
+type DashboardData = {
+  totalFeedback: number;
+  negativePercentage: number;
+  sentimentBreakdown: {
+    POS: number;
+    NEU: number;
+    NEG: number;
+  };
+  topThemes: Theme[];
+};
 
 const ReportPreview = () => {
-  const { analytics } = dashboardData;
+  const [analytics, setAnalytics] = useState<DashboardData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchDashboard = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const response = await fetch("/api/dashboard", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success || !data.analytics) {
+          throw new Error(data.message ?? "Failed to load report preview.");
+        }
+
+        setAnalytics(data.analytics);
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : "Failed to load report preview.",
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboard();
+  }, []);
+
+  if (loading) {
+    return (
+      <section className="rounded-2xl border border-white/[0.08] bg-[#091523]/75 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.16)] backdrop-blur-xl">
+        <div>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-cyan-400">
+            Report preview
+          </p>
+
+          <h2 className="mt-1.5 text-lg font-semibold text-white">
+            Voice-of-Customer report
+          </h2>
+
+          <p className="mt-1 text-xs text-slate-500">
+            Preview of the generated customer intelligence report.
+          </p>
+        </div>
+
+        <div className="mt-5 flex min-h-[300px] items-center justify-center">
+          <p className="text-xs text-slate-500">Loading report preview...</p>
+        </div>
+      </section>
+    );
+  }
+
+  if (error || !analytics) {
+    return (
+      <section className="rounded-2xl border border-white/[0.08] bg-[#091523]/75 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.16)] backdrop-blur-xl">
+        <div>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-cyan-400">
+            Report preview
+          </p>
+
+          <h2 className="mt-1.5 text-lg font-semibold text-white">
+            Voice-of-Customer report
+          </h2>
+
+          <p className="mt-1 text-xs text-slate-500">
+            Preview of the generated customer intelligence report.
+          </p>
+        </div>
+
+        <div className="mt-5 rounded-xl border border-rose-400/10 bg-rose-400/[0.03] p-4">
+          <p className="text-xs font-medium text-rose-300">
+            Unable to load report preview
+          </p>
+
+          <p className="mt-1 text-[11px] text-slate-500">
+            {error ?? "No analytics data available."}
+          </p>
+        </div>
+      </section>
+    );
+  }
 
   const topTheme = analytics.topThemes[0];
+
+  const positiveCount = analytics.sentimentBreakdown.POS;
+  const neutralCount = analytics.sentimentBreakdown.NEU;
+  const negativeCount = analytics.sentimentBreakdown.NEG;
+
+  const totalSentiment = positiveCount + neutralCount + negativeCount;
+
+  const positivePercentage =
+    totalSentiment > 0 ? Math.round((positiveCount / totalSentiment) * 100) : 0;
+
+  const neutralPercentage =
+    totalSentiment > 0 ? Math.round((neutralCount / totalSentiment) * 100) : 0;
+
+  const negativePercentage =
+    totalSentiment > 0 ? Math.round((negativeCount / totalSentiment) * 100) : 0;
+
+  let sentimentSummary =
+    "Customer feedback currently shows a balanced sentiment profile.";
+
+  if (
+    positivePercentage > neutralPercentage &&
+    positivePercentage > negativePercentage
+  ) {
+    sentimentSummary =
+      "Customer feedback currently shows a predominantly positive sentiment profile.";
+  } else if (
+    negativePercentage > positivePercentage &&
+    negativePercentage > neutralPercentage
+  ) {
+    sentimentSummary =
+      "Customer feedback currently shows a predominantly negative sentiment profile.";
+  } else if (
+    neutralPercentage > positivePercentage &&
+    neutralPercentage > negativePercentage
+  ) {
+    sentimentSummary =
+      "Customer feedback currently shows a predominantly neutral sentiment profile.";
+  }
 
   return (
     <section className="rounded-2xl border border-white/[0.08] bg-[#091523]/75 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.16)] backdrop-blur-xl">
@@ -66,14 +209,13 @@ const ReportPreview = () => {
             </p>
 
             <p className="mt-3 text-xs leading-6 text-slate-400">
-              Customer feedback currently shows a predominantly positive
-              sentiment profile. The strongest identified theme is{" "}
+              {sentimentSummary} The strongest identified theme is{" "}
               <span className="font-medium text-violet-300">
-                {topTheme?.name ?? "Product Quality"}
+                {topTheme?.name ?? "No theme available"}
               </span>
               . Negative sentiment accounts for{" "}
               <span className="font-medium text-rose-300">
-                {analytics.negativePercentage}%
+                {negativePercentage}%
               </span>{" "}
               of analyzed feedback and should be examined alongside the leading
               themes.
@@ -109,7 +251,7 @@ const ReportPreview = () => {
                   <span className="text-[10px] text-slate-500">Positive</span>
 
                   <span className="text-xs font-semibold text-cyan-300">
-                    {analytics.sentimentBreakdown.POS}%
+                    {positivePercentage}%
                   </span>
                 </div>
 
@@ -117,7 +259,7 @@ const ReportPreview = () => {
                   <div
                     className="h-full rounded-full bg-cyan-400"
                     style={{
-                      width: `${analytics.sentimentBreakdown.POS}%`,
+                      width: `${positivePercentage}%`,
                     }}
                   />
                 </div>
@@ -128,7 +270,7 @@ const ReportPreview = () => {
                   <span className="text-[10px] text-slate-500">Neutral</span>
 
                   <span className="text-xs font-semibold text-slate-300">
-                    {analytics.sentimentBreakdown.NEU}%
+                    {neutralPercentage}%
                   </span>
                 </div>
 
@@ -136,7 +278,7 @@ const ReportPreview = () => {
                   <div
                     className="h-full rounded-full bg-slate-400"
                     style={{
-                      width: `${analytics.sentimentBreakdown.NEU}%`,
+                      width: `${neutralPercentage}%`,
                     }}
                   />
                 </div>
@@ -147,7 +289,7 @@ const ReportPreview = () => {
                   <span className="text-[10px] text-slate-500">Negative</span>
 
                   <span className="text-xs font-semibold text-rose-300">
-                    {analytics.sentimentBreakdown.NEG}%
+                    {negativePercentage}%
                   </span>
                 </div>
 
@@ -155,7 +297,7 @@ const ReportPreview = () => {
                   <div
                     className="h-full rounded-full bg-rose-400"
                     style={{
-                      width: `${analytics.sentimentBreakdown.NEG}%`,
+                      width: `${negativePercentage}%`,
                     }}
                   />
                 </div>

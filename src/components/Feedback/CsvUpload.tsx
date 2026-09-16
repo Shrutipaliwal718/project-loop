@@ -8,7 +8,11 @@ const CsvUpload = () => {
 
   const [file, setFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
+  const [isImporting, setIsImporting] = useState(false);
+  const [message, setMessage] = useState<{
+    type: "success" | "error";
+    text: string;
+  } | null>(null);
 
   const handleFile = (selectedFile: File | undefined) => {
     if (!selectedFile) return;
@@ -19,7 +23,10 @@ const CsvUpload = () => {
 
     if (!isCsv) {
       setFile(null);
-      setMessage("Please select a valid CSV file.");
+      setMessage({
+        type: "error",
+        text: "Please select a valid CSV file.",
+      });
       return;
     }
 
@@ -44,6 +51,61 @@ const CsvUpload = () => {
 
     if (inputRef.current) {
       inputRef.current.value = "";
+    }
+  };
+
+  const handleImport = async () => {
+    if (!file || isImporting) return;
+
+    try {
+      setIsImporting(true);
+      setMessage(null);
+
+      const csvText = await file.text();
+
+      const response = await fetch("/api/feedback/bulk", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          csv: csvText,
+        }),
+      });
+
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok || !data.success) {
+        throw new Error(
+          data.message || data.error || "Unable to import feedback.",
+        );
+      }
+
+      setMessage({
+        type: "success",
+        text:
+          data.message ||
+          `${data.importedCount ?? 0} feedback items imported successfully.`,
+      });
+
+      setFile(null);
+
+      if (inputRef.current) {
+        inputRef.current.value = "";
+      }
+    } catch (error) {
+      console.error("CSV import error:", error);
+
+      setMessage({
+        type: "error",
+        text:
+          error instanceof Error
+            ? error.message
+            : "Feedback could not be imported. Please try again.",
+      });
+    } finally {
+      setIsImporting(false);
     }
   };
 
@@ -132,23 +194,45 @@ const CsvUpload = () => {
 
             <button
               type="button"
-              onClick={removeFile}
-              className="ml-3 rounded-md px-2 py-1 text-[10px] text-slate-500 transition hover:bg-white/[0.04] hover:text-red-300"
+              onClick={(event) => {
+                event.stopPropagation();
+                removeFile();
+              }}
+              disabled={isImporting}
+              className="ml-3 rounded-md px-2 py-1 text-[10px] text-slate-500 transition hover:bg-white/[0.04] hover:text-red-300 disabled:opacity-40"
             >
               Remove
             </button>
           </div>
         )}
 
-        {message && <p className="mt-3 text-xs text-red-300">{message}</p>}
+        {message && (
+          <div
+            className={`mt-4 rounded-lg border px-3 py-2.5 text-xs ${
+              message.type === "success"
+                ? "border-emerald-400/15 bg-emerald-400/[0.05] text-emerald-300"
+                : "border-red-400/15 bg-red-400/[0.05] text-red-300"
+            }`}
+          >
+            {message.text}
+          </div>
+        )}
 
         <div className="mt-5 flex justify-end">
           <button
             type="button"
-            disabled={!file}
-            className={`${styles.primaryButton} rounded-lg border border-cyan-300/20 bg-cyan-400/10 px-4 py-2.5 text-xs font-semibold text-cyan-300`}
+            onClick={handleImport}
+            disabled={!file || isImporting}
+            className={`${styles.primaryButton} inline-flex items-center gap-2 rounded-lg border border-cyan-300/20 bg-cyan-400/10 px-4 py-2.5 text-xs font-semibold text-cyan-300 disabled:cursor-not-allowed disabled:opacity-40`}
           >
-            <span className="relative z-10">Import feedback</span>
+            {isImporting ? (
+              <>
+                <span className={styles.spinner} />
+                Importing
+              </>
+            ) : (
+              <span className="relative z-10">Import feedback</span>
+            )}
           </button>
         </div>
       </div>
@@ -184,6 +268,20 @@ const CsvUpload = () => {
           <div className="grid grid-cols-2 border-t border-white/[0.04] px-3 py-2.5">
             <span className="text-[10px] text-slate-400">channel</span>
             <span className="text-[10px] text-cyan-400/60">CSV</span>
+          </div>
+
+          <div className="grid grid-cols-2 border-t border-white/[0.04] px-3 py-2.5">
+            <span className="text-[10px] text-slate-400">customer_label</span>
+            <span className="truncate text-[10px] text-slate-600">
+              Customer 001
+            </span>
+          </div>
+
+          <div className="grid grid-cols-2 border-t border-white/[0.04] px-3 py-2.5">
+            <span className="text-[10px] text-slate-400">created_at</span>
+            <span className="truncate text-[10px] text-slate-600">
+              2026-09-16T10:30:00Z
+            </span>
           </div>
         </div>
       </div>

@@ -1,4 +1,6 @@
-import { ReactNode } from "react";
+﻿"use client";
+
+import { ReactNode, useState } from "react";
 import Sidebar from "./Sidebar";
 import AppNavbar from "./AppNavbar";
 
@@ -7,12 +9,20 @@ type AppLayoutProps = {
 };
 
 const AppLayout = ({ children }: AppLayoutProps) => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-[#030912] text-white">
-      <Sidebar />
+      <Sidebar
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
 
       <div className="lg:pl-[250px]">
-        <AppNavbar />
+        <AppNavbar
+          onMenuClick={() => setSidebarOpen((open) => !open)}
+          sidebarOpen={sidebarOpen}
+        />
 
         <main className="min-h-[calc(100vh-58px)]">{children}</main>
       </div>

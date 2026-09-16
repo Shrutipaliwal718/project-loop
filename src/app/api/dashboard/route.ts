@@ -37,7 +37,7 @@ export async function GET(request: Request) {
           success: false,
           message: "Unauthorized",
         },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -58,17 +58,11 @@ export async function GET(request: Request) {
           message: "Invalid filter values",
           errors: filters.error.flatten(),
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
-    const {
-      startDate,
-      endDate,
-      channel,
-      sentiment,
-      status,
-    } = filters.data;
+    const { startDate, endDate, channel, sentiment, status } = filters.data;
 
     const where: {
       workspaceId: string;
@@ -136,7 +130,7 @@ export async function GET(request: Request) {
     const totalFeedback = feedbacks.length;
 
     const negativeFeedback = feedbacks.filter(
-      (feedback) => feedback.sentiment === "NEG"
+      (feedback) => feedback.sentiment === "NEG",
     ).length;
 
     const negativePercentage =
@@ -151,17 +145,13 @@ export async function GET(request: Request) {
     startOfWeek.setHours(0, 0, 0, 0);
 
     const newThisWeek = feedbacks.filter(
-      (feedback) => feedback.createdAt >= startOfWeek
+      (feedback) => feedback.createdAt >= startOfWeek,
     ).length;
 
     const sentimentBreakdown = {
-      POS: feedbacks.filter(
-        (feedback) => feedback.sentiment === "POS"
-      ).length,
+      POS: feedbacks.filter((feedback) => feedback.sentiment === "POS").length,
 
-      NEU: feedbacks.filter(
-        (feedback) => feedback.sentiment === "NEU"
-      ).length,
+      NEU: feedbacks.filter((feedback) => feedback.sentiment === "NEU").length,
 
       NEG: negativeFeedback,
     };
@@ -174,12 +164,10 @@ export async function GET(request: Request) {
       volumeMap[date] = (volumeMap[date] || 0) + 1;
     });
 
-    const volumeOverTime = Object.entries(volumeMap).map(
-      ([date, count]) => ({
-        date,
-        count,
-      })
-    );
+    const volumeOverTime = Object.entries(volumeMap).map(([date, count]) => ({
+      date,
+      count,
+    }));
 
     const themeMap: Record<string, number> = {};
 
@@ -195,12 +183,17 @@ export async function GET(request: Request) {
       .map(([name, count]) => ({
         name,
         count,
+        percentage:
+          totalFeedback > 0
+            ? Number(((count / totalFeedback) * 100).toFixed(1))
+            : 0,
       }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 10);
 
     return NextResponse.json({
       success: true,
+
       filters: {
         startDate: startDate ?? null,
         endDate: endDate ?? null,
@@ -208,6 +201,7 @@ export async function GET(request: Request) {
         sentiment: sentiment ?? null,
         status: status ?? null,
       },
+
       analytics: {
         totalFeedback,
         negativePercentage,
@@ -225,14 +219,7 @@ export async function GET(request: Request) {
         success: false,
         message: "Something went wrong",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
-
-
-
-
-
-
-

@@ -1,10 +1,16 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
-const AppNavbar = () => {
+type AppNavbarProps = {
+  onMenuClick: () => void;
+  sidebarOpen: boolean;
+};
+
+const AppNavbar = ({ onMenuClick, sidebarOpen }: AppNavbarProps) => {
   const pathname = usePathname();
+  const router = useRouter();
   const [profileOpen, setProfileOpen] = useState(false);
 
   const pageInfo = {
@@ -28,20 +34,95 @@ const AppNavbar = () => {
       label: "Reports",
       path: "reports",
     },
+    "/profile": {
+      label: "Profile",
+      path: "profile",
+    },
   };
 
   const currentPage =
     pageInfo[pathname as keyof typeof pageInfo] ?? pageInfo["/dashboard"];
 
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/auth/logout", {
+        method: "POST",
+        credentials: "include",
+      })
+    } finally {
+      setProfileOpen(false)
+      router.replace("/login")
+      router.refresh()
+    }
+  }
+
+  const handleProfileClick = () => {
+    setProfileOpen(false);
+    router.push("/profile");
+  };
+
   return (
     <header className="sticky top-0 z-30 border-b border-white/[0.07] bg-[#030912]/90 backdrop-blur-xl">
       <div className="flex h-[58px] items-center px-4 sm:px-6 lg:px-7">
+        {/* Mobile menu */}
+        <button
+          type="button"
+          onClick={onMenuClick}
+          aria-label={
+            sidebarOpen ? "Close navigation menu" : "Open navigation menu"
+          }
+          aria-expanded={sidebarOpen}
+          className="mr-3 flex h-9 w-9 items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.025] text-slate-400 transition-all duration-300 hover:border-cyan-400/20 hover:bg-cyan-400/[0.05] hover:text-cyan-300 lg:hidden"
+        >
+          {sidebarOpen ? (
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              className="h-5 w-5"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 6l12 12M18 6L6 18"
+              />
+            </svg>
+          ) : (
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              className="h-5 w-5"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4 7h16M4 12h16M4 17h16"
+              />
+            </svg>
+          )}
+        </button>
+
         {/* Current workspace */}
         <div className="flex items-center">
           <div className="hidden text-xs sm:block">
             <p className="font-medium text-slate-500">Workspace</p>
 
             <p className="mt-0.5 text-[11px] text-slate-300">
+              {currentPage.label}
+            </p>
+          </div>
+
+          <div className="sm:hidden">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+              LOOP
+            </p>
+
+            <p className="mt-0.5 text-[10px] text-cyan-400/80">
               {currentPage.label}
             </p>
           </div>
@@ -145,13 +226,16 @@ const AppNavbar = () => {
                   </div>
                 </div>
 
+                {/* Profile */}
                 <button
                   type="button"
+                  onClick={handleProfileClick}
                   className="mt-1 w-full rounded-lg px-3 py-2.5 text-left text-xs text-slate-400 transition hover:bg-white/[0.04] hover:text-white"
                 >
                   Profile
                 </button>
 
+                {/* Settings - will be connected next */}
                 <button
                   type="button"
                   className="w-full rounded-lg px-3 py-2.5 text-left text-xs text-slate-400 transition hover:bg-white/[0.04] hover:text-white"
@@ -161,9 +245,11 @@ const AppNavbar = () => {
 
                 <div className="my-1 border-t border-white/[0.07]" />
 
+                {/* Logout */}
                 <button
                   type="button"
                   className="w-full rounded-lg px-3 py-2.5 text-left text-xs text-red-400 transition hover:bg-red-400/[0.05]"
+                  onClick={handleLogout}
                 >
                   Log out
                 </button>
@@ -177,3 +263,6 @@ const AppNavbar = () => {
 };
 
 export default AppNavbar;
+
+
+
