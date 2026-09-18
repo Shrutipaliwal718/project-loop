@@ -1,0 +1,459 @@
+/* =========================================================
+   LOOP — Feedback Module
+   Feature-specific styling only.
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   Section animations
+   --------------------------------------------------------- */
+
+.fadeUp {
+  animation: fadeUp 0.65s ease-out both;
+}
+
+.fadeUpDelayed {
+  animation: fadeUp 0.7s ease-out 0.1s both;
+}
+
+.fadeIn {
+  animation: fadeIn 0.5s ease-out both;
+}
+
+.contentEnter {
+  animation: contentEnter 0.4s ease-out both;
+}
+
+/* ---------------------------------------------------------
+   Ingestion tabs
+   --------------------------------------------------------- */
+
+.ingestionTab {
+  position: relative;
+  overflow: hidden;
+  transition:
+    background-color 300ms ease,
+    border-color 300ms ease,
+    transform 300ms ease,
+    box-shadow 300ms ease;
+}
+
+.ingestionTab:hover {
+  transform: translateY(-1px);
+}
+
+.ingestionTab::after {
+  content: "";
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  bottom: 0;
+  height: 1px;
+  opacity: 0;
+  transform: scaleX(0.5);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(25, 230, 209, 0.75),
+    transparent
+  );
+  transition:
+    opacity 300ms ease,
+    transform 300ms ease;
+}
+
+.ingestionTabActive::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+/* ---------------------------------------------------------
+   Form inputs
+   --------------------------------------------------------- */
+
+.input {
+  transition:
+    border-color 300ms ease,
+    background-color 300ms ease,
+    box-shadow 300ms ease;
+}
+
+.input:focus {
+  border-color: rgba(25, 230, 209, 0.3);
+  background-color: #030912;
+  box-shadow: 0 0 30px rgba(25, 230, 209, 0.05);
+}
+
+.input::placeholder {
+  color: rgba(100, 116, 139, 0.45);
+}
+
+/* ---------------------------------------------------------
+   Primary button
+   --------------------------------------------------------- */
+
+.primaryButton {
+  position: relative;
+  overflow: hidden;
+  transition:
+    background-color 300ms ease,
+    border-color 300ms ease,
+    box-shadow 300ms ease,
+    transform 300ms ease;
+}
+
+.primaryButton::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.07) 50%,
+    transparent 80%
+  );
+  transform: translateX(-120%);
+  transition: transform 600ms ease;
+}
+
+.primaryButton:hover::before {
+  transform: translateX(120%);
+}
+
+.primaryButton:hover {
+  border-color: rgba(25, 230, 209, 0.35);
+  background-color: rgba(25, 230, 209, 0.15);
+  box-shadow: 0 0 24px rgba(25, 230, 209, 0.1);
+}
+
+.primaryButton:active {
+  transform: scale(0.98);
+}
+
+.primaryButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+  box-shadow: none;
+  transform: none;
+}
+
+/* ---------------------------------------------------------
+   Upload drop zone
+   --------------------------------------------------------- */
+
+.dropZone {
+  position: relative;
+  overflow: hidden;
+  transition:
+    border-color 300ms ease,
+    background-color 300ms ease,
+    box-shadow 300ms ease,
+    transform 300ms ease;
+}
+
+.dropZone::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at 50% 0%,
+    rgba(25, 230, 209, 0.05),
+    transparent 55%
+  );
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+
+.dropZone:hover::before {
+  opacity: 1;
+}
+
+.dropZone:hover {
+  border-color: rgba(25, 230, 209, 0.25);
+  background-color: rgba(25, 230, 209, 0.025);
+}
+
+.dropZoneDragging {
+  border-color: rgba(25, 230, 209, 0.5);
+  background-color: rgba(25, 230, 209, 0.06);
+  box-shadow: 0 0 35px rgba(25, 230, 209, 0.07);
+  transform: scale(1.005);
+}
+
+.uploadIcon {
+  transition:
+    border-color 300ms ease,
+    color 300ms ease,
+    background-color 300ms ease,
+    transform 300ms ease;
+}
+
+.dropZone:hover .uploadIcon {
+  border-color: rgba(25, 230, 209, 0.2);
+  color: #19e6d1;
+  background-color: rgba(25, 230, 209, 0.06);
+  transform: translateY(-2px);
+}
+
+/* ---------------------------------------------------------
+   Channel cards
+   --------------------------------------------------------- */
+
+.channelCard {
+  transition:
+    border-color 300ms ease,
+    background-color 300ms ease,
+    box-shadow 300ms ease,
+    transform 300ms ease;
+}
+
+.channelCard:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.channelCardSelected {
+  border-color: rgba(25, 230, 209, 0.2);
+  background-color: rgba(25, 230, 209, 0.045);
+  box-shadow: 0 0 25px rgba(25, 230, 209, 0.035);
+}
+
+/* ---------------------------------------------------------
+   Radio indicator
+   --------------------------------------------------------- */
+
+.radioIndicator {
+  transition:
+    border-color 250ms ease,
+    background-color 250ms ease,
+    box-shadow 250ms ease,
+    transform 250ms ease;
+}
+
+.radioIndicatorSelected {
+  border-color: rgba(25, 230, 209, 0.6);
+  background-color: #19e6d1;
+  box-shadow: 0 0 10px rgba(25, 230, 209, 0.45);
+  transform: scale(1.05);
+}
+
+/* ---------------------------------------------------------
+   Filter bar
+   --------------------------------------------------------- */
+
+.filterBar {
+  transition:
+    border-color 300ms ease,
+    box-shadow 300ms ease;
+}
+
+.filterBar:focus-within {
+  border-color: rgba(25, 230, 209, 0.12);
+  box-shadow: 0 0 25px rgba(25, 230, 209, 0.025);
+}
+
+.filterInput {
+  transition:
+    border-color 300ms ease,
+    background-color 300ms ease,
+    box-shadow 300ms ease;
+}
+
+.filterInput:focus {
+  border-color: rgba(25, 230, 209, 0.2);
+  background-color: #030912;
+  box-shadow: 0 0 20px rgba(25, 230, 209, 0.035);
+}
+
+/* ---------------------------------------------------------
+   Feedback rows
+   --------------------------------------------------------- */
+
+.feedbackRow {
+  transition:
+    background-color 300ms ease,
+    transform 300ms ease;
+}
+
+.feedbackRow:hover {
+  background-color: rgba(255, 255, 255, 0.018);
+}
+
+.feedbackContent {
+  transition: color 300ms ease;
+}
+
+.feedbackRow:hover .feedbackContent {
+  color: rgb(226, 232, 240);
+}
+
+/* ---------------------------------------------------------
+   Row action
+   --------------------------------------------------------- */
+
+.rowAction {
+  transition:
+    background-color 300ms ease,
+    color 300ms ease,
+    transform 300ms ease;
+}
+
+.rowAction:hover {
+  background-color: rgba(255, 255, 255, 0.04);
+  color: #19e6d1;
+  transform: translateX(2px);
+}
+
+/* ---------------------------------------------------------
+   Badges
+   --------------------------------------------------------- */
+
+.badge {
+  transition:
+    background-color 250ms ease,
+    border-color 250ms ease,
+    transform 250ms ease;
+}
+
+.badge:hover {
+  transform: translateY(-1px);
+}
+
+/* ---------------------------------------------------------
+   Empty state
+   --------------------------------------------------------- */
+
+.emptyStateIcon {
+  transition:
+    border-color 300ms ease,
+    color 300ms ease,
+    transform 300ms ease;
+}
+
+.emptyState:hover .emptyStateIcon {
+  border-color: rgba(25, 230, 209, 0.15);
+  color: rgba(25, 230, 209, 0.7);
+  transform: translateY(-2px);
+}
+
+/* ---------------------------------------------------------
+   Spinner
+   --------------------------------------------------------- */
+
+.spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(25, 230, 209, 0.2);
+  border-top-color: #19e6d1;
+  border-radius: 9999px;
+  animation: spin 0.8s linear infinite;
+}
+
+/* ---------------------------------------------------------
+   Live indicator
+   --------------------------------------------------------- */
+
+.liveDot {
+  animation: livePulse 2s ease-in-out infinite;
+}
+
+/* ---------------------------------------------------------
+   Keyframes
+   --------------------------------------------------------- */
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes contentEnter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes livePulse {
+  0%,
+  100% {
+    opacity: 0.55;
+    box-shadow: 0 0 5px rgba(25, 230, 209, 0.35);
+  }
+
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 12px rgba(25, 230, 209, 0.75);
+  }
+}
+
+/* ---------------------------------------------------------
+   Reduced motion
+   --------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .fadeUp,
+  .fadeUpDelayed,
+  .fadeIn,
+  .contentEnter,
+  .spinner,
+  .liveDot {
+    animation: none;
+  }
+
+  .ingestionTab,
+  .primaryButton,
+  .dropZone,
+  .channelCard,
+  .radioIndicator,
+  .filterBar,
+  .filterInput,
+  .feedbackRow,
+  .rowAction,
+  .badge,
+  .emptyStateIcon {
+    transition: none;
+  }
+}
+
+/* ---------------------------------------------------------
+   Mobile
+   --------------------------------------------------------- */
+
+@media (max-width: 640px) {
+  .dropZone {
+    padding: 2rem 1rem;
+  }
+
+  .primaryButton {
+    width: 100%;
+    justify-content: center;
+  }
+}

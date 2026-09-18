@@ -25,7 +25,6 @@ const config: Config = {
 
       boxShadow: {
         "loop-cyan": "0 0 35px rgba(25, 230, 209, 0.14)",
-
         "loop-purple": "0 0 35px rgba(139, 92, 246, 0.14)",
       },
     },
