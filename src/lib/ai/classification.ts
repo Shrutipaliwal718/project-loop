@@ -1,9 +1,9 @@
-﻿import Anthropic from "@anthropic-ai/sdk";
+import { GoogleGenAI, Type } from "@google/genai";
 import { Sentiment } from "@prisma/client";
 import { z } from "zod";
 
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
+const gemini = new GoogleGenAI({
+  apiKey: process.env.GEMINI_API_KEY,
 });
 
 const classificationSchema = z.object({
@@ -44,7 +44,7 @@ const extractJson = (text: string): string => {
   const end = withoutFence.lastIndexOf("}");
 
   if (start === -1 || end === -1 || end <= start) {
-    throw new Error("Claude did not return valid JSON");
+    throw new Error("Gemini did not return valid JSON");
   }
 
   return withoutFence.slice(start, end + 1);
@@ -53,8 +53,8 @@ const extractJson = (text: string): string => {
 export const classifyFeedback = async (
   content: string
 ): Promise<ClassificationResult> => {
-  if (!process.env.ANTHROPIC_API_KEY) {
-    throw new Error("ANTHROPIC_API_KEY is not configured");
+  if (!process.env.GEMINI_API_KEY) {
+    throw new Error("GEMINI_API_KEY is not configured");
   }
 
   const trimmedContent = content.trim();
@@ -63,12 +63,15 @@ export const classifyFeedback = async (
     throw new Error("Feedback content cannot be empty");
   }
 
-  const response = await anthropic.messages.create({
-    model: "claude-sonnet-4-6",
-    max_tokens: 500,
-    temperature: 0,
+  const response = await gemini.models.generateContent({
+    model: "gemini-3.5-flash-lite",
+    contents: `Classify the following customer feedback:
 
-    system: `You are the AI classification engine for LOOP, a customer feedback intelligence platform.
+${trimmedContent}`,
+    config: {
+      temperature: 0,
+
+      systemInstruction: `You are the AI classification engine for LOOP, a customer feedback intelligence platform.
 
 Your job is to analyze customer feedback and classify it accurately.
 
@@ -128,24 +131,51 @@ Rules:
 
 10. Do not return any fields other than the required fields.`,
 
-    messages: [
-      {
-        role: "user",
-        content: `Classify the following customer feedback:
+      responseMimeType: "application/json",
 
-${trimmedContent}`,
+      responseSchema: {
+        type: Type.OBJECT,
+        properties: {
+          sentiment: {
+            type: Type.STRING,
+            enum: ["POS", "NEU", "NEG"],
+          },
+          sentimentScore: {
+            type: Type.NUMBER,
+          },
+          featureArea: {
+            type: Type.STRING,
+          },
+          themes: {
+            type: Type.ARRAY,
+            items: {
+              type: Type.OBJECT,
+              properties: {
+                name: {
+                  type: Type.STRING,
+                },
+                confidence: {
+                  type: Type.NUMBER,
+                },
+              },
+              required: ["name", "confidence"],
+            },
+          },
+        },
+        required: [
+          "sentiment",
+          "sentimentScore",
+          "featureArea",
+          "themes",
+        ],
       },
-    ],
+    },
   });
 
-  const text = response.content
-    .filter((block) => block.type === "text")
-    .map((block) => block.text)
-    .join("")
-    .trim();
+  const text = response.text?.trim();
 
   if (!text) {
-    throw new Error("Claude returned an empty response");
+    throw new Error("Gemini returned an empty response");
   }
 
   const rawJson = extractJson(text);

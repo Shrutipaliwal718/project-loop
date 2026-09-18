@@ -1,8 +1,54 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
+
+type MemberStats = {
+  total: number;
+  admins: number;
+  analysts: number;
+  viewers: number;
+};
 
 const AdminWorkspace = () => {
+  const [stats, setStats] = useState<MemberStats>({
+    total: 0,
+    admins: 0,
+    analysts: 0,
+    viewers: 0,
+  });
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadStats = async () => {
+      try {
+        const response = await fetch("/api/workspace/members", {
+          credentials: "include",
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to load workspace members");
+        }
+
+        const data = await response.json();
+
+        setStats({
+          total: data.counts?.total ?? 0,
+          admins: data.counts?.admins ?? 0,
+          analysts: data.counts?.analysts ?? 0,
+          viewers: data.counts?.viewers ?? 0,
+        });
+      } catch (error) {
+        console.error("Failed to load member stats:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadStats();
+  }, []);
+
   return (
     <section className="rounded-2xl border border-white/10 bg-white/[0.025] p-5 shadow-[0_0_40px_rgba(0,0,0,0.18)]">
       <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
@@ -55,17 +101,23 @@ const AdminWorkspace = () => {
       <div className="mt-5 grid gap-3 sm:grid-cols-3">
         <div className="rounded-xl border border-white/8 bg-black/10 px-4 py-3">
           <p className="text-xs text-slate-500">Members</p>
-          <p className="mt-1 text-xl font-semibold text-white">24</p>
+          <p className="mt-1 text-xl font-semibold text-white">
+            {loading ? "�" : stats.total}
+          </p>
         </div>
 
         <div className="rounded-xl border border-white/8 bg-black/10 px-4 py-3">
           <p className="text-xs text-slate-500">Analysts</p>
-          <p className="mt-1 text-xl font-semibold text-white">8</p>
+          <p className="mt-1 text-xl font-semibold text-white">
+            {loading ? "�" : stats.analysts}
+          </p>
         </div>
 
         <div className="rounded-xl border border-white/8 bg-black/10 px-4 py-3">
           <p className="text-xs text-slate-500">Viewers</p>
-          <p className="mt-1 text-xl font-semibold text-white">13</p>
+          <p className="mt-1 text-xl font-semibold text-white">
+            {loading ? "�" : stats.viewers}
+          </p>
         </div>
       </div>
     </section>
@@ -73,5 +125,3 @@ const AdminWorkspace = () => {
 };
 
 export default AdminWorkspace;
-
-

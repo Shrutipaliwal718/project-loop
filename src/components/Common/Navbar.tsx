@@ -97,7 +97,12 @@ export default function Navbar() {
 
             {/* SIGN IN */}
 
-            <Link href="/login" className="whitespace-nowrap rounded-lg px-3 py-2.5 text-[14px] font-semibold text-slate-300 transition-colors duration-200 hover:text-white">Sign in</Link>
+            <Link
+              href="/login"
+              className="whitespace-nowrap rounded-lg border border-transparent px-3 py-2.5 text-[14px] font-semibold text-slate-400 transition-all duration-300 hover:-translate-y-0.5 hover:border-cyan-300/25 hover:bg-cyan-300/[0.05] hover:text-cyan-300 hover:shadow-[0_0_20px_rgba(0,229,212,0.10)]"
+            >
+              Sign in
+            </Link>
 
             {/* GET STARTED */}
 
@@ -159,7 +164,13 @@ export default function Navbar() {
               <div className="grid grid-cols-2 gap-3">
                 {/* MOBILE SIGN IN */}
 
-                <Link href="/login" onClick={() => setMenuOpen(false)} className="rounded-lg border border-white/10 px-4 py-3 text-center text-[14px] font-semibold text-slate-300 transition hover:border-cyan-300/25 hover:text-white">Sign in</Link>
+                <Link
+                  href="/login"
+                  onClick={() => setMenuOpen(false)}
+                  className="rounded-lg border border-white/10 px-4 py-3 text-center text-[14px] font-semibold text-slate-300 transition hover:border-cyan-300/25 hover:text-white"
+                >
+                  Sign in
+                </Link>
 
                 {/* MOBILE GET STARTED */}
 
@@ -182,5 +193,3 @@ export default function Navbar() {
     </>
   );
 }
-
-

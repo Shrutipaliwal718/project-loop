@@ -1,8 +1,12 @@
-import Anthropic from "@anthropic-ai/sdk";
+import { GoogleGenAI, Type } from "@google/genai";
 import type { FeatureExtractionPipeline } from "@xenova/transformers";
 import { Sentiment } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
+
+const gemini = new GoogleGenAI({
+  apiKey: process.env.GEMINI_API_KEY,
+});
 
 export interface ClassificationResult {
   sentiment: Sentiment;
@@ -31,6 +35,7 @@ export const generateEmbedding = async (
 ): Promise<number[] | null> => {
   try {
     const { pipeline } = await import("@xenova/transformers");
+
     if (!embedder) {
       embedder = await pipeline(
         "feature-extraction",
@@ -84,10 +89,13 @@ export const storeFeedbackEmbedding = async (
 /**
  * Ask LOOP:
  * Generate a query embedding, retrieve semantically similar
- * feedback from the current workspace, then use Claude
+ * feedback from the current workspace, then use Gemini
  * to generate a grounded answer.
  */
-export const answerRAGQuery = async (query: string, workspaceId: string) => {
+export const answerRAGQuery = async (
+  query: string,
+  workspaceId: string,
+) => {
   const trimmedQuery = query.trim();
 
   if (!trimmedQuery) {
@@ -96,6 +104,10 @@ export const answerRAGQuery = async (query: string, workspaceId: string) => {
 
   if (!workspaceId) {
     throw new Error("Workspace ID is required");
+  }
+
+  if (!process.env.GEMINI_API_KEY) {
+    throw new Error("GEMINI_API_KEY is not configured");
   }
 
   let topFeedbacks: Array<{
@@ -182,20 +194,20 @@ Content: ${feedback.content}`,
     )
     .join("\n\n");
 
-  if (!process.env.ANTHROPIC_API_KEY) {
-    throw new Error("ANTHROPIC_API_KEY is not configured");
-  }
-
   try {
-    const anthropic = new Anthropic({
-      apiKey: process.env.ANTHROPIC_API_KEY,
-    });
+    const response = await gemini.models.generateContent({
+      model: "gemini-3.5-flash-lite",
+      contents: `Customer feedback context:
 
-    const response = await anthropic.messages.create({
-      model: "claude-sonnet-4-6",
-      max_tokens: 700,
-      temperature: 0,
-      system: `You are Ask LOOP, the customer-feedback intelligence assistant.
+${contextText}
+
+User question:
+
+${trimmedQuery}`,
+      config: {
+        temperature: 0,
+
+        systemInstruction: `You are Ask LOOP, the customer-feedback intelligence assistant.
 
 Answer the user's question using ONLY the supplied customer feedback context.
 
@@ -205,28 +217,13 @@ Rules:
 3. Mention specific Feedback IDs when they support the answer.
 4. Keep the answer concise and executive-friendly.
 5. Do not claim information that is not present in the context.`,
-      messages: [
-        {
-          role: "user",
-          content: `Customer feedback context:
-
-${contextText}
-
-User question:
-
-${trimmedQuery}`,
-        },
-      ],
+      },
     });
 
-    const answer = response.content
-      .filter((block) => block.type === "text")
-      .map((block) => block.text)
-      .join("")
-      .trim();
+    const answer = response.text?.trim();
 
     if (!answer) {
-      throw new Error("Claude returned an empty answer");
+      throw new Error("Gemini returned an empty answer");
     }
 
     return {
@@ -243,13 +240,13 @@ ${trimmedQuery}`,
       })),
     };
   } catch (error) {
-    console.error("Ask LOOP Claude error:", error);
+    console.error("Ask LOOP Gemini error:", error);
     throw error;
   }
 };
 
 /**
- * Generate an emerging friction trend using Claude.
+ * Generate an emerging friction trend using Gemini.
  */
 export const analyzeEmergingTrend = async (
   feedbacks: Array<{
@@ -263,8 +260,8 @@ export const analyzeEmergingTrend = async (
     return null;
   }
 
-  if (!process.env.ANTHROPIC_API_KEY) {
-    throw new Error("ANTHROPIC_API_KEY is not configured");
+  if (!process.env.GEMINI_API_KEY) {
+    throw new Error("GEMINI_API_KEY is not configured");
   }
 
   const contextText = feedbacks
@@ -277,15 +274,15 @@ Content: ${feedback.content}`,
     )
     .join("\n\n");
 
-  const anthropic = new Anthropic({
-    apiKey: process.env.ANTHROPIC_API_KEY,
-  });
+  const response = await gemini.models.generateContent({
+    model: "gemini-3.5-flash-lite",
+    contents: `Recent customer feedback:
 
-  const response = await anthropic.messages.create({
-    model: "claude-sonnet-4-6",
-    max_tokens: 400,
-    temperature: 0,
-    system: `You are LOOP's customer feedback trend analyzer.
+${contextText}`,
+    config: {
+      temperature: 0,
+
+      systemInstruction: `You are LOOP's customer feedback trend analyzer.
 
 Analyze only the supplied feedback.
 
@@ -298,37 +295,41 @@ Return ONLY valid JSON:
 
 Do not invent facts.
 The increase value should represent an estimated percentage change only when the supplied dataset supports such a comparison. Otherwise return 0.`,
-    messages: [
-      {
-        role: "user",
-        content: `Recent customer feedback:
 
-${contextText}`,
+      responseMimeType: "application/json",
+
+      responseSchema: {
+        type: Type.OBJECT,
+        properties: {
+          title: {
+            type: Type.STRING,
+          },
+          increase: {
+            type: Type.NUMBER,
+          },
+          description: {
+            type: Type.STRING,
+          },
+        },
+        required: ["title", "increase", "description"],
       },
-    ],
+    },
   });
 
-  const text = response.content
-    .filter((block) => block.type === "text")
-    .map((block) => block.text)
-    .join("")
-    .trim();
+  const text = response.text?.trim();
+
+  if (!text) {
+    throw new Error("Gemini returned empty trend JSON");
+  }
 
   const start = text.indexOf("{");
   const end = text.lastIndexOf("}");
 
   if (start === -1 || end === -1) {
-    throw new Error("Claude returned invalid trend JSON");
+    throw new Error("Gemini returned invalid trend JSON");
   }
 
   const parsed: unknown = JSON.parse(text.slice(start, end + 1));
 
   return trendSchema.parse(parsed);
 };
-
-
-
-
-
-
-

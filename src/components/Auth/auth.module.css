@@ -934,3 +934,122 @@
     transition: none;
   }
 }
+
+.signupMode {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+  margin-bottom: 2px;
+}
+
+.modeOption {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 58px;
+  padding: 10px 11px;
+  border: 1px solid var(--auth-border);
+  border-radius: 11px;
+  background: rgba(3, 9, 18, 0.32);
+  cursor: pointer;
+  transition:
+    border-color 180ms ease,
+    background 180ms ease,
+    transform 180ms ease;
+}
+
+.modeOption:hover {
+  border-color: rgba(25, 230, 209, 0.25);
+  background: rgba(16, 32, 51, 0.5);
+  transform: translateY(-1px);
+}
+
+.modeOptionActive {
+  border-color: rgba(25, 230, 209, 0.4);
+  background: rgba(25, 230, 209, 0.055);
+}
+
+.modeOption input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.radioIndicator {
+  position: relative;
+  flex: 0 0 auto;
+  width: 15px;
+  height: 15px;
+  border: 1px solid rgba(145, 181, 207, 0.32);
+  border-radius: 50%;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.modeOptionActive .radioIndicator {
+  border-color: var(--auth-cyan);
+  box-shadow: 0 0 0 3px rgba(25, 230, 209, 0.08);
+}
+
+.modeOptionActive .radioIndicator::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: var(--auth-cyan);
+  box-shadow: 0 0 8px rgba(25, 230, 209, 0.55);
+}
+
+.modeContent {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.modeContent strong {
+  color: var(--auth-text);
+  font-size: 10px;
+  font-weight: 650;
+}
+
+.modeContent small {
+  color: var(--auth-muted);
+  font-size: 8px;
+  line-height: 1.35;
+}
+
+.formError,
+.formSuccess {
+  padding: 9px 11px;
+  border-radius: 9px;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.formError {
+  border: 1px solid rgba(248, 113, 113, 0.2);
+  background: rgba(248, 113, 113, 0.06);
+  color: #fca5a5;
+}
+
+.formSuccess {
+  border: 1px solid rgba(25, 230, 209, 0.2);
+  background: rgba(25, 230, 209, 0.05);
+  color: #8ff7ea;
+}
+
+.primaryButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+  transform: none;
+  filter: none;
+}
+
+@media (max-width: 520px) {
+  .signupMode {
+    grid-template-columns: 1fr;
+  }
+}

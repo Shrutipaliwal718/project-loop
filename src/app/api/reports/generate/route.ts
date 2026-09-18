@@ -1,10 +1,14 @@
+import { GoogleGenAI, Type } from "@google/genai";
 import { z } from "zod";
 import { NextResponse } from "next/server";
 import { requireAuth } from "@/lib/require-auth";
 import { prisma } from "@/lib/prisma";
-import Anthropic from "@anthropic-ai/sdk";
 
 export const dynamic = "force-dynamic";
+
+const gemini = new GoogleGenAI({
+  apiKey: process.env.GEMINI_API_KEY,
+});
 
 const requestSchema = z.object({
   periodStart: z
@@ -73,7 +77,7 @@ const extractJson = (text: string): string => {
   const end = cleaned.lastIndexOf("}");
 
   if (start === -1 || end === -1 || end <= start) {
-    throw new Error("Claude returned invalid report JSON");
+    throw new Error("Gemini returned invalid report JSON");
   }
 
   return cleaned.slice(start, end + 1);
@@ -180,19 +184,22 @@ Content: ${feedback.content}`,
       )
       .join("\n\n");
 
-    if (!process.env.ANTHROPIC_API_KEY) {
-      throw new Error("ANTHROPIC_API_KEY is not configured");
+    if (!process.env.GEMINI_API_KEY) {
+      throw new Error("GEMINI_API_KEY is not configured");
     }
 
-    const anthropic = new Anthropic({
-      apiKey: process.env.ANTHROPIC_API_KEY,
-    });
+    const response = await gemini.models.generateContent({
+      model: "gemini-3.5-flash-lite",
+      contents: `Reporting period:
+${periodStart.toISOString()} to ${periodEnd.toISOString()}
 
-    const response = await anthropic.messages.create({
-      model: "claude-sonnet-4-6",
-      max_tokens: 1600,
-      temperature: 0,
-      system: `You are LOOP's Voice-of-Customer report generator.
+Customer feedback:
+
+${contextText}`,
+      config: {
+        temperature: 0,
+
+        systemInstruction: `You are LOOP's Voice-of-Customer report generator.
 
 Analyze ONLY the supplied customer feedback.
 
@@ -238,30 +245,110 @@ Rules:
 6. If there is insufficient evidence for a claim, do not make that claim.
 7. Return JSON only. No markdown or explanation outside JSON.`,
 
-      messages: [
-        {
-          role: "user",
-          content: `Reporting period:
-${periodStart.toISOString()} to ${periodEnd.toISOString()}
+        responseMimeType: "application/json",
 
-Customer feedback:
-
-${contextText}`,
+        responseSchema: {
+          type: Type.OBJECT,
+          properties: {
+            executiveSummary: {
+              type: Type.STRING,
+            },
+            topThemes: {
+              type: Type.ARRAY,
+              items: {
+                type: Type.OBJECT,
+                properties: {
+                  name: {
+                    type: Type.STRING,
+                  },
+                  count: {
+                    type: Type.INTEGER,
+                  },
+                  percentage: {
+                    type: Type.NUMBER,
+                  },
+                  insight: {
+                    type: Type.STRING,
+                  },
+                },
+                required: [
+                  "name",
+                  "count",
+                  "percentage",
+                  "insight",
+                ],
+              },
+            },
+            sentimentShifts: {
+              type: Type.ARRAY,
+              items: {
+                type: Type.OBJECT,
+                properties: {
+                  sentiment: {
+                    type: Type.STRING,
+                    enum: ["POS", "NEU", "NEG"],
+                  },
+                  observation: {
+                    type: Type.STRING,
+                  },
+                },
+                required: ["sentiment", "observation"],
+              },
+            },
+            notableQuotes: {
+              type: Type.ARRAY,
+              items: {
+                type: Type.OBJECT,
+                properties: {
+                  feedbackId: {
+                    type: Type.STRING,
+                  },
+                  quote: {
+                    type: Type.STRING,
+                  },
+                  reason: {
+                    type: Type.STRING,
+                  },
+                },
+                required: ["feedbackId", "quote", "reason"],
+              },
+            },
+            recommendedActions: {
+              type: Type.ARRAY,
+              items: {
+                type: Type.OBJECT,
+                properties: {
+                  action: {
+                    type: Type.STRING,
+                  },
+                  reason: {
+                    type: Type.STRING,
+                  },
+                },
+                required: ["action", "reason"],
+              },
+            },
+          },
+          required: [
+            "executiveSummary",
+            "topThemes",
+            "sentimentShifts",
+            "notableQuotes",
+            "recommendedActions",
+          ],
         },
-      ],
+      },
     });
 
-    const text = response.content
-      .filter((block) => block.type === "text")
-      .map((block) => block.text)
-      .join("")
-      .trim();
+    const text = response.text?.trim();
 
     if (!text) {
-      throw new Error("Claude returned an empty report");
+      throw new Error("Gemini returned an empty report");
     }
 
-    const reportData = reportSchema.parse(JSON.parse(extractJson(text)));
+    const reportData = reportSchema.parse(
+      JSON.parse(extractJson(text)),
+    );
 
     const savedReport = await prisma.report.create({
       data: {

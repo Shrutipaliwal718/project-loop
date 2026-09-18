@@ -1,6 +1,7 @@
-﻿"use client";
+"use client";
 
-import { useState } from "react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
 type AppNavbarProps = {
@@ -8,10 +9,43 @@ type AppNavbarProps = {
   sidebarOpen: boolean;
 };
 
+type CurrentUser = {
+  name: string;
+  email: string;
+  role: "ADMIN" | "ANALYST" | "VIEWER";
+};
+
 const AppNavbar = ({ onMenuClick, sidebarOpen }: AppNavbarProps) => {
   const pathname = usePathname();
   const router = useRouter();
+
   const [profileOpen, setProfileOpen] = useState(false);
+  const [user, setUser] = useState<CurrentUser | null>(null);
+
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const response = await fetch("/api/auth/me", {
+          credentials: "include",
+          cache: "no-store",
+        });
+
+        if (!response.ok) {
+          return;
+        }
+
+        const data = await response.json();
+
+        if (data.success && data.user) {
+          setUser(data.user);
+        }
+      } catch (error) {
+        console.error("Failed to load current user:", error);
+      }
+    };
+
+    loadUser();
+  }, []);
 
   const pageInfo = {
     "/dashboard": {
@@ -43,18 +77,30 @@ const AppNavbar = ({ onMenuClick, sidebarOpen }: AppNavbarProps) => {
   const currentPage =
     pageInfo[pathname as keyof typeof pageInfo] ?? pageInfo["/dashboard"];
 
+  const roleLabel =
+    user?.role === "ADMIN"
+      ? "Administrator"
+      : user?.role === "ANALYST"
+        ? "Analyst"
+        : user?.role === "VIEWER"
+          ? "Viewer"
+          : "";
+
+  const userInitial =
+    user?.name?.trim()?.charAt(0)?.toUpperCase() || "U";
+
   const handleLogout = async () => {
     try {
       await fetch("/api/auth/logout", {
         method: "POST",
         credentials: "include",
-      })
+      });
     } finally {
-      setProfileOpen(false)
-      router.replace("/login")
-      router.refresh()
+      setProfileOpen(false);
+      router.replace("/login");
+      router.refresh();
     }
-  }
+  };
 
   const handleProfileClick = () => {
     setProfileOpen(false);
@@ -200,7 +246,7 @@ const AppNavbar = ({ onMenuClick, sidebarOpen }: AppNavbarProps) => {
               aria-haspopup="menu"
               className="flex h-9 w-9 items-center justify-center rounded-full border border-cyan-300/20 bg-gradient-to-br from-cyan-300 to-cyan-500 text-sm font-bold text-[#031018] shadow-[0_0_18px_rgba(25,230,209,0.18)] transition-all duration-300 hover:scale-105 hover:shadow-[0_0_24px_rgba(25,230,209,0.3)]"
             >
-              P
+              {userInitial}
             </button>
 
             {profileOpen && (
@@ -211,16 +257,16 @@ const AppNavbar = ({ onMenuClick, sidebarOpen }: AppNavbarProps) => {
                 <div className="border-b border-white/[0.07] px-3 py-3">
                   <div className="flex items-center gap-3">
                     <div className="flex h-9 w-9 items-center justify-center rounded-full bg-cyan-400/10 text-sm font-semibold text-cyan-300">
-                      P
+                      {userInitial}
                     </div>
 
-                    <div>
-                      <p className="text-sm font-medium text-white">
-                        Pravind Kumar
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-medium text-white">
+                        {user?.name || "Loading..."}
                       </p>
 
                       <p className="mt-0.5 text-[10px] text-slate-500">
-                        Administrator
+                        {roleLabel}
                       </p>
                     </div>
                   </div>
@@ -263,6 +309,3 @@ const AppNavbar = ({ onMenuClick, sidebarOpen }: AppNavbarProps) => {
 };
 
 export default AppNavbar;
-
-
-

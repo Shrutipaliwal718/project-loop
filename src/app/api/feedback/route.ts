@@ -142,7 +142,7 @@ export async function POST(request: Request) {
             },
           },
         });
-      });
+      }, { timeout: 15000 });
 
       try {
         await storeFeedbackEmbedding(

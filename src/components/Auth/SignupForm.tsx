@@ -2,12 +2,114 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import LoopLogo from "@/components/Common/LoopLogo";
 import styles from "./auth.module.css";
 
+type SignupMode = "CREATE" | "JOIN";
+
 const SignupForm = () => {
+  const router = useRouter();
+
+  const [mode, setMode] = useState<SignupMode>("CREATE");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    setMessage("");
+    setError("");
+
+    const formData = new FormData(event.currentTarget);
+
+    const name = String(formData.get("name") ?? "").trim();
+    const email = String(formData.get("email") ?? "").trim();
+    const password = String(formData.get("password") ?? "");
+    const confirmPassword = String(
+      formData.get("confirmPassword") ?? "",
+    );
+    const termsAccepted = formData.get("terms") === "on";
+
+    const workspaceName = String(
+      formData.get("workspaceName") ?? "",
+    ).trim();
+
+    const inviteCode = String(
+      formData.get("inviteCode") ?? "",
+    ).trim();
+
+    if (!name || !email || !password || !confirmPassword) {
+      setError("Please fill in all required fields.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    if (!termsAccepted) {
+      setError("Please accept the Terms of Service and Privacy Policy.");
+      return;
+    }
+
+    if (mode === "CREATE" && !workspaceName) {
+      setError("Please enter a workspace name.");
+      return;
+    }
+
+    if (mode === "JOIN" && !inviteCode) {
+      setError("Please enter your invite code.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const response = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+          mode,
+          workspaceName: mode === "CREATE" ? workspaceName : undefined,
+          inviteCode: mode === "JOIN" ? inviteCode : undefined,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.message ?? "Unable to create your account.");
+      }
+
+      setMessage(
+        mode === "CREATE"
+          ? "Workspace created successfully. Redirecting to login..."
+          : "You joined the workspace successfully. Redirecting to login...",
+      );
+
+      setTimeout(() => {
+        router.push("/login");
+      }, 900);
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Something went wrong during signup.",
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className={styles.formWrapper}>
@@ -23,12 +125,154 @@ const SignupForm = () => {
       <div className={styles.formHeader}>
         <p className={styles.eyebrow}>GET STARTED</p>
 
-        <h1>Create your workspace</h1>
+        <h1>
+          {mode === "CREATE"
+            ? "Create your workspace"
+            : "Join a workspace"}
+        </h1>
 
-        <p>Bring customer feedback together and turn it into intelligence.</p>
+        <p>
+          {mode === "CREATE"
+            ? "Bring customer feedback together and turn it into intelligence."
+            : "Join your team workspace using the invite code provided by an admin."}
+        </p>
       </div>
 
-      <form className={styles.form}>
+      <div className={styles.signupMode}>
+        <label
+          className={`${styles.modeOption} ${
+            mode === "CREATE" ? styles.modeOptionActive : ""
+          }`}
+        >
+          <input
+            type="radio"
+            name="signupMode"
+            value="CREATE"
+            checked={mode === "CREATE"}
+            onChange={() => {
+              setMode("CREATE");
+              setError("");
+              setMessage("");
+            }}
+          />
+
+          <span className={styles.radioIndicator} />
+
+          <span className={styles.modeContent}>
+            <strong>Create Workspace</strong>
+            <small>Start a new workspace as admin</small>
+          </span>
+        </label>
+
+        <label
+          className={`${styles.modeOption} ${
+            mode === "JOIN" ? styles.modeOptionActive : ""
+          }`}
+        >
+          <input
+            type="radio"
+            name="signupMode"
+            value="JOIN"
+            checked={mode === "JOIN"}
+            onChange={() => {
+              setMode("JOIN");
+              setError("");
+              setMessage("");
+            }}
+          />
+
+          <span className={styles.radioIndicator} />
+
+          <span className={styles.modeContent}>
+            <strong>Join Workspace</strong>
+            <small>Use an invite code from your admin</small>
+          </span>
+        </label>
+      </div>
+
+      <form className={styles.form} onSubmit={handleSubmit}>
+        {mode === "CREATE" ? (
+          <div className={styles.fieldGroup}>
+            <label htmlFor="signup-workspace">
+              Workspace Name
+            </label>
+
+            <div className={styles.inputWrapper}>
+              <svg
+                className={styles.inputIcon}
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M4 20V7.5L12 4l8 3.5V20"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M8 20v-5h8v5M8 9h.01M12 9h.01M16 9h.01"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                  strokeLinecap="round"
+                />
+              </svg>
+
+              <input
+                id="signup-workspace"
+                name="workspaceName"
+                type="text"
+                placeholder="Enter your workspace name"
+                autoComplete="organization"
+              />
+            </div>
+          </div>
+        ) : (
+          <div className={styles.fieldGroup}>
+            <label htmlFor="signup-invite">
+              Invite Code
+            </label>
+
+            <div className={styles.inputWrapper}>
+              <svg
+                className={styles.inputIcon}
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M8.5 15.5 15.5 8.5"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M7 17a3.5 3.5 0 1 1-5-5l4-4a3.5 3.5 0 0 1 5 0"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M17 7a3.5 3.5 0 1 1 5 5l-4 4a3.5 3.5 0 0 1-5 0"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                  strokeLinecap="round"
+                />
+              </svg>
+
+              <input
+                id="signup-invite"
+                name="inviteCode"
+                type="text"
+                placeholder="Enter your unique invite code"
+                autoComplete="off"
+                spellCheck={false}
+                style={{ textTransform: "uppercase" }}
+              />
+            </div>
+          </div>
+        )}
+
         <div className={styles.fieldGroup}>
           <label htmlFor="signup-name">Full name</label>
 
@@ -146,7 +390,9 @@ const SignupForm = () => {
         </div>
 
         <div className={styles.fieldGroup}>
-          <label htmlFor="signup-confirm-password">Confirm password</label>
+          <label htmlFor="signup-confirm-password">
+            Confirm password
+          </label>
 
           <div className={styles.inputWrapper}>
             <svg
@@ -183,7 +429,9 @@ const SignupForm = () => {
             <button
               type="button"
               className={styles.passwordToggle}
-              onClick={() => setShowConfirmPassword((current) => !current)}
+              onClick={() =>
+                setShowConfirmPassword((current) => !current)
+              }
               aria-label={
                 showConfirmPassword ? "Hide password" : "Show password"
               }
@@ -202,8 +450,30 @@ const SignupForm = () => {
           </span>
         </label>
 
-        <button type="submit" className={styles.primaryButton}>
-          <span>Create workspace</span>
+        {error ? (
+          <div className={styles.formError} role="alert">
+            {error}
+          </div>
+        ) : null}
+
+        {message ? (
+          <div className={styles.formSuccess} role="status">
+            {message}
+          </div>
+        ) : null}
+
+        <button
+          type="submit"
+          className={styles.primaryButton}
+          disabled={loading}
+        >
+          <span>
+            {loading
+              ? "Creating account..."
+              : mode === "CREATE"
+                ? "Create Workspace"
+                : "Join Workspace"}
+          </span>
 
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path
@@ -242,7 +512,6 @@ const SignupForm = () => {
             stroke="currentColor"
             strokeWidth="1.6"
             strokeLinecap="round"
-            strokeLinejoin="round"
           />
         </svg>
 
