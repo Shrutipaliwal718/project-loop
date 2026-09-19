@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
 import { verifySessionToken } from "@/lib/auth";
@@ -34,6 +34,14 @@ export async function GET() {
 
     const user = await prisma.user.findUnique({
       where: { id: session.userId },
+      include: {
+        workspace: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
     });
 
     if (!user) {
@@ -54,6 +62,12 @@ export async function GET() {
         email: user.email,
         role: user.role,
         workspaceId: user.workspaceId,
+        workspace: user.workspace
+          ? {
+              id: user.workspace.id,
+              name: user.workspace.name,
+            }
+          : null,
         profileImage: user.profileImage,
       },
     });
@@ -69,4 +83,5 @@ export async function GET() {
     );
   }
 }
+
 
