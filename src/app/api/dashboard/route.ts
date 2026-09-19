@@ -2,6 +2,7 @@ import { z } from "zod";
 import { NextResponse } from "next/server";
 import { requireAuth } from "@/lib/require-auth";
 import { prisma } from "@/lib/prisma";
+import { ensureWorkspaceSeed } from "@/lib/seed-workspace";
 
 export const dynamic = "force-dynamic";
 
@@ -40,6 +41,9 @@ export async function GET(request: Request) {
         { status: 401 },
       );
     }
+
+    // Auto-seed demo feedback if workspace is brand new
+    await ensureWorkspaceSeed(user.workspaceId);
 
     const { searchParams } = new URL(request.url);
 

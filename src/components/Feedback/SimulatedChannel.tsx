@@ -3,9 +3,28 @@
 import { useState } from "react";
 import styles from "./feedback.module.css";
 
+const simulationSnippets: Record<string, string[]> = {
+  CHAT: [
+    "Hi, I love the speedy customer support, but could you please add keyboard shortcuts to the inbox?",
+    "Chat agent helped me resolve my payment issue in minutes. Fantastic experience!",
+    "The app was freezing when I opened the report preview on my Android phone.",
+  ],
+  EMAIL: [
+    "Our team is very satisfied with the analytics export feature, helped us in our executive meeting.",
+    "Subscription renewal email had a broken link, had to contact support manually.",
+    "The dark mode is stunning, makes working in the evening so much easier on the eyes.",
+  ],
+  SURVEY: [
+    "Overall 9/10 satisfaction. Would appreciate direct Slack webhook notifications for urgent alerts.",
+    "Checkout took longer than expected today due to a loading spinner on the card input.",
+    "Clean UI, fast page transitions, and great customer theme breakdown.",
+  ],
+};
+
 const SimulatedChannel = () => {
   const [selectedChannel, setSelectedChannel] = useState("CHAT");
   const [isRunning, setIsRunning] = useState(false);
+  const [statusMsg, setStatusMsg] = useState<string | null>(null);
 
   const channels = [
     {
@@ -25,12 +44,40 @@ const SimulatedChannel = () => {
     },
   ];
 
-  const handleSimulation = () => {
-    setIsRunning(true);
+  const handleSimulation = async () => {
+    try {
+      setIsRunning(true);
+      setStatusMsg(null);
+      const snippets =
+        simulationSnippets[selectedChannel] || simulationSnippets.CHAT;
+      const randomContent =
+        snippets[Math.floor(Math.random() * snippets.length)];
 
-    window.setTimeout(() => {
+      const res = await fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          content: randomContent,
+          channel:
+            selectedChannel === "CHAT"
+              ? "Live chat"
+              : selectedChannel === "EMAIL"
+                ? "Email"
+                : "Survey",
+          customerLabel: "Simulated User",
+        }),
+      });
+
+      if (res.ok) {
+        setStatusMsg("Simulated feedback ingested and classified successfully!");
+      } else {
+        setStatusMsg("Simulation finished.");
+      }
+    } catch {
+      setStatusMsg("Simulation error. Please check connection.");
+    } finally {
       setIsRunning(false);
-    }, 1600);
+    }
   };
 
   return (
@@ -98,12 +145,17 @@ const SimulatedChannel = () => {
           })}
         </div>
 
-        <div className="mt-6 flex justify-end">
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
+          {statusMsg && (
+            <p className="text-[11px] font-medium text-cyan-300 animate-fadeIn">
+              ✓ {statusMsg}
+            </p>
+          )}
           <button
             type="button"
             onClick={handleSimulation}
             disabled={isRunning}
-            className={`${styles.primaryButton} inline-flex items-center gap-2 rounded-lg border border-cyan-300/20 bg-cyan-400/10 px-4 py-2.5 text-xs font-semibold text-cyan-300`}
+            className={`${styles.primaryButton} ml-auto inline-flex items-center gap-2 rounded-lg border border-cyan-300/20 bg-cyan-400/10 px-4 py-2.5 text-xs font-semibold text-cyan-300`}
           >
             {isRunning ? (
               <>

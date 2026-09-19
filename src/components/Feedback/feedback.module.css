@@ -457,3 +457,62 @@
     justify-content: center;
   }
 }
+
+/* =========================================================
+   LIGHT MODE SUPPORT
+   ========================================================= */
+
+:global(html.light) .input {
+  background-color: #ffffff;
+  border-color: rgba(15, 23, 42, 0.12);
+  color: #0f172a;
+}
+
+:global(html.light) .input:focus {
+  background-color: #ffffff;
+  border-color: #008f83;
+  box-shadow: 0 0 0 3px rgba(0, 143, 131, 0.12);
+}
+
+:global(html.light) .input::placeholder {
+  color: #94a3b8;
+}
+
+:global(html.light) .dropZone {
+  background-color: #f8fafc;
+  border-color: rgba(15, 23, 42, 0.14);
+}
+
+:global(html.light) .dropZone:hover {
+  background-color: rgba(0, 143, 131, 0.04);
+  border-color: #008f83;
+}
+
+:global(html.light) .channelCard {
+  background-color: #ffffff;
+  border-color: rgba(15, 23, 42, 0.1);
+}
+
+:global(html.light) .channelCard:hover {
+  border-color: rgba(0, 143, 131, 0.35);
+  background-color: #f8fafc;
+}
+
+:global(html.light) .channelCardSelected {
+  border-color: #008f83;
+  background-color: rgba(0, 143, 131, 0.06);
+}
+
+:global(html.light) .filterBar {
+  background-color: #ffffff;
+  border-color: rgba(15, 23, 42, 0.1);
+}
+
+:global(html.light) .filterInput {
+  background-color: transparent;
+  color: #0f172a;
+}
+
+:global(html.light) .filterInput::placeholder {
+  color: #94a3b8;
+}

@@ -2,8 +2,12 @@
 
 import { useState } from "react";
 
-const TrendsHeader = () => {
-  const [range, setRange] = useState("12 days");
+type TrendsHeaderProps = {
+  range?: string;
+  onRangeChange?: (range: string) => void;
+};
+
+const TrendsHeader = ({ range = "12 days", onRangeChange }: TrendsHeaderProps) => {
 
   return (
     <section className="mb-6">
@@ -32,7 +36,7 @@ const TrendsHeader = () => {
               <button
                 key={item}
                 type="button"
-                onClick={() => setRange(item)}
+                onClick={() => onRangeChange?.(item)}
                 className={`rounded-lg px-3 py-2 text-[11px] font-medium transition-all duration-200 ${
                   range === item
                     ? "bg-cyan-400/10 text-cyan-300 shadow-[inset_0_0_0_1px_rgba(25,230,209,0.12)]"

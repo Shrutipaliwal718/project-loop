@@ -1,4 +1,4 @@
-﻿import type { DashboardAnalytics } from "@/types/dashboard";
+import type { DashboardAnalytics } from "@/types/dashboard";
 import styles from "./dashboard.module.css";
 
 type SentimentAnalyticsProps = {
@@ -7,34 +7,42 @@ type SentimentAnalyticsProps = {
 
 const SentimentAnalytics = ({ analytics }: SentimentAnalyticsProps) => {
   const sentiment = analytics.sentimentBreakdown;
+  const total = analytics.totalFeedback || 0;
+
+  const posPct = total > 0 ? Math.round((sentiment.POS / total) * 100) : 0;
+  const neuPct = total > 0 ? Math.round((sentiment.NEU / total) * 100) : 0;
+  const negPct = total > 0 ? Math.round((sentiment.NEG / total) * 100) : 0;
 
   const items = [
     {
       label: "Positive",
-      value: sentiment.POS,
+      value: posPct,
+      count: sentiment.POS,
       className: "bg-cyan-400",
       glow: "shadow-[0_0_12px_rgba(25,230,209,.25)]",
     },
     {
       label: "Neutral",
-      value: sentiment.NEU,
+      value: neuPct,
+      count: sentiment.NEU,
       className: "bg-violet-400",
       glow: "shadow-[0_0_12px_rgba(139,92,246,.2)]",
     },
     {
       label: "Negative",
-      value: sentiment.NEG,
+      value: negPct,
+      count: sentiment.NEG,
       className: "bg-rose-400",
       glow: "shadow-[0_0_12px_rgba(251,113,133,.2)]",
     },
   ];
 
   const strongestSentiment = items.reduce((strongest, current) =>
-    current.value > strongest.value ? current : strongest,
+    current.count > strongest.count ? current : strongest,
   );
 
   const aiSignal =
-    strongestSentiment.value > 0
+    strongestSentiment.count > 0
       ? `${strongestSentiment.label} sentiment is currently the strongest customer signal.`
       : "There is not enough sentiment data to identify a dominant customer signal.";
 

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import styles from "./dashboard.module.css";
 
 const actionSignals = [
@@ -43,20 +44,21 @@ const ActionSignals = () => {
             </p>
           </div>
 
-          <button
-            type="button"
+          <Link
+            href="/inbox"
             className="text-[11px] font-semibold text-cyan-400 transition hover:text-cyan-300"
           >
             View all
-          </button>
+          </Link>
         </div>
 
         {/* Signals */}
         <div className="mt-4 space-y-2.5">
           {actionSignals.map((signal, index) => (
-            <div
+            <Link
+              href="/inbox"
               key={signal.title}
-              className="group flex items-center gap-3 rounded-lg transition hover:bg-white/[0.025]"
+              className="group flex items-center gap-3 rounded-lg p-1 -mx-1 transition hover:bg-white/[0.035]"
             >
               {/* Icon */}
               <div
@@ -151,7 +153,7 @@ const ActionSignals = () => {
               >
                 {signal.priority}
               </span>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

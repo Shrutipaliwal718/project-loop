@@ -12,16 +12,32 @@ type ThemeAnalytics = {
   topThemes: Theme[];
 };
 
-const ThemeTrends = () => {
-  const [analytics, setAnalytics] = useState<ThemeAnalytics | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+type ThemeTrendsProps = {
+  analytics?: { topThemes?: Theme[] } | null;
+  loading?: boolean;
+  error?: string | null;
+  range?: string;
+};
+
+const ThemeTrends = ({
+  analytics: propsAnalytics,
+  loading: propsLoading,
+  error: propsError,
+}: ThemeTrendsProps) => {
+  const [internalAnalytics, setInternalAnalytics] = useState<ThemeAnalytics | null>(null);
+  const [internalLoading, setInternalLoading] = useState(true);
+  const [internalError, setInternalError] = useState<string | null>(null);
+
+  const analytics = propsAnalytics !== undefined ? propsAnalytics : internalAnalytics;
+  const loading = propsLoading !== undefined ? propsLoading : internalLoading;
+  const error = propsError !== undefined ? propsError : internalError;
 
   useEffect(() => {
+    if (propsAnalytics !== undefined) return;
     const fetchDashboard = async () => {
       try {
-        setLoading(true);
-        setError(null);
+        setInternalLoading(true);
+        setInternalError(null);
 
         const response = await fetch("/api/dashboard", {
           method: "GET",
@@ -34,22 +50,22 @@ const ThemeTrends = () => {
           throw new Error(data.message ?? "Failed to load theme analytics.");
         }
 
-        setAnalytics({
+        setInternalAnalytics({
           topThemes: data.analytics.topThemes ?? [],
         });
       } catch (err) {
-        setError(
+        setInternalError(
           err instanceof Error
             ? err.message
             : "Failed to load theme analytics.",
         );
       } finally {
-        setLoading(false);
+        setInternalLoading(false);
       }
     };
 
     fetchDashboard();
-  }, []);
+  }, [propsAnalytics]);
 
   if (loading) {
     return (

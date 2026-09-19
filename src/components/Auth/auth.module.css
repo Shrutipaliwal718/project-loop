@@ -1053,3 +1053,242 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* =========================================================
+   LIGHT MODE SUPPORT
+   ========================================================= */
+
+:global(html.light) .authPage {
+  --auth-bg: #f8fafc;
+  --auth-surface: #ffffff;
+  --auth-card: #ffffff;
+  --auth-hover: #f1f5f9;
+  --auth-text: #0f172a;
+  --auth-secondary: #334155;
+  --auth-muted: #64748b;
+  --auth-border: rgba(15, 23, 42, 0.1);
+  --auth-cyan: #008f83;
+  --auth-blue: #0878c9;
+  --auth-violet: #6d3fd1;
+
+  background: radial-gradient(
+      circle at 70% 20%,
+      rgba(0, 143, 131, 0.05),
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at 25% 75%,
+      rgba(109, 63, 209, 0.05),
+      transparent 35%
+    ),
+    #f8fafc;
+  color: #0f172a;
+}
+
+:global(html.light) .gridBackground {
+  opacity: 0.15;
+  background-image:
+    linear-gradient(rgba(15, 23, 42, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, 0.06) 1px, transparent 1px);
+}
+
+:global(html.light) .backButton {
+  background: #ffffff;
+  border-color: rgba(15, 23, 42, 0.12);
+  color: #334155;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
+}
+
+:global(html.light) .backButton:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+  border-color: rgba(15, 23, 42, 0.2);
+}
+
+:global(html.light) .formWrapper {
+  background: #ffffff;
+  border-color: rgba(15, 23, 42, 0.1);
+  box-shadow:
+    0 24px 60px rgba(15, 23, 42, 0.08),
+    0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+:global(html.light) .brandText span {
+  color: #0f172a;
+}
+
+:global(html.light) .brandText small {
+  color: #64748b;
+}
+
+:global(html.light) .formHeader h1 {
+  color: #0f172a;
+}
+
+:global(html.light) .formHeader p:not(.eyebrow) {
+  color: #475569;
+}
+
+:global(html.light) .fieldGroup label,
+:global(html.light) .labelRow label {
+  color: #334155;
+}
+
+:global(html.light) .inputWrapper input {
+  background: #f8fafc;
+  border-color: rgba(15, 23, 42, 0.14);
+  color: #0f172a;
+}
+
+:global(html.light) .inputWrapper input::placeholder {
+  color: #94a3b8;
+}
+
+:global(html.light) .inputWrapper input:hover {
+  border-color: rgba(15, 23, 42, 0.25);
+}
+
+:global(html.light) .inputWrapper input:focus {
+  background: #ffffff;
+  border-color: #008f83;
+  box-shadow: 0 0 0 3px rgba(0, 143, 131, 0.12);
+}
+
+:global(html.light) .inputIcon {
+  color: #64748b;
+}
+
+:global(html.light) .passwordToggle {
+  color: #64748b;
+}
+
+:global(html.light) .passwordToggle:hover {
+  color: #0f172a;
+  background: rgba(15, 23, 42, 0.06);
+}
+
+:global(html.light) .modeOption {
+  background: #f8fafc;
+  border-color: rgba(15, 23, 42, 0.12);
+}
+
+:global(html.light) .modeOption:hover {
+  background: #f1f5f9;
+  border-color: rgba(0, 143, 131, 0.35);
+}
+
+:global(html.light) .modeOptionActive {
+  background: rgba(0, 143, 131, 0.07);
+  border-color: #008f83;
+}
+
+:global(html.light) .modeContent strong {
+  color: #0f172a;
+}
+
+:global(html.light) .modeContent small {
+  color: #64748b;
+}
+
+:global(html.light) .radioIndicator {
+  border-color: rgba(15, 23, 42, 0.3);
+}
+
+:global(html.light) .modeOptionActive .radioIndicator {
+  border-color: #008f83;
+  box-shadow: 0 0 0 3px rgba(0, 143, 131, 0.12);
+}
+
+:global(html.light) .modeOptionActive .radioIndicator::after {
+  background: #008f83;
+  box-shadow: 0 0 8px rgba(0, 143, 131, 0.4);
+}
+
+:global(html.light) .infoContent h2 {
+  color: #0f172a;
+}
+
+:global(html.light) .infoContent > p {
+  color: #334155;
+}
+
+:global(html.light) .infoBadge {
+  background: rgba(0, 143, 131, 0.07);
+  border-color: rgba(0, 143, 131, 0.22);
+  color: #008f83;
+}
+
+:global(html.light) .featureItem strong {
+  color: #0f172a;
+}
+
+:global(html.light) .featureItem span {
+  color: #475569;
+}
+
+:global(html.light) .featureIcon {
+  background: rgba(0, 143, 131, 0.08);
+  border-color: rgba(0, 143, 131, 0.22);
+  color: #008f83;
+}
+
+:global(html.light) .metricPreview {
+  background: #ffffff;
+  border-color: rgba(15, 23, 42, 0.1);
+  box-shadow:
+    0 16px 36px rgba(15, 23, 42, 0.07),
+    0 2px 6px rgba(15, 23, 42, 0.03);
+}
+
+:global(html.light) .metricHeader {
+  color: #64748b;
+}
+
+:global(html.light) .metricValue span:first-child {
+  color: #0f172a;
+}
+
+:global(html.light) .metricValue span:last-child {
+  color: #64748b;
+}
+
+:global(html.light) .signalRow p {
+  color: #0f172a;
+}
+
+:global(html.light) .signalRow small {
+  color: #64748b;
+}
+
+:global(html.light) .securityNote {
+  color: #64748b;
+  border-top-color: rgba(15, 23, 42, 0.08);
+}
+
+:global(html.light) .switchAuth {
+  color: #64748b;
+}
+
+:global(html.light) .switchAuth a {
+  color: #008f83;
+}
+
+:global(html.light) .checkboxRow {
+  color: #475569;
+}
+
+:global(html.light) .checkboxRow a {
+  color: #0f172a;
+}
+
+:global(html.light) .formError {
+  border-color: rgba(220, 49, 87, 0.25);
+  background: rgba(220, 49, 87, 0.06);
+  color: #dc3157;
+}
+
+:global(html.light) .formSuccess {
+  border-color: rgba(0, 143, 131, 0.25);
+  background: rgba(0, 143, 131, 0.06);
+  color: #008f83;
+}

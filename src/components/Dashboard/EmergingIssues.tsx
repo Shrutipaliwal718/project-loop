@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import styles from "./dashboard.module.css";
 
 type Theme = {
@@ -68,12 +69,12 @@ const EmergingIssues = () => {
             </p>
           </div>
 
-          <button
-            type="button"
+          <Link
+            href="/trends"
             className="text-[11px] font-semibold text-cyan-400 transition hover:text-cyan-300"
           >
             View all
-          </button>
+          </Link>
         </div>
 
         {/* Loading */}
@@ -155,12 +156,12 @@ const EmergingIssues = () => {
                 theme, based on the analyzed feedback in this workspace.
               </p>
 
-              <button
-                type="button"
-                className="mt-3 rounded-lg border border-cyan-400/30 bg-cyan-400/[0.04] px-3 py-2 text-[10px] font-semibold text-cyan-300 transition hover:bg-cyan-400/[0.09]"
+              <Link
+                href="/inbox"
+                className="mt-3 inline-block rounded-lg border border-cyan-400/30 bg-cyan-400/[0.04] px-3 py-2 text-[10px] font-semibold text-cyan-300 transition hover:bg-cyan-400/[0.09]"
               >
                 View feedback
-              </button>
+              </Link>
             </div>
           </div>
         )}

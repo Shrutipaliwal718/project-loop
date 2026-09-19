@@ -1,4 +1,4 @@
-﻿import type { DashboardAnalytics } from "@/types/dashboard";
+import type { DashboardAnalytics } from "@/types/dashboard";
 import styles from "./dashboard.module.css";
 
 type DashboardStatsProps = {

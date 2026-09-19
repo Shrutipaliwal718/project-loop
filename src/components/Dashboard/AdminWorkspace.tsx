@@ -102,21 +102,21 @@ const AdminWorkspace = () => {
         <div className="rounded-xl border border-white/8 bg-black/10 px-4 py-3">
           <p className="text-xs text-slate-500">Members</p>
           <p className="mt-1 text-xl font-semibold text-white">
-            {loading ? "�" : stats.total}
+            {loading ? "..." : stats.total}
           </p>
         </div>
 
         <div className="rounded-xl border border-white/8 bg-black/10 px-4 py-3">
           <p className="text-xs text-slate-500">Analysts</p>
           <p className="mt-1 text-xl font-semibold text-white">
-            {loading ? "�" : stats.analysts}
+            {loading ? "..." : stats.analysts}
           </p>
         </div>
 
         <div className="rounded-xl border border-white/8 bg-black/10 px-4 py-3">
           <p className="text-xs text-slate-500">Viewers</p>
           <p className="mt-1 text-xl font-semibold text-white">
-            {loading ? "�" : stats.viewers}
+            {loading ? "..." : stats.viewers}
           </p>
         </div>
       </div>

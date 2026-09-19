@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 
@@ -13,18 +13,33 @@ type DashboardData = {
   };
 };
 
-const SentimentTrend = () => {
-  const [analytics, setAnalytics] = useState<DashboardData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [hoveredSegment, setHoveredSegment] =
-    useState<SentimentType>(null);
+type SentimentTrendProps = {
+  analytics?: DashboardData | null;
+  loading?: boolean;
+  error?: string | null;
+  range?: string;
+};
+
+const SentimentTrend = ({
+  analytics: propsAnalytics,
+  loading: propsLoading,
+  error: propsError,
+}: SentimentTrendProps) => {
+  const [internalAnalytics, setInternalAnalytics] = useState<DashboardData | null>(null);
+  const [internalLoading, setInternalLoading] = useState(true);
+  const [internalError, setInternalError] = useState<string | null>(null);
+  const [hoveredSegment, setHoveredSegment] = useState<SentimentType>(null);
+
+  const analytics = propsAnalytics !== undefined ? propsAnalytics : internalAnalytics;
+  const loading = propsLoading !== undefined ? propsLoading : internalLoading;
+  const error = propsError !== undefined ? propsError : internalError;
 
   useEffect(() => {
+    if (propsAnalytics !== undefined) return;
     const fetchDashboard = async () => {
       try {
-        setLoading(true);
-        setError(null);
+        setInternalLoading(true);
+        setInternalError(null);
 
         const response = await fetch("/api/dashboard", {
           method: "GET",
@@ -39,23 +54,23 @@ const SentimentTrend = () => {
           );
         }
 
-        setAnalytics({
+        setInternalAnalytics({
           totalFeedback: data.analytics.totalFeedback,
           sentimentBreakdown: data.analytics.sentimentBreakdown,
         });
       } catch (err) {
-        setError(
+        setInternalError(
           err instanceof Error
             ? err.message
             : "Failed to load sentiment analytics.",
         );
       } finally {
-        setLoading(false);
+        setInternalLoading(false);
       }
     };
 
     fetchDashboard();
-  }, []);
+  }, [propsAnalytics]);
 
   if (loading) {
     return (

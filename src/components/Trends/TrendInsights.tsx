@@ -18,16 +18,32 @@ type DashboardData = {
   topThemes: Theme[];
 };
 
-const TrendInsights = () => {
-  const [analytics, setAnalytics] = useState<DashboardData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+type TrendInsightsProps = {
+  analytics?: DashboardData | null;
+  loading?: boolean;
+  error?: string | null;
+  range?: string;
+};
+
+const TrendInsights = ({
+  analytics: propsAnalytics,
+  loading: propsLoading,
+  error: propsError,
+}: TrendInsightsProps) => {
+  const [internalAnalytics, setInternalAnalytics] = useState<DashboardData | null>(null);
+  const [internalLoading, setInternalLoading] = useState(true);
+  const [internalError, setInternalError] = useState<string | null>(null);
+
+  const analytics = propsAnalytics !== undefined ? propsAnalytics : internalAnalytics;
+  const loading = propsLoading !== undefined ? propsLoading : internalLoading;
+  const error = propsError !== undefined ? propsError : internalError;
 
   useEffect(() => {
+    if (propsAnalytics !== undefined) return;
     const fetchDashboard = async () => {
       try {
-        setLoading(true);
-        setError(null);
+        setInternalLoading(true);
+        setInternalError(null);
 
         const response = await fetch("/api/dashboard", {
           method: "GET",
@@ -40,21 +56,21 @@ const TrendInsights = () => {
           throw new Error(data.message ?? "Failed to load trend insights.");
         }
 
-        setAnalytics({
+        setInternalAnalytics({
           volumeOverTime: data.analytics.volumeOverTime ?? [],
           topThemes: data.analytics.topThemes ?? [],
         });
       } catch (err) {
-        setError(
+        setInternalError(
           err instanceof Error ? err.message : "Failed to load trend insights.",
         );
       } finally {
-        setLoading(false);
+        setInternalLoading(false);
       }
     };
 
     fetchDashboard();
-  }, []);
+  }, [propsAnalytics]);
 
   if (loading) {
     return (

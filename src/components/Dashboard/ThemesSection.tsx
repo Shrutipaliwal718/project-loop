@@ -1,4 +1,5 @@
-﻿import type { DashboardAnalytics } from "@/types/dashboard";
+import Link from "next/link";
+import type { DashboardAnalytics } from "@/types/dashboard";
 import styles from "./dashboard.module.css";
 
 type ThemesSectionProps = {
@@ -21,12 +22,12 @@ const ThemesSection = ({ analytics }: ThemesSectionProps) => {
             </p>
           </div>
 
-          <button
-            type="button"
+          <Link
+            href="/trends"
             className="text-[11px] font-semibold text-cyan-400 transition hover:text-cyan-300"
           >
             View all
-          </button>
+          </Link>
         </div>
 
         {/* Themes */}

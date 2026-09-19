@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import LoopIcon from "./LoopIcon";
 import LoopLogo from "./LoopLogo";
+import { getTheme, toggleTheme } from "@/lib/theme";
 
 const links = [
   { label: "Preview", href: "#preview" },
@@ -18,8 +19,17 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    document.documentElement.classList.toggle("light", lightMode);
-  }, [lightMode]);
+    setLightMode(getTheme() === "light");
+
+    const onThemeChange = () => {
+      setLightMode(getTheme() === "light");
+    };
+
+    window.addEventListener("loop-theme-change", onThemeChange);
+    return () => {
+      window.removeEventListener("loop-theme-change", onThemeChange);
+    };
+  }, []);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
@@ -86,7 +96,7 @@ export default function Navbar() {
 
             <button
               type="button"
-              onClick={() => setLightMode((value) => !value)}
+              onClick={() => toggleTheme()}
               className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/[0.035] text-slate-300 transition-all duration-200 hover:-translate-y-0.5 hover:border-cyan-300/35 hover:bg-cyan-300/[0.06] hover:text-cyan-300"
               aria-label={
                 lightMode ? "Switch to dark mode" : "Switch to light mode"
@@ -153,7 +163,7 @@ export default function Navbar() {
 
               <button
                 type="button"
-                onClick={() => setLightMode((value) => !value)}
+                onClick={() => toggleTheme()}
                 className="mb-3 flex w-full items-center justify-between rounded-lg border border-white/10 bg-white/[0.035] px-4 py-3 text-[14px] font-medium text-slate-300 transition hover:border-cyan-300/25 hover:text-cyan-300"
               >
                 <span>{lightMode ? "Light mode" : "Dark mode"}</span>

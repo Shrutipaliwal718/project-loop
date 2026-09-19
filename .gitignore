@@ -32,6 +32,8 @@ yarn-error.log*
 # local test/session files
 cookies.txt
 admin-cookies.txt
+proxy3002.cjs
+check_dates.js
 
 # vercel
 .vercel

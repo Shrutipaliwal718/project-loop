@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useRef, useState } from "react";
 import type { ChangeEvent } from "react";
@@ -50,7 +50,13 @@ const ProfilePage = () => {
         }
 
         setUser(data.user);
+        setName(data.user.name || "");
+        setEmail(data.user.email || "");
         setProfileImage(data.user.profileImage || "");
+
+        if (typeof window !== "undefined" && window.location.search.includes("settings=true")) {
+          setEditOpen(true);
+        }
       } catch (err) {
         console.error("Profile loading error:", err);
         setError("Something went wrong while loading your profile.");
