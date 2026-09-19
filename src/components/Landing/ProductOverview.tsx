@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 
@@ -116,7 +116,7 @@ function ProductCard({
 }) {
   return (
     <div
-      className={`group relative overflow-hidden rounded-2xl border ${border} bg-[#050d19] p-5 shadow-[0_10px_30px_rgba(0,0,0,.25)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_18px_42px_rgba(0,0,0,.48)]`}
+      className={`group relative overflow-hidden rounded-2xl border ${border} bg-[#050d19] [html.light_&]:bg-white p-5 shadow-[0_10px_30px_rgba(0,0,0,.25)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_18px_42px_rgba(0,0,0,.48)]`}
     >
       {/* subtle corner glow */}
 
@@ -149,11 +149,11 @@ function ProductCard({
       {/* content */}
 
       <div className="relative mt-5">
-        <h3 className="text-[15px] font-semibold tracking-[-0.02em] text-white">
+        <h3 className="text-[15px] font-semibold tracking-[-0.02em] text-white [html.light_&]:text-slate-900">
           {title}
         </h3>
 
-        <p className="mt-2 text-[11px] leading-5 text-slate-400">
+        <p className="mt-2 text-[11px] leading-5 text-slate-400 [html.light_&]:text-slate-700">
           {description}
         </p>
       </div>
@@ -176,7 +176,7 @@ export default function ProductOverview() {
   return (
     <section
       id="product"
-      className="relative overflow-hidden bg-[#010711] py-16 text-white sm:py-20"
+      className="relative overflow-hidden bg-[#010711] [html.light_&]:bg-slate-50 py-16 text-white [html.light_&]:text-slate-900 sm:py-20"
     >
       {/* ===================================================
           BACKGROUND
@@ -206,7 +206,7 @@ export default function ProductOverview() {
            ================================================= */}
 
         <div className="mx-auto max-w-[760px] text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/35 bg-[#04131d] px-3.5 py-1.5">
+          <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/35 bg-[#04131d] [html.light_&]:bg-white px-3.5 py-1.5">
             <span className="h-1.5 w-1.5 rounded-full bg-cyan-300 shadow-[0_0_9px_rgba(25,230,209,.9)]" />
 
             <span className="text-[10px] font-semibold tracking-[0.12em] text-cyan-300">
@@ -214,14 +214,14 @@ export default function ProductOverview() {
             </span>
           </div>
 
-          <h2 className="mt-5 text-[32px] font-bold leading-[1.08] tracking-[-0.045em] text-slate-100 sm:text-[38px]">
+          <h2 className="mt-5 text-[32px] font-bold leading-[1.08] tracking-[-0.045em] text-slate-100 [html.light_&]:text-slate-900 sm:text-[38px]">
             Turn customer feedback into
             <span className="block bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 bg-clip-text text-transparent">
               intelligence your team can act on.
             </span>
           </h2>
 
-          <p className="mx-auto mt-4 max-w-[680px] text-[13px] leading-6 text-slate-400 sm:text-[14px]">
+          <p className="mx-auto mt-4 max-w-[680px] text-[13px] leading-6 text-slate-400 [html.light_&]:text-slate-700 sm:text-[14px]">
             LOOP brings customer feedback into one place, analyzes what
             customers are saying, and turns thousands of comments into clear
             insights, themes, problems, and actions.
@@ -292,18 +292,18 @@ export default function ProductOverview() {
             BOTTOM PRODUCT MESSAGE
            ================================================= */}
 
-        <div className="mt-7 flex flex-col items-center justify-between gap-4 rounded-2xl border border-white/[0.09] bg-[#050d19] px-5 py-4 shadow-[0_10px_30px_rgba(0,0,0,.22)] sm:flex-row sm:px-6">
+        <div className="mt-7 flex flex-col items-center justify-between gap-4 rounded-2xl border border-white/[0.09] [html.light_&]:border-slate-300 bg-[#050d19] [html.light_&]:bg-white px-5 py-4 shadow-[0_10px_30px_rgba(0,0,0,.22)] sm:flex-row sm:px-6">
           <div className="flex items-center gap-3">
             <div className="flex h-9 w-9 items-center justify-center rounded-full bg-cyan-400/[0.10] text-cyan-300">
               <Icon name="brain" size={18} />
             </div>
 
             <div>
-              <p className="text-[11px] font-semibold text-slate-100">
+              <p className="text-[11px] font-semibold text-slate-100 [html.light_&]:text-slate-900">
                 From raw feedback to actionable intelligence
               </p>
 
-              <p className="mt-0.5 text-[9px] text-slate-500">
+              <p className="mt-0.5 text-[9px] text-slate-500 [html.light_&]:text-slate-600">
                 One continuous feedback intelligence loop.
               </p>
             </div>
@@ -323,3 +323,4 @@ export default function ProductOverview() {
     </section>
   );
 }
+

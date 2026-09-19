@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 
@@ -74,7 +74,7 @@ export default function CTA() {
     <section
       className="
         relative overflow-hidden
-        bg-[#030912]
+        bg-[#030912] [html.light_&]:bg-slate-50
         px-5 py-20
         sm:px-6
         lg:px-8 lg:py-24
@@ -119,8 +119,8 @@ export default function CTA() {
           relative mx-auto max-w-5xl
           overflow-hidden
           rounded-2xl
-          border border-white/[0.08]
-          bg-[#050d19]
+          border border-white/[0.08] [html.light_&]:border-slate-300
+          bg-[#050d19] [html.light_&]:bg-white
           shadow-[0_25px_80px_rgba(0,0,0,0.28)]
         "
       >
@@ -193,7 +193,7 @@ export default function CTA() {
               font-semibold
               leading-tight
               tracking-[-0.03em]
-              text-white
+              text-white [html.light_&]:text-slate-900
               sm:text-[34px]
               lg:text-[40px]
             "
@@ -224,7 +224,7 @@ export default function CTA() {
               max-w-2xl
               text-[12px]
               leading-6
-              text-slate-400
+              text-slate-400 [html.light_&]:text-slate-700
               sm:text-[13px]
             "
           >
@@ -289,17 +289,17 @@ export default function CTA() {
                 justify-center
                 gap-2
                 rounded-lg
-                border border-white/[0.09]
-                bg-white/[0.025]
+                border border-white/[0.09] [html.light_&]:border-slate-300
+                bg-white/[0.025] [html.light_&]:bg-slate-100
                 px-5 py-2.5
                 text-[12px]
                 font-medium
-                text-slate-300
+                text-slate-300 [html.light_&]:text-slate-700
                 transition-all duration-200
                 hover:-translate-y-0.5
                 hover:border-loop-blue/30
-                hover:bg-white/[0.04]
-                hover:text-white
+                hover:bg-white/[0.04] [html.light_&]:bg-slate-100
+                hover:text-white [html.light_&]:text-slate-900
               "
             >
               See how it works
@@ -319,7 +319,7 @@ export default function CTA() {
               justify-center
               gap-x-5
               gap-y-3
-              border-t border-white/[0.06]
+              border-t border-white/[0.06] [html.light_&]:border-slate-300
               pt-6
             "
           >
@@ -327,7 +327,7 @@ export default function CTA() {
               <span className="text-loop-cyan">
                 <CheckIcon />
               </span>
-              <span className="text-[10px] text-slate-500">
+              <span className="text-[10px] text-slate-500 [html.light_&]:text-slate-600 [html.light_&]:text-slate-700">
                 AI-powered analysis
               </span>
             </div>
@@ -338,7 +338,7 @@ export default function CTA() {
               <span className="text-loop-green">
                 <CheckIcon />
               </span>
-              <span className="text-[10px] text-slate-500">
+              <span className="text-[10px] text-slate-500 [html.light_&]:text-slate-600 [html.light_&]:text-slate-700">
                 Real-time insights
               </span>
             </div>
@@ -349,7 +349,7 @@ export default function CTA() {
               <span className="text-loop-purple">
                 <CheckIcon />
               </span>
-              <span className="text-[10px] text-slate-500">
+              <span className="text-[10px] text-slate-500 [html.light_&]:text-slate-600 [html.light_&]:text-slate-700">
                 Actionable intelligence
               </span>
             </div>
@@ -360,7 +360,7 @@ export default function CTA() {
               <span className="text-loop-amber">
                 <CheckIcon />
               </span>
-              <span className="text-[10px] text-slate-500">
+              <span className="text-[10px] text-slate-500 [html.light_&]:text-slate-600 [html.light_&]:text-slate-700">
                 Built for teams
               </span>
             </div>
@@ -373,10 +373,11 @@ export default function CTA() {
           ===================================================== */}
 
       <div className="relative mx-auto mt-6 max-w-5xl text-center">
-        <p className="text-[10px] tracking-wide text-slate-600">
+        <p className="text-[10px] tracking-wide text-slate-600 [html.light_&]:text-slate-700">
           Collect. Understand. Discover. Act.
         </p>
       </div>
     </section>
   );
 }
+

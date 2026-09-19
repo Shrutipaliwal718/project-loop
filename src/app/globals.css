@@ -433,3 +433,63 @@ html.light [class*="shadow-[0_0_"] {
     scroll-behavior: auto !important;
   }
 }
+
+/* =========================================================
+   LANDING HERO — LIGHT MODE CONTRAST
+   ========================================================= */
+
+html.light section[class*="bg-[#030912]"] {
+  background-color: #ffffff !important;
+}
+
+html.light section[class*="bg-[#030912]"] .bg-[#020711] {
+  background-color: #f8fafc !important;
+}
+
+html.light section[class*="bg-[#030912]"] .bg-[#050d19],
+html.light section[class*="bg-[#030912]"] .bg-[#050d19]\/80,
+html.light section[class*="bg-[#030912]"] .bg-[#050d19]\/98 {
+  background-color: #ffffff !important;
+}
+
+html.light section[class*="bg-[#030912]"] .hover\:bg-[#07111f]:hover {
+  background-color: #f0fdfa !important;
+}
+
+html.light section[class*="bg-[#030912]"] .text-slate-100,
+html.light section[class*="bg-[#030912]"] .text-slate-200 {
+  color: #0f172a !important;
+}
+
+html.light section[class*="bg-[#030912]"] .text-slate-300 {
+  color: #1e293b !important;
+}
+
+html.light section[class*="bg-[#030912]"] .text-slate-400 {
+  color: #334155 !important;
+}
+
+html.light section[class*="bg-[#030912]"] .text-slate-500 {
+  color: #475569 !important;
+}
+
+html.light section[class*="bg-[#030912]"] .border-white\/\[0\.16\],
+html.light section[class*="bg-[#030912]"] .border-white\/\[0\.1\] {
+  border-color: rgba(15, 118, 110, 0.45) !important;
+}
+
+html.light section[class*="bg-[#030912]"] .bg-white\/\[0\.055\] {
+  background-color: #f0fdfa !important;
+}
+
+html.light section[class*="bg-[#030912]"] .bg-white\/\[0\.1\] {
+  background-color: rgba(15, 118, 110, 0.18) !important;
+}
+
+html.light section[class*="bg-[#030912]"] .hover\:text-white:hover {
+  color: #0f172a !important;
+}
+
+html.light section[class*="bg-[#030912]"] .shadow-\[0_10px_28px_rgba\(0\,0\,0\,0\.28\)\,0_3px_0_rgba\(0\,0\,0\,0\.45\)\] {
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12), 0 3px 0 rgba(15, 118, 110, 0.25) !important;
+}

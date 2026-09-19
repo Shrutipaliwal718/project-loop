@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 
@@ -140,7 +140,7 @@ function AIInsightCard({
 }) {
   return (
     <div
-      className={`group relative overflow-hidden rounded-2xl border ${border} bg-[#050d19] p-5 shadow-[0_10px_30px_rgba(0,0,0,.25)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_45px_rgba(0,0,0,.5)]`}
+      className={`group relative overflow-hidden rounded-2xl border ${border} bg-[#050d19] [html.light_&]:bg-white p-5 shadow-[0_10px_30px_rgba(0,0,0,.25)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_45px_rgba(0,0,0,.5)]`}
     >
       {/* subtle corner glow */}
 
@@ -180,7 +180,7 @@ function AIInsightCard({
           TITLE
          ================================================= */}
 
-      <h3 className="relative mt-5 text-[16px] font-semibold tracking-[-0.025em] text-white">
+      <h3 className="relative mt-5 text-[16px] font-semibold tracking-[-0.025em] text-white [html.light_&]:text-slate-900">
         {title}
       </h3>
 
@@ -188,7 +188,7 @@ function AIInsightCard({
           DESCRIPTION
          ================================================= */}
 
-      <p className="relative mt-2 text-[11px] leading-[1.65] text-slate-400">
+      <p className="relative mt-2 text-[11px] leading-[1.65] text-slate-400 [html.light_&]:text-slate-700">
         {description}
       </p>
 
@@ -234,7 +234,7 @@ function AIInsightCard({
 function SentimentVisual() {
   return (
     <div className="flex items-center gap-2">
-      <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-white/[0.06]">
+      <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-white/[0.06] [html.light_&]:bg-slate-200">
         <div className="h-full w-[73%] rounded-full bg-emerald-400" />
       </div>
 
@@ -281,11 +281,11 @@ function AskLoopVisual() {
           <Icon name="message" size={11} />
         </span>
 
-        <span className="text-[8px] text-slate-500">Ask LOOP</span>
+        <span className="text-[8px] text-slate-500 [html.light_&]:text-slate-600">Ask LOOP</span>
       </div>
 
-      <p className="mt-2 text-[9px] leading-4 text-slate-300">
-        “What is driving the recent increase in negative feedback?”
+      <p className="mt-2 text-[9px] leading-4 text-slate-300 [html.light_&]:text-slate-700">
+        â€œWhat is driving the recent increase in negative feedback?â€
       </p>
     </div>
   );
@@ -299,17 +299,17 @@ function ReportVisual() {
   return (
     <div className="grid grid-cols-3 gap-1.5">
       <div className="rounded-md border border-orange-400/20 bg-orange-500/[0.05] p-2">
-        <p className="text-[7px] text-slate-500">Sentiment</p>
+        <p className="text-[7px] text-slate-500 [html.light_&]:text-slate-600">Sentiment</p>
         <p className="mt-1 text-[10px] font-semibold text-orange-300">72.6%</p>
       </div>
 
       <div className="rounded-md border border-red-400/20 bg-red-500/[0.05] p-2">
-        <p className="text-[7px] text-slate-500">Issues</p>
+        <p className="text-[7px] text-slate-500 [html.light_&]:text-slate-600">Issues</p>
         <p className="mt-1 text-[10px] font-semibold text-red-300">08</p>
       </div>
 
       <div className="rounded-md border border-cyan-400/20 bg-cyan-500/[0.05] p-2">
-        <p className="text-[7px] text-slate-500">Themes</p>
+        <p className="text-[7px] text-slate-500 [html.light_&]:text-slate-600">Themes</p>
         <p className="mt-1 text-[10px] font-semibold text-cyan-300">24</p>
       </div>
     </div>
@@ -324,7 +324,7 @@ export default function AIInsights() {
   return (
     <section
       id="ai-insights"
-      className="relative overflow-hidden bg-[#010711] py-16 text-white sm:py-20"
+      className="relative overflow-hidden bg-[#010711] [html.light_&]:bg-slate-50 py-16 text-white [html.light_&]:text-slate-900 sm:py-20"
     >
       {/* ===================================================
           BACKGROUND
@@ -362,16 +362,16 @@ export default function AIInsights() {
             </span>
           </div>
 
-          <h2 className="mt-5 text-[32px] font-bold leading-[1.08] tracking-[-0.045em] text-slate-100 sm:text-[38px]">
+          <h2 className="mt-5 text-[32px] font-bold leading-[1.08] tracking-[-0.045em] text-slate-100 [html.light_&]:text-slate-900 sm:text-[38px]">
             Let AI uncover what your
             <span className="block bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 bg-clip-text text-transparent">
               customers are really saying.
             </span>
           </h2>
 
-          <p className="mx-auto mt-4 max-w-[690px] text-[13px] leading-6 text-slate-400 sm:text-[14px]">
+          <p className="mx-auto mt-4 max-w-[690px] text-[13px] leading-6 text-slate-400 [html.light_&]:text-slate-700 sm:text-[14px]">
             LOOP turns unstructured customer feedback into meaningful
-            intelligence — from sentiment and themes to questions, trends, and
+            intelligence â€” from sentiment and themes to questions, trends, and
             executive-ready reports.
           </p>
         </div>
@@ -382,7 +382,7 @@ export default function AIInsights() {
 
         <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {/* =================================================
-              01 — CLASSIFICATION
+              01 â€” CLASSIFICATION
              ================================================= */}
 
           <AIInsightCard
@@ -398,7 +398,7 @@ export default function AIInsights() {
           </AIInsightCard>
 
           {/* =================================================
-              02 — THEMES
+              02 â€” THEMES
              ================================================= */}
 
           <AIInsightCard
@@ -414,7 +414,7 @@ export default function AIInsights() {
           </AIInsightCard>
 
           {/* =================================================
-              03 — ASK LOOP
+              03 â€” ASK LOOP
              ================================================= */}
 
           <AIInsightCard
@@ -430,7 +430,7 @@ export default function AIInsights() {
           </AIInsightCard>
 
           {/* =================================================
-              04 — VOC
+              04 â€” VOC
              ================================================= */}
 
           <AIInsightCard
@@ -453,18 +453,18 @@ export default function AIInsights() {
         <div className="mt-7 grid grid-cols-1 gap-3 md:grid-cols-3">
           {/* sentiment */}
 
-          <div className="group rounded-xl border border-emerald-400/20 bg-[#050d19] px-4 py-3 transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-400/35 hover:shadow-[0_12px_30px_rgba(0,0,0,.35)]">
+          <div className="group rounded-xl border border-emerald-400/20 bg-[#050d19] [html.light_&]:bg-white px-4 py-3 transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-400/35 hover:shadow-[0_12px_30px_rgba(0,0,0,.35)]">
             <div className="flex items-center gap-3">
               <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-500/[0.08] text-emerald-300">
                 <Icon name="smile" size={18} />
               </div>
 
               <div>
-                <p className="text-[10px] font-semibold text-slate-100">
+                <p className="text-[10px] font-semibold text-slate-100 [html.light_&]:text-slate-900">
                   Sentiment intelligence
                 </p>
 
-                <p className="mt-0.5 text-[9px] text-slate-500">
+                <p className="mt-0.5 text-[9px] text-slate-500 [html.light_&]:text-slate-600">
                   Understand how customers feel.
                 </p>
               </div>
@@ -473,18 +473,18 @@ export default function AIInsights() {
 
           {/* trends */}
 
-          <div className="group rounded-xl border border-violet-400/20 bg-[#050d19] px-4 py-3 transition-all duration-300 hover:-translate-y-0.5 hover:border-violet-400/35 hover:shadow-[0_12px_30px_rgba(0,0,0,.35)]">
+          <div className="group rounded-xl border border-violet-400/20 bg-[#050d19] [html.light_&]:bg-white px-4 py-3 transition-all duration-300 hover:-translate-y-0.5 hover:border-violet-400/35 hover:shadow-[0_12px_30px_rgba(0,0,0,.35)]">
             <div className="flex items-center gap-3">
               <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-violet-500/[0.08] text-violet-300">
                 <Icon name="trend" size={18} />
               </div>
 
               <div>
-                <p className="text-[10px] font-semibold text-slate-100">
+                <p className="text-[10px] font-semibold text-slate-100 [html.light_&]:text-slate-900">
                   Emerging trends
                 </p>
 
-                <p className="mt-0.5 text-[9px] text-slate-500">
+                <p className="mt-0.5 text-[9px] text-slate-500 [html.light_&]:text-slate-600">
                   See what is changing over time.
                 </p>
               </div>
@@ -493,18 +493,18 @@ export default function AIInsights() {
 
           {/* action */}
 
-          <div className="group rounded-xl border border-red-400/20 bg-[#050d19] px-4 py-3 transition-all duration-300 hover:-translate-y-0.5 hover:border-red-400/35 hover:shadow-[0_12px_30px_rgba(0,0,0,.35)]">
+          <div className="group rounded-xl border border-red-400/20 bg-[#050d19] [html.light_&]:bg-white px-4 py-3 transition-all duration-300 hover:-translate-y-0.5 hover:border-red-400/35 hover:shadow-[0_12px_30px_rgba(0,0,0,.35)]">
             <div className="flex items-center gap-3">
               <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-red-500/[0.08] text-red-300">
                 <Icon name="target" size={18} />
               </div>
 
               <div>
-                <p className="text-[10px] font-semibold text-slate-100">
+                <p className="text-[10px] font-semibold text-slate-100 [html.light_&]:text-slate-900">
                   Action signals
                 </p>
 
-                <p className="mt-0.5 text-[9px] text-slate-500">
+                <p className="mt-0.5 text-[9px] text-slate-500 [html.light_&]:text-slate-600">
                   Know which issues need attention.
                 </p>
               </div>
@@ -516,7 +516,7 @@ export default function AIInsights() {
             AI FLOW
            ================================================= */}
 
-        <div className="mt-7 rounded-2xl border border-white/[0.09] bg-[#050d19] px-5 py-4 shadow-[0_10px_30px_rgba(0,0,0,.22)] sm:px-6">
+        <div className="mt-7 rounded-2xl border border-white/[0.09] [html.light_&]:border-slate-300 bg-[#050d19] [html.light_&]:bg-white px-5 py-4 shadow-[0_10px_30px_rgba(0,0,0,.22)] sm:px-6">
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-cyan-400/[0.09] text-cyan-300">
@@ -524,12 +524,12 @@ export default function AIInsights() {
               </div>
 
               <div>
-                <p className="text-[11px] font-semibold text-slate-100">
+                <p className="text-[11px] font-semibold text-slate-100 [html.light_&]:text-slate-900">
                   One AI intelligence layer
                 </p>
 
-                <p className="mt-0.5 text-[9px] text-slate-500">
-                  Classification → themes → answers → reports → action.
+                <p className="mt-0.5 text-[9px] text-slate-500 [html.light_&]:text-slate-600">
+                  Classification â†’ themes â†’ answers â†’ reports â†’ action.
                 </p>
               </div>
             </div>
@@ -549,4 +549,5 @@ export default function AIInsights() {
     </section>
   );
 }
+
 

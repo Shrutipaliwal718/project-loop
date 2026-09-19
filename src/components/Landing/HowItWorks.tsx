@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 
@@ -127,7 +127,7 @@ function StepCard({
 }) {
   return (
     <div
-      className={`group relative rounded-2xl border ${border} bg-[#050d19] p-5 shadow-[0_10px_30px_rgba(0,0,0,.25)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_45px_rgba(0,0,0,.48)]`}
+      className={`group relative rounded-2xl border ${border} bg-[#050d19] [html.light_&]:bg-white p-5 shadow-[0_10px_30px_rgba(0,0,0,.25)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_45px_rgba(0,0,0,.48)]`}
     >
       {/* subtle glow */}
 
@@ -165,7 +165,7 @@ function StepCard({
           TITLE
          ================================================= */}
 
-      <h3 className="relative mt-5 text-[16px] font-semibold tracking-[-0.02em] text-white">
+      <h3 className="relative mt-5 text-[16px] font-semibold tracking-[-0.02em] text-white [html.light_&]:text-slate-900">
         {title}
       </h3>
 
@@ -173,7 +173,7 @@ function StepCard({
           DESCRIPTION
          ================================================= */}
 
-      <p className="relative mt-2 text-[11px] leading-[1.65] text-slate-400">
+      <p className="relative mt-2 text-[11px] leading-[1.65] text-slate-400 [html.light_&]:text-slate-700">
         {description}
       </p>
 
@@ -192,7 +192,7 @@ function StepCard({
               }}
             />
 
-            <span className="text-[9px] text-slate-500">{detail}</span>
+            <span className="text-[9px] text-slate-500 [html.light_&]:text-slate-600">{detail}</span>
           </div>
         ))}
       </div>
@@ -219,7 +219,7 @@ function Connector() {
   return (
     <div className="hidden items-center justify-center lg:flex">
       <div className="relative h-px w-8 bg-gradient-to-r from-cyan-400/20 via-cyan-400/50 to-purple-400/20">
-        <span className="absolute -right-1 -top-[3px] h-2 w-2 rounded-full border border-cyan-300/50 bg-[#010711]" />
+        <span className="absolute -right-1 -top-[3px] h-2 w-2 rounded-full border border-cyan-300/50 bg-[#010711] [html.light_&]:bg-slate-50" />
       </div>
     </div>
   );
@@ -233,7 +233,7 @@ export default function HowItWorks() {
   return (
     <section
       id="how-it-works"
-      className="relative overflow-hidden bg-[#010711] py-16 text-white sm:py-20"
+      className="relative overflow-hidden bg-[#010711] [html.light_&]:bg-slate-50 py-16 text-white [html.light_&]:text-slate-900 sm:py-20"
     >
       {/* ===================================================
           BACKGROUND
@@ -271,14 +271,14 @@ export default function HowItWorks() {
             </span>
           </div>
 
-          <h2 className="mt-5 text-[32px] font-bold leading-[1.08] tracking-[-0.045em] text-slate-100 sm:text-[38px]">
+          <h2 className="mt-5 text-[32px] font-bold leading-[1.08] tracking-[-0.045em] text-slate-100 [html.light_&]:text-slate-900 sm:text-[38px]">
             From customer feedback to
             <span className="block bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 bg-clip-text text-transparent">
               action in four simple steps.
             </span>
           </h2>
 
-          <p className="mx-auto mt-4 max-w-[680px] text-[13px] leading-6 text-slate-400 sm:text-[14px]">
+          <p className="mx-auto mt-4 max-w-[680px] text-[13px] leading-6 text-slate-400 [html.light_&]:text-slate-700 sm:text-[14px]">
             LOOP continuously turns raw customer conversations into structured
             intelligence, helping your team understand what is happening and
             what should happen next.
@@ -361,7 +361,7 @@ export default function HowItWorks() {
             INTELLIGENCE FLOW
            ================================================= */}
 
-        <div className="mt-7 rounded-2xl border border-white/[0.09] bg-[#050d19] p-4 shadow-[0_10px_30px_rgba(0,0,0,.22)] sm:p-5">
+        <div className="mt-7 rounded-2xl border border-white/[0.09] [html.light_&]:border-slate-300 bg-[#050d19] [html.light_&]:bg-white p-4 shadow-[0_10px_30px_rgba(0,0,0,.22)] sm:p-5">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             {/* feedback */}
 
@@ -371,11 +371,11 @@ export default function HowItWorks() {
               </div>
 
               <div>
-                <p className="text-[10px] font-semibold text-slate-100">
+                <p className="text-[10px] font-semibold text-slate-100 [html.light_&]:text-slate-900">
                   Customer voice
                 </p>
 
-                <p className="mt-0.5 text-[9px] text-slate-500">
+                <p className="mt-0.5 text-[9px] text-slate-500 [html.light_&]:text-slate-600">
                   Thousands of raw comments
                 </p>
               </div>
@@ -389,11 +389,11 @@ export default function HowItWorks() {
               </div>
 
               <div>
-                <p className="text-[10px] font-semibold text-slate-100">
+                <p className="text-[10px] font-semibold text-slate-100 [html.light_&]:text-slate-900">
                   LOOP intelligence
                 </p>
 
-                <p className="mt-0.5 text-[9px] text-slate-500">
+                <p className="mt-0.5 text-[9px] text-slate-500 [html.light_&]:text-slate-600">
                   AI-powered analysis and insights
                 </p>
               </div>
@@ -407,11 +407,11 @@ export default function HowItWorks() {
               </div>
 
               <div>
-                <p className="text-[10px] font-semibold text-slate-100">
+                <p className="text-[10px] font-semibold text-slate-100 [html.light_&]:text-slate-900">
                   Team action
                 </p>
 
-                <p className="mt-0.5 text-[9px] text-slate-500">
+                <p className="mt-0.5 text-[9px] text-slate-500 [html.light_&]:text-slate-600">
                   Priorities your team can act on
                 </p>
               </div>
@@ -423,13 +423,13 @@ export default function HowItWorks() {
             BOTTOM CTA
            ================================================= */}
 
-        <div className="mt-7 flex flex-col items-center justify-between gap-4 rounded-2xl border border-white/[0.09] bg-[#050d19] px-5 py-4 shadow-[0_10px_30px_rgba(0,0,0,.22)] sm:flex-row sm:px-6">
+        <div className="mt-7 flex flex-col items-center justify-between gap-4 rounded-2xl border border-white/[0.09] [html.light_&]:border-slate-300 bg-[#050d19] [html.light_&]:bg-white px-5 py-4 shadow-[0_10px_30px_rgba(0,0,0,.22)] sm:flex-row sm:px-6">
           <div>
-            <p className="text-[11px] font-semibold text-slate-100">
+            <p className="text-[11px] font-semibold text-slate-100 [html.light_&]:text-slate-900">
               Close the feedback loop.
             </p>
 
-            <p className="mt-0.5 text-[9px] text-slate-500">
+            <p className="mt-0.5 text-[9px] text-slate-500 [html.light_&]:text-slate-600">
               Give every team a clearer view of what customers really need.
             </p>
           </div>
@@ -448,3 +448,4 @@ export default function HowItWorks() {
     </section>
   );
 }
+

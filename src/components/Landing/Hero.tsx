@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 
@@ -185,7 +185,7 @@ function PlayIcon() {
 /* =========================================================
    LEFT FLAME
    Screenshot-style:
-   top-left → flowing inward/down
+   top-left â†’ flowing inward/down
    cyan / turquoise / subtle blue
    ========================================================= */
 
@@ -489,8 +489,8 @@ function LeftFlame() {
 /* =========================================================
    RIGHT FLAME
    Screenshot-style:
-   top-right → flowing inward/down
-   violet → purple → pink → red/orange
+   top-right â†’ flowing inward/down
+   violet â†’ purple â†’ pink â†’ red/orange
    ========================================================= */
 
 function RightFlame() {
@@ -509,7 +509,7 @@ function RightFlame() {
         fill="none"
       >
         <defs>
-          {/* Violet → pink → red */}
+          {/* Violet â†’ pink â†’ red */}
 
           <linearGradient
             id="rightFlame"
@@ -905,7 +905,7 @@ function FeedbackCard({
           translate-y-1.5
           rounded-xl
           border
-          bg-[#020711]
+          bg-[#020711] [html.light_&]:bg-white
           opacity-80
           ${border}
         `}
@@ -919,14 +919,14 @@ function FeedbackCard({
           w-[218px]
           rounded-xl
           border
-          bg-[#050d19]/98
+          bg-[#050d19] [html.light_&]:bg-white/98 [html.light_&]:bg-white
           px-3.5 py-3
           shadow-[0_18px_45px_rgba(0,0,0,0.48),0_5px_0_rgba(0,0,0,0.32)]
           backdrop-blur-md
           transition-all
           duration-300
           hover:-translate-y-1
-          hover:bg-[#07111f]
+          hover:bg-[#07111f] [html.light_&]:hover:bg-slate-50
           hover:shadow-[0_24px_55px_rgba(0,0,0,0.55),0_7px_0_rgba(0,0,0,0.35)]
           ${border}
         `}
@@ -934,7 +934,7 @@ function FeedbackCard({
         <div className="flex items-center gap-3">
           {icon}
 
-          <div className="text-[11px] leading-5 text-slate-300">{children}</div>
+          <div className="text-[11px] leading-5 text-slate-300 [html.light_&]:text-slate-900">{children}</div>
         </div>
       </div>
     </div>
@@ -956,7 +956,7 @@ function Capability({
     <div className="flex items-center gap-2.5 px-3">
       <span className="text-loop-cyan">{icon}</span>
 
-      <span className="whitespace-nowrap text-[11px] font-normal text-slate-300 sm:text-xs">
+      <span className="whitespace-nowrap text-[11px] font-normal text-slate-300 [html.light_&]:text-slate-900 sm:text-xs">
         {children}
       </span>
     </div>
@@ -992,7 +992,7 @@ function RoleCard({
           translate-y-1
           rounded-lg
           border
-          bg-[#020711]
+          bg-[#020711] [html.light_&]:bg-white
           opacity-75
           ${border}
         `}
@@ -1006,7 +1006,7 @@ function RoleCard({
           flex items-center gap-2.5
           rounded-lg
           border
-          bg-[#050d19]
+          bg-[#050d19] [html.light_&]:bg-white
           px-3.5 py-2
           shadow-[0_10px_25px_rgba(0,0,0,0.32),0_3px_0_rgba(0,0,0,0.35)]
           transition-all duration-300
@@ -1027,9 +1027,9 @@ function RoleCard({
         </div>
 
         <div>
-          <p className="text-[11px] font-medium text-slate-200">{role}</p>
+          <p className="text-[11px] font-medium text-slate-200 [html.light_&]:text-slate-900">{role}</p>
 
-          <p className="mt-0.5 text-[9px] text-slate-500">{description}</p>
+          <p className="mt-0.5 text-[9px] text-slate-500 [html.light_&]:text-slate-900">{description}</p>
         </div>
       </div>
     </div>
@@ -1099,7 +1099,7 @@ function StatCard({
           translate-y-1.5
           rounded-xl
           border
-          bg-[#020711]
+          bg-[#020711] [html.light_&]:bg-white
           opacity-80
           ${accent}
         `}
@@ -1114,12 +1114,12 @@ function StatCard({
           min-w-0
           rounded-xl
           border
-          bg-[#050d19]
+          bg-[#050d19] [html.light_&]:bg-white
           px-5 py-4
           shadow-[0_16px_40px_rgba(0,0,0,0.42),0_5px_0_rgba(0,0,0,0.35)]
           transition-all duration-300
           hover:-translate-y-1
-          hover:bg-[#07111f]
+          hover:bg-[#07111f] [html.light_&]:hover:bg-slate-50
           hover:shadow-[0_24px_55px_rgba(0,0,0,0.52),0_7px_0_rgba(0,0,0,0.4)]
           ${accent}
         `}
@@ -1128,14 +1128,14 @@ function StatCard({
 
         <div className="flex items-center justify-between gap-3">
           <div className="flex min-w-0 items-center gap-3">
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/[0.055] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/[0.055] [html.light_&]:bg-slate-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
               {icon}
             </div>
 
             <div className="min-w-0">
-              <p className="text-[10px] text-slate-500">{label}</p>
+              <p className="text-[10px] text-slate-500 [html.light_&]:text-slate-900">{label}</p>
 
-              <p className="mt-1 text-[25px] font-medium tracking-tight text-slate-100">
+              <p className="mt-1 text-[25px] font-medium tracking-tight text-slate-100 [html.light_&]:text-slate-900">
                 {value}
               </p>
 
@@ -1232,9 +1232,9 @@ export default function Hero() {
           </div>
         }
       >
-        <span className="block text-slate-200">Amazing product!</span>
+        <span className="block text-slate-200 [html.light_&]:text-slate-900">Amazing product!</span>
 
-        <span className="text-loop-cyan">★★★★★</span>
+        <span className="text-loop-cyan">â˜…â˜…â˜…â˜…â˜…</span>
       </FeedbackCard>
 
       <FeedbackCard
@@ -1246,9 +1246,9 @@ export default function Hero() {
           </div>
         }
       >
-        <span className="block text-slate-200">The dashboard is</span>
+        <span className="block text-slate-200 [html.light_&]:text-slate-900">The dashboard is</span>
 
-        <span className="block text-slate-400">confusing.</span>
+        <span className="block text-slate-400 [html.light_&]:text-slate-900">confusing.</span>
       </FeedbackCard>
 
       <FeedbackCard
@@ -1260,9 +1260,9 @@ export default function Hero() {
           </div>
         }
       >
-        <span className="block text-slate-200">Please add export</span>
+        <span className="block text-slate-200 [html.light_&]:text-slate-900">Please add export</span>
 
-        <span className="block text-slate-400">to PDF feature.</span>
+        <span className="block text-slate-400 [html.light_&]:text-slate-900">to PDF feature.</span>
       </FeedbackCard>
 
       <FeedbackCard
@@ -1274,9 +1274,9 @@ export default function Hero() {
           </div>
         }
       >
-        <span className="block text-slate-200">Love the new</span>
+        <span className="block text-slate-200 [html.light_&]:text-slate-900">Love the new</span>
 
-        <span className="block text-slate-400">AI summary!</span>
+        <span className="block text-slate-400 [html.light_&]:text-slate-900">AI summary!</span>
       </FeedbackCard>
 
       {/* =====================================================
@@ -1314,7 +1314,7 @@ export default function Hero() {
               font-medium
               leading-[1.08]
               tracking-[-0.035em]
-              text-slate-100
+              text-slate-100 [html.light_&]:text-slate-900
               sm:text-[54px]
               lg:text-[58px]
             "
@@ -1352,12 +1352,12 @@ export default function Hero() {
               text-[13px]
               font-normal
               leading-6
-              text-slate-400
+              text-slate-400 [html.light_&]:text-slate-900
               sm:text-[14px]
             "
           >
             LOOP transforms thousands of customer comments into structured
-            intelligence — revealing sentiment, recurring themes, emerging
+            intelligence â€” revealing sentiment, recurring themes, emerging
             problems, feature requests, and the actions your team should
             prioritize next.
           </p>
@@ -1411,17 +1411,17 @@ export default function Hero() {
                 justify-center
                 gap-2.5
                 rounded-lg
-                border border-white/[0.16]
-                bg-[#050d19]/80
+                border border-white/[0.16] [html.light_&]:border-cyan-500/50
+                bg-[#050d19] [html.light_&]:bg-white/80
                 px-6 py-3
                 text-[13px]
                 font-medium
-                text-slate-300
+                text-slate-300 [html.light_&]:text-slate-900
                 shadow-[0_10px_28px_rgba(0,0,0,0.28),0_3px_0_rgba(0,0,0,0.45)]
                 transition-all duration-300
                 hover:-translate-y-1
                 hover:border-loop-cyan/35
-                hover:bg-[#07111f]
+                hover:bg-[#07111f] [html.light_&]:hover:bg-slate-50
                 hover:text-white
                 hover:shadow-[0_15px_35px_rgba(0,0,0,0.38),0_4px_0_rgba(0,0,0,0.5)]
               "
@@ -1460,17 +1460,17 @@ export default function Hero() {
         >
           <Capability icon={<BrainIcon />}>AI-Powered Analysis</Capability>
 
-          <span className="hidden h-4 w-px bg-white/[0.1] sm:block" />
+          <span className="hidden h-4 w-px bg-white/[0.1] [html.light_&]:bg-cyan-500/20 sm:block" />
 
           <Capability icon={<ClockIcon />}>Real-time Insights</Capability>
 
-          <span className="hidden h-4 w-px bg-white/[0.1] sm:block" />
+          <span className="hidden h-4 w-px bg-white/[0.1] [html.light_&]:bg-cyan-500/20 sm:block" />
 
           <Capability icon={<IntelligenceIcon />}>
             Actionable Intelligence
           </Capability>
 
-          <span className="hidden h-4 w-px bg-white/[0.1] sm:block" />
+          <span className="hidden h-4 w-px bg-white/[0.1] [html.light_&]:bg-cyan-500/20 sm:block" />
 
           <Capability icon={<ShieldIcon />}>Trusted by Teams</Capability>
         </div>
@@ -1536,7 +1536,7 @@ export default function Hero() {
             }
             label="Total feedback"
             value="12,480"
-            change="↑ 18.4% vs last month"
+            change="â†‘ 18.4% vs last month"
             graph="cyan"
             accent="border-loop-cyan/45 hover:border-loop-cyan/75"
           />
@@ -1549,7 +1549,7 @@ export default function Hero() {
             }
             label="Positive sentiment"
             value="72.6%"
-            change="↑ 6.2% vs last month"
+            change="â†‘ 6.2% vs last month"
             graph="green"
             accent="border-loop-green/45 hover:border-loop-green/75"
           />
@@ -1562,7 +1562,7 @@ export default function Hero() {
             }
             label="Themes detected"
             value="24"
-            change="↑ 4 new themes"
+            change="â†‘ 4 new themes"
             graph="purple"
             accent="border-loop-purple/45 hover:border-loop-purple/75"
           />
@@ -1575,7 +1575,7 @@ export default function Hero() {
             }
             label="Action signals"
             value="17"
-            change="↑ 8 urgent"
+            change="â†‘ 8 urgent"
             graph="orange"
             accent="border-loop-amber/45 hover:border-loop-amber/75"
           />
@@ -1584,3 +1584,6 @@ export default function Hero() {
     </section>
   );
 }
+
+
+
