@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-
 type TrendsHeaderProps = {
   range?: string;
   onRangeChange?: (range: string) => void;
