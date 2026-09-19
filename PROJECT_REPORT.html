@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LOOP - AI Customer-Feedback Intelligence Platform - Project Report</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #1e293b;
+      background-color: #f8fafc;
+      line-height: 1.65;
+      font-size: 14px;
+      padding: 40px 20px;
+    }
+    
+    .report-container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 60px 70px;
+      border-radius: 12px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.06);
+      border: 1px solid #e2e8f0;
+    }
+    
+    .header {
+      border-bottom: 2px solid #06b6d4;
+      padding-bottom: 24px;
+      margin-bottom: 36px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    
+    .header-title h1 {
+      font-size: 26px;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.02em;
+    }
+    
+    .header-title p {
+      font-size: 14px;
+      color: #0284c7;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+    
+    .meta-badge {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      color: #166534;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      text-align: right;
+    }
+    
+    h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-top: 36px;
+      margin-bottom: 14px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    h3 {
+      font-size: 15px;
+      font-weight: 600;
+      color: #1e293b;
+      margin-top: 20px;
+      margin-bottom: 8px;
+    }
+    
+    p {
+      margin-bottom: 14px;
+      color: #334155;
+      text-align: justify;
+    }
+    
+    ul, ol {
+      margin-left: 22px;
+      margin-bottom: 16px;
+      color: #334155;
+    }
+    
+    li {
+      margin-bottom: 6px;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0;
+      font-size: 13px;
+    }
+    
+    th, td {
+      border: 1px solid #e2e8f0;
+      padding: 10px 14px;
+      text-align: left;
+    }
+    
+    th {
+      background-color: #f1f5f9;
+      font-weight: 600;
+      color: #0f172a;
+    }
+    
+    tr:nth-child(even) {
+      background-color: #f8fafc;
+    }
+    
+    pre {
+      background: #0f172a;
+      color: #38bdf8;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 18px;
+      border-radius: 8px;
+      font-size: 12px;
+      line-height: 1.5;
+      overflow-x: auto;
+      margin: 18px 0;
+    }
+    
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      background: #f1f5f9;
+      color: #0f172a;
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid #e2e8f0;
+    }
+    
+    .diagram-box {
+      background: #091523;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      color: #22d3ee;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      line-height: 1.4;
+      white-space: pre;
+      overflow-x: auto;
+    }
+    
+    .footer {
+      margin-top: 50px;
+      padding-top: 20px;
+      border-top: 1px solid #e2e8f0;
+      text-align: center;
+      font-size: 12px;
+      color: #64748b;
+    }
+    
+    .print-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #0284c7;
+      color: #ffffff;
+      padding: 12px 24px;
+      border-radius: 8px;
+      border: none;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+    
+    .print-btn:hover {
+      background: #0369a1;
+      transform: translateY(-2px);
+    }
+    
+    @media print {
+      body {
+        background: #ffffff;
+        padding: 0;
+      }
+      .report-container {
+        box-shadow: none;
+        border: none;
+        padding: 20px 0;
+        max-width: 100%;
+      }
+      .print-btn {
+        display: none;
+      }
+      h2 {
+        page-break-after: avoid;
+      }
+      table, pre, .diagram-box {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <button class="print-btn" onclick="window.print()">
+    🖨️ Print / Save as PDF
+  </button>
+
+  <div class="report-container">
+    <div class="header">
+      <div class="header-title">
+        <h1>LOOP — AI Customer-Feedback Intelligence</h1>
+        <p>Comprehensive Project Documentation & Technical Architecture Report</p>
+      </div>
+      <div class="meta-badge">
+        <span>Status: Production Ready</span><br>
+        <span style="font-size: 10px; color: #475569;">Submission Documentation</span>
+      </div>
+    </div>
+
+    <h2>1. Executive Summary & Overview</h2>
+    <p>
+      In modern consumer and SaaS software companies, feedback streams continuously from heterogeneous sources including mobile app stores, Twitter/X, customer support tickets (Zendesk), email, and in-app surveys. Manual analysis of this high-velocity unstructured data leads to delayed product decisions and overlooked critical defects.
+    </p>
+    <p>
+      <strong>LOOP</strong> is an enterprise customer-feedback intelligence platform built to centralize, process, classify, and visualize customer sentiment in real time. Powered by Next.js 14 and Google Gemini AI, LOOP surfaces high-urgency friction signals, provides historical trend analytics across customizable date horizons (7, 12, and 30 days), and enables conversational voice-of-customer exploration through natural language chat.
+    </p>
+
+    <h2>2. Technology Stack</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Technology</th>
+          <th>Version</th>
+          <th>Strategic Purpose</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Frontend</strong></td>
+          <td>Next.js (App Router) + React</td>
+          <td>14.2.35 / 18.x</td>
+          <td>Server-side rendering, streaming SSR, optimized Core Web Vitals.</td>
+        </tr>
+        <tr>
+          <td><strong>Language</strong></td>
+          <td>TypeScript</td>
+          <td>5.x</td>
+          <td>Strict compile-time type safety across database entities and API routes.</td>
+        </tr>
+        <tr>
+          <td><strong>Styling</strong></td>
+          <td>Tailwind CSS + Custom Design System</td>
+          <td>3.4</td>
+          <td>Cyberpunk neon dark mode and high-contrast modern light mode.</td>
+        </tr>
+        <tr>
+          <td><strong>Charts</strong></td>
+          <td>Recharts</td>
+          <td>3.10.1</td>
+          <td>Responsive SVG charts for volume, sentiment donuts, and theme velocity.</td>
+        </tr>
+        <tr>
+          <td><strong>Database</strong></td>
+          <td>PostgreSQL (Supabase Cloud)</td>
+          <td>Latest</td>
+          <td>Scalable relational database with secure SSL connection pooling.</td>
+        </tr>
+        <tr>
+          <td><strong>ORM</strong></td>
+          <td>Prisma ORM</td>
+          <td>6.19.0</td>
+          <td>Declarative schema, automated migrations, and type-safe database queries.</td>
+        </tr>
+        <tr>
+          <td><strong>AI Engine</strong></td>
+          <td>Google Gemini 3.5 Flash Lite</td>
+          <td>@google/genai</td>
+          <td>Zero-shot sentiment scoring (-1.0 to 1.0) and theme classification.</td>
+        </tr>
+        <tr>
+          <td><strong>Auth & Security</strong></td>
+          <td>JWT + Bcrypt</td>
+          <td>jose / bcryptjs</td>
+          <td>Stateless, tamper-proof session authentication via HttpOnly cookies.</td>
+        </tr>
+        <tr>
+          <td><strong>Hosting</strong></td>
+          <td>Vercel Edge Network</td>
+          <td>Cloud</td>
+          <td>Automated CI/CD linked with GitHub main branch.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>3. System Architecture & Data Flow</h2>
+    <div class="diagram-box">
++---------------------------------------------------------------------------------+
+|                                 CLIENT TIER                                     |
+|  * Executive Dashboard        * Historical Trends (7d, 12d, 30d)                |
+|  * "Ask LOOP" AI Chat         * Bulk CSV Ingestion & Simulators                 |
+|  * Settings & Theme Modals    * Executive Voice-of-Customer Reports             |
++----------------------------------------+----------------------------------------+
+                                         | HTTPS / REST API
++----------------------------------------v----------------------------------------+
+|                             NEXT.JS SERVERLESS BACKEND                          |
+|  * RBAC & Session Auth (`require-auth.ts`)                                      |
+|  * Route Handlers: `/api/dashboard`, `/api/feedback`, `/api/ai/ask-loop`       |
++--------------------+-----------------------------------+------------------------+
+                     |                                   |
+                     v                                   v
++--------------------+--------------+   +----------------+------------------------+
+|         AI INTELLIGENCE           |   |            PERSISTENCE TIER             |
+|  * Google Gemini 3.5 Flash Lite   |   |  * PostgreSQL on Supabase Cloud         |
+|  * Resilient Fallback Engine      |   |  * Prisma ORM Client                    |
++-----------------------------------+   +-----------------------------------------+
+    </div>
+
+    <h2>4. Key Functional Modules</h2>
+    <ul>
+      <li><strong>Executive Overview Dashboard:</strong> Aggregates live feedback volume, average customer satisfaction scores, and distribution across Positive, Neutral, and Negative categories.</li>
+      <li><strong>Dynamic Range Filtering:</strong> Trends section recalculates metrics on-the-fly for 7-day, 12-day, and 30-day time horizons with zero duplicate requests.</li>
+      <li><strong>Action Signals & Emerging Issues:</strong> Automatically isolates high-urgency customer complaints (such as checkout timeouts or payment failures) for rapid engineering triaging.</li>
+      <li><strong>"Ask LOOP" Natural Language Assistant:</strong> Allows product managers to query customer feedback using plain English, citing exact feedback IDs as evidence.</li>
+      <li><strong>Multi-Channel Ingestion & CSV Import:</strong> Supports manual feedback submission, bulk CSV uploads with column validation, and realistic test stream generators.</li>
+      <li><strong>Settings & Preferences Modal:</strong> Comprehensive in-app modal allowing live name and email updates, 1-click theme switching (Dark/Light), alert threshold toggles, and workspace management.</li>
+      <li><strong>Multi-Tenant Workspace & RBAC:</strong> Strict data isolation by <code>workspaceId</code> with three role tiers: Administrator, Analyst, and Viewer.</li>
+    </ul>
+
+    <h2>5. Security & Reliability Highlights</h2>
+    <p>
+      The platform implements enterprise-grade security practices:
+    </p>
+    <ul>
+      <li><strong>Stateless Authentication:</strong> User credentials are protected using salted <code>bcryptjs</code> hashing. Sessions are maintained via cryptographically signed JWT tokens stored in <code>HttpOnly</code>, <code>SameSite=Lax</code> cookies to prevent client-side script tampering.</li>
+      <li><strong>SQL Injection Immunity:</strong> All database queries are executed through Prisma ORM's parameterized engine, completely eliminating SQL injection vectors.</li>
+      <li><strong>Resilient AI Engine:</strong> If the Gemini API experiences network timeouts or rate limits, LOOP automatically triggers its local heuristic synthesis engine, ensuring zero downtime for users.</li>
+    </ul>
+
+    <h2>6. Conclusion</h2>
+    <p>
+      LOOP provides an end-to-end modern solution for product organizations seeking to replace fragmented feedback spreadsheets with automated, AI-driven customer intelligence. The application is production-verified, fully typed with TypeScript, and pre-configured for continuous deployment on Vercel.
+    </p>
+
+    <div class="footer">
+      <p><strong>LOOP Project Documentation</strong> • Built with Next.js, Prisma & Google Gemini AI • Author: Shrutipaliwal718</p>
+    </div>
+  </div>
+
+</body>
+</html>
