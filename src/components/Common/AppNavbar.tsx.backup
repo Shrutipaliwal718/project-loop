@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -20,9 +20,6 @@ const AppNavbar = ({ onMenuClick, sidebarOpen }: AppNavbarProps) => {
   const router = useRouter();
 
   const [profileOpen, setProfileOpen] = useState(false);
-  const [notificationsOpen, setNotificationsOpen] = useState(false);
-  const [notificationCount, setNotificationCount] = useState(0);
-  const [hasNewFeedback, setHasNewFeedback] = useState(false);
   const [user, setUser] = useState<CurrentUser | null>(null);
 
   useEffect(() => {
@@ -50,52 +47,6 @@ const AppNavbar = ({ onMenuClick, sidebarOpen }: AppNavbarProps) => {
     loadUser();
   }, []);
 
-  useEffect(() => {
-    let active = true;
-
-    const checkFeedback = async () => {
-      try {
-        const response = await fetch("/api/feedback", {
-          credentials: "include",
-          cache: "no-store",
-        });
-
-        if (!response.ok || !active) return;
-
-        const data = await response.json();
-        const feedbackList = data?.feedbacks;
-
-        if (!Array.isArray(feedbackList) || feedbackList.length === 0) return;
-
-        const latestId = feedbackList[0]?.id;
-        if (!latestId) return;
-
-        const storedId = localStorage.getItem("loop_last_feedback_id");
-
-        if (!storedId) {
-          localStorage.setItem("loop_last_feedback_id", String(latestId));
-          return;
-        }
-
-        if (storedId !== String(latestId)) {
-          localStorage.setItem("loop_last_feedback_id", String(latestId));
-          setNotificationCount((count) => count + 1);
-          setHasNewFeedback(true);
-        }
-      } catch {
-        // Keep the existing navbar working if notification polling fails.
-      }
-    };
-
-    checkFeedback();
-
-    const interval = setInterval(checkFeedback, 10000);
-
-    return () => {
-      active = false;
-      clearInterval(interval);
-    };
-  }, []);
   const pageInfo = {
     "/dashboard": {
       label: "Overview",
@@ -252,10 +203,6 @@ const AppNavbar = ({ onMenuClick, sidebarOpen }: AppNavbarProps) => {
           <button
             type="button"
             aria-label="Notifications"
-            onClick={() => {
-              setNotificationsOpen((open) => !open);
-              setNotificationCount(0);
-            }}
             className="relative flex h-9 w-9 items-center justify-center rounded-lg text-slate-400 transition-all duration-300 hover:bg-white/[0.04] hover:text-cyan-300"
           >
             <svg
@@ -275,34 +222,8 @@ const AppNavbar = ({ onMenuClick, sidebarOpen }: AppNavbarProps) => {
               <path strokeLinecap="round" d="M10 21h4" />
             </svg>
 
-            {notificationCount > 0 && (
-              <span className="absolute -right-1 -top-1 flex min-h-[17px] min-w-[17px] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold leading-none text-white shadow-[0_0_10px_rgba(239,68,68,0.7)]">
-                {notificationCount}
-              </span>
-            )}
+            <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(25,230,209,0.8)]" />
           </button>
-
-          {notificationsOpen && (
-            <div className="absolute right-0 top-12 z-50 w-80 overflow-hidden rounded-xl border border-white/[0.08] bg-[#07111d] shadow-2xl shadow-black/40">
-              <div className="border-b border-white/[0.06] px-4 py-3">
-                <p className="text-sm font-semibold text-white">Notifications</p>
-                <p className="mt-0.5 text-[11px] text-slate-500">Recent workspace activity</p>
-              </div>
-              <div className="px-4 py-6">
-                {hasNewFeedback ? (
-                  <div>
-                    <p className="text-sm font-medium text-white">New feedback received</p>
-                    <p className="mt-1 text-xs text-slate-400">A new feedback entry was added to your workspace.</p>
-                  </div>
-                ) : (
-                  <div className="text-center">
-                    <p className="text-sm text-slate-300">No new notifications</p>
-                    <p className="mt-1 text-xs text-slate-500">You&apos;re all caught up.</p>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
 
           {/* Help */}
           <button
@@ -388,12 +309,3 @@ const AppNavbar = ({ onMenuClick, sidebarOpen }: AppNavbarProps) => {
 };
 
 export default AppNavbar;
-
-
-
-
-
-
-
-
-
