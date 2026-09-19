@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import LoopLogo from "../Common/LoopLogo";
 
@@ -340,7 +340,7 @@ function KpiCard({
 }) {
   return (
     <div
-      className={`group relative overflow-hidden rounded-xl border ${borderClass} bg-[#06111f]/95 p-4 shadow-[0_15px_45px_rgba(0,0,0,.22)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_50px_rgba(0,0,0,.35)]`}
+      className={`group relative overflow-hidden rounded-xl border ${borderClass} bg-[#06111f]/95 [html.light_&]:bg-white p-4 shadow-[0_15px_45px_rgba(0,0,0,.22)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_50px_rgba(0,0,0,.35)]`}
     >
       {/* Corner glow */}
 
@@ -357,9 +357,9 @@ function KpiCard({
         </div>
 
         <div className="min-w-0 pt-0.5">
-          <div className="text-[12px] font-medium text-slate-300">{title}</div>
+          <div className="text-[12px] font-medium text-slate-300 [html.light_&]:text-slate-700">{title}</div>
 
-          <div className="mt-1 text-[30px] font-semibold tracking-[-0.045em] text-slate-100">
+          <div className="mt-1 text-[30px] font-semibold tracking-[-0.045em] text-slate-100 [html.light_&]:text-slate-900">
             {value}
           </div>
 
@@ -371,10 +371,10 @@ function KpiCard({
                   : "font-semibold text-emerald-400"
               }
             >
-              {urgent ? "↓" : "↑"} {change}
+              {urgent ? "â†“" : "â†‘"} {change}
             </span>
 
-            <span className="text-slate-500">{changeLabel}</span>
+            <span className="text-slate-500 [html.light_&]:text-slate-500">{changeLabel}</span>
           </div>
         </div>
       </div>
@@ -402,14 +402,14 @@ function SentimentBar({
   return (
     <div>
       <div className="mb-1.5 flex items-center justify-between">
-        <span className="text-[11px] text-slate-400">{label}</span>
+        <span className="text-[11px] text-slate-400 [html.light_&]:text-slate-600">{label}</span>
 
-        <span className="text-[11px] font-semibold text-slate-200">
+        <span className="text-[11px] font-semibold text-slate-200 [html.light_&]:text-slate-800">
           {value}
         </span>
       </div>
 
-      <div className="h-[7px] overflow-hidden rounded-full bg-[#101d31]">
+      <div className="h-[7px] overflow-hidden rounded-full bg-[#101d31] [html.light_&]:bg-slate-200">
         <div
           className={`h-full rounded-full ${barClass} transition-all duration-1000`}
           style={{ width }}
@@ -443,7 +443,7 @@ export default function AnalyticsPreview() {
   return (
     <section
       id="preview"
-      className="relative overflow-hidden bg-[#01071a] px-4 py-20 text-white sm:px-6 lg:px-8 lg:py-24"
+      className="relative overflow-hidden bg-[#01071a] [html.light_&]:bg-slate-50 px-4 py-20 text-white [html.light_&]:text-slate-900 sm:px-6 lg:px-8 lg:py-24"
     >
       {/* =====================================================
           BACKGROUND
@@ -466,11 +466,11 @@ export default function AnalyticsPreview() {
           Customer intelligence dashboard
         </div>
 
-        <h2 className="mt-1 text-[32px] font-semibold tracking-[-0.045em] text-slate-100 sm:text-[38px] lg:text-[40px]">
+        <h2 className="mt-1 text-[32px] font-semibold tracking-[-0.045em] text-slate-100 [html.light_&]:text-slate-900 sm:text-[38px] lg:text-[40px]">
           Feedback overview
         </h2>
 
-        <p className="mt-1 text-[15px] text-slate-300 sm:text-[17px]">
+        <p className="mt-1 text-[15px] text-slate-300 [html.light_&]:text-slate-700 sm:text-[17px]">
           What changed in your customer voice this month
         </p>
       </div>
@@ -480,7 +480,7 @@ export default function AnalyticsPreview() {
          ===================================================== */}
 
       <div className="relative z-10 mx-auto w-full max-w-[1480px]">
-        <div className="relative overflow-hidden rounded-[14px] border border-violet-500/60 bg-[#020a1a] shadow-[0_0_70px_rgba(38,169,255,.06),0_30px_100px_rgba(0,0,0,.55)]">
+        <div className="relative overflow-hidden rounded-[14px] border border-violet-500/60 bg-[#020a1a] [html.light_&]:bg-white shadow-[0_0_70px_rgba(38,169,255,.06),0_30px_100px_rgba(0,0,0,.55)]">
           {/* cyan edge */}
 
           <div className="pointer-events-none absolute inset-0 rounded-[14px] ring-1 ring-cyan-400/40" />
@@ -494,14 +494,14 @@ export default function AnalyticsPreview() {
                 SIDEBAR
                ================================================= */}
 
-            <aside className="hidden w-[272px] shrink-0 border-r border-[#172640] bg-[#020b1c] md:flex md:flex-col">
+            <aside className="hidden w-[272px] shrink-0 border-r border-[#172640] [html.light_&]:border-slate-300 bg-[#020b1c] [html.light_&]:bg-white md:flex md:flex-col">
               {/* Logo */}
 
-              <div className="flex h-[104px] items-center border-b border-[#172640] px-7">
+              <div className="flex h-[104px] items-center border-b border-[#172640] [html.light_&]:border-slate-300 px-7">
                 <div className="flex items-center gap-3">
                   <LoopLogo />
                   <div>
-                    <div className="text-[27px] font-semibold tracking-[-0.04em] text-slate-100">
+                    <div className="text-[27px] font-semibold tracking-[-0.04em] text-slate-100 [html.light_&]:text-slate-900">
                       LOOP
                     </div>
 
@@ -522,7 +522,7 @@ export default function AnalyticsPreview() {
                       className={`flex h-[44px] items-center gap-4 rounded-xl px-4 transition-all duration-300 ${
                         item.active
                           ? "bg-gradient-to-r from-cyan-400 to-cyan-500 text-[#02101c] shadow-[0_0_25px_rgba(25,230,209,.12)]"
-                          : "text-slate-300 hover:bg-white/[0.035] hover:text-white"
+                          : "text-slate-300 [html.light_&]:text-slate-700 hover:bg-white/[0.035] hover:text-white [html.light_&]:text-slate-900"
                       }`}
                     >
                       <Icon name={item.icon} size={22} strokeWidth={1.6} />
@@ -537,7 +537,7 @@ export default function AnalyticsPreview() {
 
               {/* Workspace */}
 
-              <div className="mt-9 border-t border-[#172640] px-6 pt-6">
+              <div className="mt-9 border-t border-[#172640] [html.light_&]:border-slate-300 px-6 pt-6">
                 <div className="mb-5 text-[11px] font-medium uppercase tracking-[0.06em] text-blue-200/80">
                   Workspace
                 </div>
@@ -546,7 +546,7 @@ export default function AnalyticsPreview() {
                   <div className="flex items-center gap-3">
                     <Icon name="users" size={25} />
 
-                    <span className="text-[14px] font-medium text-slate-200">
+                    <span className="text-[14px] font-medium text-slate-200 [html.light_&]:text-slate-800">
                       Acme Product Team
                     </span>
                   </div>
@@ -564,7 +564,7 @@ export default function AnalyticsPreview() {
                   <div className="relative">
                     <Icon name="spark" size={29} strokeWidth={1.5} />
 
-                    <div className="mt-4 text-[13px] font-semibold text-slate-100">
+                    <div className="mt-4 text-[13px] font-semibold text-slate-100 [html.light_&]:text-slate-900">
                       Unlock deeper insights
                     </div>
 
@@ -581,18 +581,18 @@ export default function AnalyticsPreview() {
 
               {/* User */}
 
-              <div className="border-t border-[#172640] px-6 py-5">
+              <div className="border-t border-[#172640] [html.light_&]:border-slate-300 px-6 py-5">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-full border border-blue-500/50 bg-blue-500/20 text-[18px] font-medium text-white">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-full border border-blue-500/50 bg-blue-500/20 text-[18px] font-medium text-white [html.light_&]:text-slate-900">
                     P
                   </div>
 
                   <div className="min-w-0 flex-1">
-                    <div className="text-[13px] font-medium text-slate-200">
+                    <div className="text-[13px] font-medium text-slate-200 [html.light_&]:text-slate-800">
                       Priya Sharma
                     </div>
 
-                    <div className="mt-1 text-[11px] text-slate-500">Admin</div>
+                    <div className="mt-1 text-[11px] text-slate-500 [html.light_&]:text-slate-500">Admin</div>
                   </div>
 
                   <Icon name="chevron" size={16} />
@@ -604,17 +604,17 @@ export default function AnalyticsPreview() {
                 MAIN AREA
                ================================================= */}
 
-            <main className="min-w-0 flex-1 bg-[#020a19]">
+            <main className="min-w-0 flex-1 bg-[#020a19] [html.light_&]:bg-white">
               {/* Top bar */}
 
-              <div className="flex h-[70px] items-center border-b border-[#172640] px-4 sm:px-6 lg:px-8">
-                <div className="mx-auto flex h-[34px] w-[310px] items-center justify-center rounded-lg border border-[#172640] bg-[#071226] text-[12px] text-blue-100/70 shadow-inner sm:w-[340px]">
-                  <span className="mr-1 text-slate-500">⌕</span>
+              <div className="flex h-[70px] items-center border-b border-[#172640] [html.light_&]:border-slate-300 px-4 sm:px-6 lg:px-8">
+                <div className="mx-auto flex h-[34px] w-[310px] items-center justify-center rounded-lg border border-[#172640] [html.light_&]:border-slate-300 bg-[#071226] [html.light_&]:bg-slate-50 text-[12px] text-blue-100/70 shadow-inner sm:w-[340px]">
+                  <span className="mr-1 text-slate-500 [html.light_&]:text-slate-500">âŒ•</span>
                   app.loop.ai / overview
                 </div>
 
                 <div className="ml-auto flex items-center gap-4">
-                  <div className="hidden items-center gap-2 text-[11px] text-slate-300 sm:flex">
+                  <div className="hidden items-center gap-2 text-[11px] text-slate-300 [html.light_&]:text-slate-700 sm:flex">
                     <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,.8)]" />
                     Live intelligence
                   </div>
@@ -692,10 +692,10 @@ export default function AnalyticsPreview() {
                 <div className="mt-3 grid gap-3 xl:grid-cols-[1.55fr_1fr]">
                   {/* Sentiment movement */}
 
-                  <div className="rounded-xl border border-[#18304e] bg-[#031020] p-5">
+                  <div className="rounded-xl border border-[#18304e] [html.light_&]:border-slate-300 bg-[#031020] [html.light_&]:bg-white p-5">
                     <div className="flex items-start justify-between">
                       <div>
-                        <h3 className="text-[15px] font-semibold text-slate-100">
+                        <h3 className="text-[15px] font-semibold text-slate-100 [html.light_&]:text-slate-900">
                           Sentiment movement
                         </h3>
 
@@ -705,7 +705,7 @@ export default function AnalyticsPreview() {
                       </div>
 
                       <div className="rounded-full bg-emerald-400/[0.09] px-3 py-2 text-[11px] font-semibold text-emerald-300">
-                        Improving ↗
+                        Improving â†—
                       </div>
                     </div>
 
@@ -717,7 +717,7 @@ export default function AnalyticsPreview() {
                       <div className="absolute inset-0 flex flex-col justify-between">
                         {[100, 75, 50, 25, 0].map((value) => (
                           <div key={value} className="flex items-center gap-3">
-                            <span className="w-7 text-[10px] text-slate-500">
+                            <span className="w-7 text-[10px] text-slate-500 [html.light_&]:text-slate-500">
                               {value}%
                             </span>
 
@@ -749,11 +749,11 @@ export default function AnalyticsPreview() {
                       </div>
 
                       <div className="absolute bottom-[-25px] left-[48px] right-2 flex justify-between">
-                        <span className="text-[10px] text-slate-400">
+                        <span className="text-[10px] text-slate-400 [html.light_&]:text-slate-600">
                           30 days ago
                         </span>
 
-                        <span className="text-[10px] text-slate-400">
+                        <span className="text-[10px] text-slate-400 [html.light_&]:text-slate-600">
                           Today
                         </span>
                       </div>
@@ -762,8 +762,8 @@ export default function AnalyticsPreview() {
 
                   {/* What customers feel */}
 
-                  <div className="rounded-xl border border-[#18304e] bg-[#031020] p-5">
-                    <h3 className="text-[15px] font-semibold text-slate-100">
+                  <div className="rounded-xl border border-[#18304e] [html.light_&]:border-slate-300 bg-[#031020] [html.light_&]:bg-white p-5">
+                    <h3 className="text-[15px] font-semibold text-slate-100 [html.light_&]:text-slate-900">
                       What customers feel
                     </h3>
 
@@ -824,10 +824,10 @@ export default function AnalyticsPreview() {
                 <div className="mt-3 grid gap-3 lg:grid-cols-3">
                   {/* TOP THEMES */}
 
-                  <div className="rounded-xl border border-[#18304e] bg-[#031020] p-5">
+                  <div className="rounded-xl border border-[#18304e] [html.light_&]:border-slate-300 bg-[#031020] [html.light_&]:bg-white p-5">
                     <div className="flex items-start justify-between">
                       <div>
-                        <h3 className="text-[15px] font-semibold text-slate-100">
+                        <h3 className="text-[15px] font-semibold text-slate-100 [html.light_&]:text-slate-900">
                           Top themes
                         </h3>
 
@@ -886,10 +886,10 @@ export default function AnalyticsPreview() {
 
                   {/* EMERGING ISSUE */}
 
-                  <div className="rounded-xl border border-[#18304e] bg-[#031020] p-5">
+                  <div className="rounded-xl border border-[#18304e] [html.light_&]:border-slate-300 bg-[#031020] [html.light_&]:bg-white p-5">
                     <div className="flex items-start justify-between">
                       <div>
-                        <h3 className="text-[15px] font-semibold text-slate-100">
+                        <h3 className="text-[15px] font-semibold text-slate-100 [html.light_&]:text-slate-900">
                           Emerging issue
                         </h3>
 
@@ -909,7 +909,7 @@ export default function AnalyticsPreview() {
                       </div>
 
                       <div className="min-w-0 flex-1">
-                        <div className="text-[12px] font-semibold leading-5 text-slate-200">
+                        <div className="text-[12px] font-semibold leading-5 text-slate-200 [html.light_&]:text-slate-800">
                           App performance on
                           <br />
                           low-end devices
@@ -918,16 +918,16 @@ export default function AnalyticsPreview() {
 
                       <div className="text-right">
                         <div className="text-[14px] font-bold text-emerald-400">
-                          ↑ 32%
+                          â†‘ 32%
                         </div>
 
-                        <div className="mt-1 text-[9px] text-slate-500">
+                        <div className="mt-1 text-[9px] text-slate-500 [html.light_&]:text-slate-500">
                           vs last 7 days
                         </div>
                       </div>
                     </div>
 
-                    <div className="mt-5 rounded-lg border border-[#17304d] bg-[#071426] p-3">
+                    <div className="mt-5 rounded-lg border border-[#17304d] [html.light_&]:border-slate-300 bg-[#071426] [html.light_&]:bg-slate-50 p-3">
                       <p className="text-[11px] leading-5 text-blue-100/70">
                         Customers are reporting crashes and slow loading on
                         budget devices.
@@ -941,10 +941,10 @@ export default function AnalyticsPreview() {
 
                   {/* RECENT ACTION SIGNALS */}
 
-                  <div className="rounded-xl border border-[#18304e] bg-[#031020] p-5">
+                  <div className="rounded-xl border border-[#18304e] [html.light_&]:border-slate-300 bg-[#031020] [html.light_&]:bg-white p-5">
                     <div className="flex items-start justify-between">
                       <div>
-                        <h3 className="text-[15px] font-semibold text-slate-100">
+                        <h3 className="text-[15px] font-semibold text-slate-100 [html.light_&]:text-slate-900">
                           Recent action signals
                         </h3>
 
@@ -1039,13 +1039,13 @@ function ThemeRow({
       </div>
 
       <div className="min-w-0 flex-1">
-        <div className="truncate text-[11px] font-medium text-slate-300">
+        <div className="truncate text-[11px] font-medium text-slate-300 [html.light_&]:text-slate-700">
           {label}
         </div>
       </div>
 
       <div className="hidden w-[92px] sm:block">
-        <div className="h-[7px] overflow-hidden rounded-full bg-[#112039]">
+        <div className="h-[7px] overflow-hidden rounded-full bg-[#112039] [html.light_&]:bg-slate-200">
           <div
             className="h-full rounded-full bg-gradient-to-r from-cyan-400 to-cyan-300"
             style={{ width }}
@@ -1053,7 +1053,7 @@ function ThemeRow({
         </div>
       </div>
 
-      <div className="w-[42px] text-right text-[10px] font-medium text-slate-300">
+      <div className="w-[42px] text-right text-[10px] font-medium text-slate-300 [html.light_&]:text-slate-700">
         {value}
       </div>
     </div>
@@ -1088,11 +1088,11 @@ function ActionRow({
       </div>
 
       <div className="min-w-0 flex-1">
-        <div className="truncate text-[11px] font-medium text-slate-200">
+        <div className="truncate text-[11px] font-medium text-slate-200 [html.light_&]:text-slate-800">
           {title}
         </div>
 
-        <div className="mt-0.5 text-[9px] text-slate-500">{mentions}</div>
+        <div className="mt-0.5 text-[9px] text-slate-500 [html.light_&]:text-slate-500">{mentions}</div>
       </div>
 
       <div
@@ -1103,3 +1103,4 @@ function ActionRow({
     </div>
   );
 }
+

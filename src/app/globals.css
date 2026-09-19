@@ -98,34 +98,37 @@ html.light {
     Bright cyan from dark mode becomes deeper teal.
   */
 
-  --loop-cyan: #0d9488;
-  --loop-blue: #2563eb;
-  --loop-purple: #7c3aed;
-  --loop-violet: #9333ea;
+  --loop-cyan: #008f83;
+  --loop-blue: #0878c9;
+  --loop-purple: #6d3fd1;
+  --loop-violet: #a43fc4;
 
-  --loop-green: #16a34a;
-  --loop-amber: #d97706;
-  --loop-red: #e11d48;
+  --loop-green: #15803d;
+  --loop-amber: #b45309;
+  --loop-red: #dc3157;
 
   /* Very subtle light-mode glow */
-  --loop-cyan-glow: rgba(13, 148, 136, 0.08);
-  --loop-blue-glow: rgba(37, 99, 235, 0.08);
-  --loop-purple-glow: rgba(124, 58, 237, 0.08);
-  --loop-red-glow: rgba(225, 29, 72, 0.07);
+  --loop-cyan-glow: rgba(0, 143, 131, 0.08);
+  --loop-blue-glow: rgba(8, 120, 201, 0.08);
+  --loop-purple-glow: rgba(109, 63, 209, 0.08);
+  --loop-red-glow: rgba(220, 49, 87, 0.07);
 
   /* Light-mode shadows */
-  --loop-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.08), 0 4px 6px -2px rgba(15, 23, 42, 0.03);
-  --loop-shadow-small: 0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px -1px rgba(15, 23, 42, 0.04);
-  --loop-shadow-cyan: 0 4px 20px rgba(13, 148, 136, 0.12);
-  --loop-shadow-purple: 0 4px 20px rgba(124, 58, 237, 0.12);
+  --loop-shadow: 0 20px 50px rgba(15, 23, 42, 0.1);
+
+  --loop-shadow-small: 0 8px 25px rgba(15, 23, 42, 0.08);
+
+  --loop-shadow-cyan: 0 0 30px rgba(0, 143, 131, 0.08);
+
+  --loop-shadow-purple: 0 0 30px rgba(109, 63, 209, 0.08);
 
   /* Dashboard */
-  --loop-chart-grid: #f1f5f9;
-  --loop-chart-text: #64748b;
+  --loop-chart-grid: rgba(15, 23, 42, 0.08);
+  --loop-chart-text: #475569;
 
-  /* Logo */
-  --loop-logo-primary: #0d9488;
-  --loop-logo-secondary: #2563eb;
+  /* Darker logo */
+  --loop-logo-primary: #008f83;
+  --loop-logo-secondary: #0878c9;
 }
 
 /* =========================================================
@@ -332,158 +335,18 @@ html.light::-webkit-scrollbar-thumb:hover {
 }
 
 /* =========================================================
-   LIGHT MODE — COMPREHENSIVE OVERRIDES
+   LIGHT MODE — COMMON DARK TAILWIND OVERRIDES
    ---------------------------------------------------------
-   Seamlessly transforms all hard-coded dark classes into
-   clean, beautiful, high-contrast light mode styling.
-   Dark mode remains 100% unaltered.
+   This helps existing LOOP components that still contain
+   some hard-coded dark Tailwind classes.
    ========================================================= */
 
-/* Body, main pages & layout */
-html.light,
-html.light body,
-html.light .loop-page {
-  background-color: var(--loop-bg) !important;
-  color: var(--loop-text) !important;
-}
-
-/* Page, section & full-width backgrounds */
-html.light .bg-\[\#010711\],
-html.light .bg-\[\#01071a\],
-html.light .bg-\[\#02070d\],
-html.light .bg-\[\#020711\],
-html.light .bg-\[\#020a19\],
-html.light .bg-\[\#020a1a\],
-html.light .bg-\[\#020b1c\],
 html.light .bg-\[\#030912\],
-html.light .bg-\[\#031020\] {
-  background-color: var(--loop-bg) !important;
-}
-
-/* Translucent floating headers, sidebars & mobile menus */
-html.light header,
-html.light aside,
-html.light .bg-\[\#020812\]\/95,
-html.light .bg-\[\#030912\]\/90,
-html.light .bg-\[\#030912\]\/95,
-html.light .bg-\[\#030912\]\/98,
-html.light .bg-\[\#06111f\]\/95 {
-  background-color: rgba(255, 255, 255, 0.94) !important;
-  backdrop-filter: blur(20px) !important;
-  -webkit-backdrop-filter: blur(20px) !important;
-}
-
-/* Card, panel, dropdown & surface backgrounds */
-html.light .bg-\[\#04131d\],
 html.light .bg-\[\#050b14\],
-html.light .bg-\[\#050d19\],
-html.light .bg-\[\#050d19\]\/80,
-html.light .bg-\[\#050d19\]\/98,
 html.light .bg-\[\#060d17\],
-html.light .bg-\[\#060e18\],
-html.light .bg-\[\#061322\]\/90,
 html.light .bg-\[\#07101c\],
-html.light .bg-\[\#07111e\]\/90,
-html.light .bg-\[\#07111f\],
-html.light .bg-\[\#07121e\],
-html.light .bg-\[\#07121e\]\/90,
-html.light .bg-\[\#071226\],
-html.light .bg-\[\#071426\],
-html.light .bg-\[\#071522\],
-html.light .bg-\[\#08131f\],
-html.light .bg-\[\#091523\],
-html.light .bg-\[\#091523\]\/70,
-html.light .bg-\[\#091523\]\/75,
-html.light .bg-\[\#091523\]\/80,
-html.light .bg-\[\#0a1725\],
-html.light .bg-\[\#0a1725\]\/75,
-html.light .bg-\[\#0b1726\],
-html.light .bg-\[\#0b1827\]\/90,
-html.light .bg-\[\#0c1b2b\],
-html.light .bg-\[\#101d31\],
-html.light .bg-\[\#112039\],
-html.light .bg-\[\#11233b\],
-html.light .bg-\[\#14263b\],
-html.light .bg-\[\#17142f\] {
+html.light .bg-\[\#091523\] {
   background-color: var(--loop-surface) !important;
-}
-
-/* Subtle inner boxes & translucent panels */
-html.light .bg-\[\#030912\]\/40,
-html.light .bg-\[\#030912\]\/45,
-html.light .bg-\[\#030912\]\/70 {
-  background-color: rgba(241, 245, 249, 0.85) !important;
-}
-
-/* Hover backgrounds */
-html.light .hover\:bg-\[\#07111f\]:hover,
-html.light .hover\:bg-\[\#0c1b2b\]:hover {
-  background-color: var(--loop-bg-secondary) !important;
-}
-
-/* Translucent white overlay backgrounds */
-html.light .bg-white\/5,
-html.light .bg-white\/10,
-html.light .bg-white\/20,
-html.light .bg-white\/\[0\.015\],
-html.light .bg-white\/\[0\.018\],
-html.light .bg-white\/\[0\.02\],
-html.light .bg-white\/\[0\.025\],
-html.light .bg-white\/\[0\.03\],
-html.light .bg-white\/\[0\.035\],
-html.light .bg-white\/\[0\.04\],
-html.light .bg-white\/\[0\.05\],
-html.light .bg-white\/\[0\.055\],
-html.light .bg-white\/\[0\.06\],
-html.light .bg-white\/\[0\.08\],
-html.light .bg-white\/\[0\.1\] {
-  background-color: rgba(15, 23, 42, 0.04) !important;
-}
-
-html.light .hover\:bg-white\/\[0\.025\]:hover,
-html.light .hover\:bg-white\/\[0\.035\]:hover,
-html.light .hover\:bg-white\/\[0\.04\]:hover,
-html.light .hover\:bg-white\/\[0\.05\]:hover,
-html.light .hover\:bg-white\/\[0\.08\]:hover {
-  background-color: rgba(15, 23, 42, 0.075) !important;
-}
-
-/* White borders -> subtle dark borders */
-html.light .border-white,
-html.light .border-white\/5,
-html.light .border-white\/6,
-html.light .border-white\/8,
-html.light .border-white\/10,
-html.light .border-white\/15,
-html.light .border-white\/20,
-html.light .border-white\/\[0\.04\],
-html.light .border-white\/\[0\.05\],
-html.light .border-white\/\[0\.06\],
-html.light .border-white\/\[0\.07\],
-html.light .border-white\/\[0\.08\],
-html.light .border-white\/\[0\.09\],
-html.light .border-white\/\[0\.1\],
-html.light .border-white\/\[0\.11\],
-html.light .border-white\/\[0\.12\],
-html.light .border-white\/\[0\.14\],
-html.light .border-white\/\[0\.16\] {
-  border-color: var(--loop-border) !important;
-}
-
-html.light .hover\:border-white\/\[0\.16\]:hover,
-html.light .hover\:border-white\/\[0\.06\]:hover,
-html.light .hover\:border-white\/\[0\.08\]:hover,
-html.light .hover\:border-white\/\[0\.2\]:hover {
-  border-color: var(--loop-border-strong) !important;
-}
-
-/* Typography contrast */
-html.light .text-white {
-  color: var(--loop-text) !important;
-}
-
-html.light .hover\:text-white:hover {
-  color: var(--loop-text) !important;
 }
 
 html.light .text-slate-100 {
@@ -506,329 +369,50 @@ html.light .text-slate-500 {
   color: var(--loop-text-subtle) !important;
 }
 
-html.light .text-slate-600 {
-  color: var(--loop-text-subtle) !important;
-}
+/* =========================================================
+   LIGHT MODE — WHITE BORDER OVERRIDES
+   ========================================================= */
 
-/* Preserve white text only on solid/gradient action buttons & badges */
-html.light button[class*="bg-gradient-to"] .text-white,
-html.light a[class*="bg-gradient-to"] .text-white,
-html.light button.bg-gradient-to-r,
-html.light a.bg-gradient-to-r,
-html.light .bg-teal-600,
-html.light .bg-teal-600 .text-white,
-html.light .bg-blue-600,
-html.light .bg-blue-600 .text-white,
-html.light .bg-indigo-600,
-html.light .bg-indigo-600 .text-white,
-html.light .bg-rose-500,
-html.light .bg-rose-500 .text-white,
-html.light .bg-red-500,
-html.light .bg-red-500 .text-white {
-  color: #ffffff !important;
-}
-
-/* Accent colors in light mode for readability */
-html.light .text-cyan-100,
-html.light .text-cyan-200,
-html.light .text-cyan-300,
-html.light .text-cyan-400,
-html.light .text-loop-cyan {
-  color: var(--loop-cyan) !important;
-}
-
-html.light .text-violet-300,
-html.light .text-violet-400,
-html.light .text-purple-300,
-html.light .text-purple-400,
-html.light .text-loop-purple,
-html.light .text-loop-violet {
-  color: var(--loop-purple) !important;
-}
-
-html.light .text-emerald-300,
-html.light .text-emerald-400,
-html.light .text-green-300,
-html.light .text-green-400,
-html.light .text-loop-green {
-  color: var(--loop-green) !important;
-}
-
-html.light .text-amber-300,
-html.light .text-amber-400,
-html.light .text-orange-300,
-html.light .text-orange-400,
-html.light .text-loop-amber {
-  color: var(--loop-amber) !important;
-}
-
-html.light .text-rose-300,
-html.light .text-rose-400,
-html.light .text-red-300,
-html.light .text-red-400,
-html.light .text-loop-red {
-  color: var(--loop-red) !important;
-}
-
-/* Accent background tints */
-html.light .bg-cyan-400\/10,
-html.light .bg-cyan-400\/\[0\.05\],
-html.light .bg-cyan-400\/\[0\.06\],
-html.light .bg-cyan-400\/\[0\.08\],
-html.light .bg-loop-cyan\/\[0\.025\],
-html.light .bg-loop-cyan\/\[0\.05\],
-html.light .bg-loop-cyan\/\[0\.08\] {
-  background-color: rgba(0, 143, 131, 0.08) !important;
-}
-
-html.light .bg-violet-400\/10,
-html.light .bg-violet-400\/\[0\.05\],
-html.light .bg-violet-400\/\[0\.06\],
-html.light .bg-loop-purple\/\[0\.08\] {
-  background-color: rgba(109, 63, 209, 0.08) !important;
-}
-
-html.light .bg-red-400\/10,
-html.light .bg-red-400\/\[0\.05\],
-html.light .bg-red-400\/\[0\.06\],
-html.light .bg-rose-500\/\[0\.14\] {
-  background-color: rgba(220, 49, 87, 0.08) !important;
-}
-
-html.light .bg-amber-400\/10,
-html.light .bg-amber-400\/\[0\.05\],
-html.light .bg-orange-500\/\[0\.12\],
-html.light .bg-loop-amber\/\[0\.08\] {
-  background-color: rgba(217, 119, 6, 0.08) !important;
-}
-
-/* Light mode card borders & surface refinement */
-html.light .border-cyan-400\/\[0\.12\],
-html.light .border-cyan-400\/\[0\.14\],
-html.light .border-cyan-400\/\[0\.16\],
-html.light .border-cyan-400\/10,
-html.light .border-cyan-400\/15,
-html.light .border-cyan-400\/20,
-html.light .border-cyan-400\/25,
-html.light .border-violet-400\/20,
-html.light .border-red-400\/20,
-html.light .border-red-400\/25 {
-  border-color: #e2e8f0 !important;
-}
-
-/* Progress bar tracks */
-html.light .bg-\[\#14263b\] {
-  background-color: #f1f5f9 !important;
-}
-
-/* Dirty grey box override */
-html.light .bg-black\/10 {
-  background-color: #f8fafc !important;
-  border-color: #e2e8f0 !important;
-}
-
-/* Sidebar navigation in Light mode */
-html.light aside a.border-cyan-400\/15 {
-  background-color: #f0fdfa !important;
-  border-color: #ccfbf1 !important;
-  color: #0f766e !important;
-  box-shadow: 0 1px 2px rgba(13, 148, 136, 0.05) !important;
-}
-
-html.light aside a.border-cyan-400\/15 span.text-cyan-300,
-html.light aside a.border-cyan-400\/15 span.text-cyan-400 {
-  color: #0d9488 !important;
-}
-
-html.light aside a.border-cyan-400\/15 div {
-  background-color: #ccfbf1 !important;
-  color: #0f766e !important;
-}
-
-/* Form inputs, textareas and selects */
-html.light input,
-html.light textarea,
-html.light select {
-  background-color: #ffffff !important;
-  border-color: rgba(15, 23, 42, 0.12) !important;
-  color: var(--loop-text) !important;
-}
-
-html.light input::placeholder,
-html.light textarea::placeholder {
-  color: var(--loop-text-subtle) !important;
-}
-
-html.light input:focus,
-html.light textarea:focus,
-html.light select:focus {
-  background-color: #ffffff !important;
-  border-color: var(--loop-cyan) !important;
-  box-shadow: 0 0 0 3px rgba(0, 143, 131, 0.12) !important;
-}
-
-/* Card elevations & clean shadows */
-html.light .shadow-2xl,
-html.light [class*="shadow-[0_20px_"],
-html.light [class*="shadow-[0_25px_"] {
-  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08), 0 2px 6px rgba(15, 23, 42, 0.04) !important;
-}
-
-html.light [class*="shadow-[0_10px_"],
-html.light [class*="shadow-[0_12px_"],
-html.light [class*="shadow-[0_16px_"] {
-  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(15, 23, 42, 0.04) !important;
-}
-
-/* Soften background glow orbs */
-html.light [class*="blur-3xl"],
-html.light [class*="blur-[100px]"],
-html.light [class*="blur-[120px]"],
-html.light [class*="blur-[130px]"],
-html.light [class*="blur-[140px]"] {
-  opacity: 0.35 !important;
-}
-
-/* Chart grid lines & axes */
-html.light .border-t.border-white\/\[0\.06\] {
+html.light .border-white\/5 {
   border-color: rgba(15, 23, 42, 0.06) !important;
 }
 
-/* Dark slate borders -> subtle light borders */
-html.light .border-slate-700,
-html.light .border-slate-700\/80,
-html.light .border-slate-800 {
-  border-color: var(--loop-border) !important;
-}
-
-/* Auth / Signup / Login Global Light Overrides */
-html.light [class*="authPage"] {
-  background: var(--loop-bg) !important;
-  color: var(--loop-text) !important;
-}
-
-html.light [class*="formWrapper"] {
-  background: #ffffff !important;
+html.light .border-white\/10 {
   border-color: rgba(15, 23, 42, 0.1) !important;
-  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08), 0 2px 6px rgba(15, 23, 42, 0.03) !important;
 }
 
-html.light [class*="metricPreview"] {
-  background: #ffffff !important;
-  border-color: rgba(15, 23, 42, 0.1) !important;
-  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.07) !important;
+html.light .border-white\/15 {
+  border-color: rgba(15, 23, 42, 0.15) !important;
 }
 
-html.light [class*="modeOption"] {
-  background: #f8fafc !important;
-  border-color: rgba(15, 23, 42, 0.12) !important;
-}
-
-html.light [class*="modeOptionActive"] {
-  background: rgba(0, 143, 131, 0.07) !important;
-  border-color: var(--loop-cyan) !important;
-}
-
-html.light [class*="backButton"] {
-  background: #ffffff !important;
-  border-color: rgba(15, 23, 42, 0.12) !important;
-  color: var(--loop-text-secondary) !important;
-}
-
-html.light [class*="backButton"]:hover {
-  background: #f1f5f9 !important;
-  color: var(--loop-text) !important;
-}
-
-/* Modals & Dropdown menus */
-html.light [role="menu"],
-html.light [role="dialog"] {
-  background-color: #ffffff !important;
-  border-color: rgba(15, 23, 42, 0.12) !important;
-  color: var(--loop-text) !important;
-  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.12) !important;
-}
-
-/* Tables & Lists in Light Mode */
-html.light table {
-  color: var(--loop-text) !important;
-}
-
-html.light th {
-  color: var(--loop-text-subtle) !important;
-  border-color: var(--loop-border) !important;
-}
-
-html.light td {
-  color: var(--loop-text) !important;
-  border-color: var(--loop-border) !important;
-}
-
-html.light tr:hover {
-  background-color: rgba(15, 23, 42, 0.02) !important;
+html.light .border-white\/20 {
+  border-color: rgba(15, 23, 42, 0.2) !important;
 }
 
 /* =========================================================
-   HELP MODAL & DROPDOWN LIGHT MODE ENHANCEMENTS
+   LIGHT MODE — WHITE BACKGROUNDS
+   Keep pure white elements white.
    ========================================================= */
 
-html.light .loop-modal-card {
-  background-color: #ffffff !important;
-  border-color: #e2e8f0 !important;
-  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.25) !important;
+html.light .bg-white\/5 {
+  background-color: rgba(15, 23, 42, 0.035) !important;
 }
 
-html.light .loop-modal-header,
-html.light .loop-modal-footer {
-  border-color: #f1f5f9 !important;
+html.light .bg-white\/10 {
+  background-color: rgba(15, 23, 42, 0.055) !important;
 }
 
-html.light .loop-modal-title {
-  color: #0f172a !important;
+html.light .bg-white\/20 {
+  background-color: rgba(15, 23, 42, 0.08) !important;
 }
 
-html.light .loop-modal-subtitle {
-  color: #64748b !important;
-}
+/* =========================================================
+   LIGHT MODE — GLOW REDUCTION
+   Bright dark-mode neon effects should become subtle.
+   ========================================================= */
 
-html.light .loop-modal-item {
-  background-color: #f8fafc !important;
-  border-color: #e2e8f0 !important;
-}
-
-html.light .loop-modal-desc {
-  color: #475569 !important;
-}
-
-html.light .loop-modal-item strong {
-  color: #0f172a !important;
-}
-
-/* Notifications dropdown light mode */
-html.light .bg-\[\#091523\] {
-  background-color: #ffffff !important;
-  border-color: #e2e8f0 !important;
-  box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.15) !important;
-}
-
-html.light .bg-\[\#091523\] p.text-white {
-  color: #0f172a !important;
-}
-
-html.light .bg-\[\#091523\] p.text-slate-200 {
-  color: #1e293b !important;
-}
-
-html.light .bg-\[\#091523\] p.text-slate-400 {
-  color: #64748b !important;
-}
-
-html.light .bg-\[\#091523\] div {
-  border-color: #f1f5f9 !important;
-}
-
-html.light .bg-\[\#091523\] a:hover {
-  background-color: #f8fafc !important;
+html.light [class*="shadow-[0_0_"] {
+  filter: saturate(0.85);
 }
 
 /* =========================================================
@@ -848,4 +432,64 @@ html.light .bg-\[\#091523\] a:hover {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* =========================================================
+   LANDING HERO — LIGHT MODE CONTRAST
+   ========================================================= */
+
+html.light section[class*="bg-[#030912]"] {
+  background-color: #ffffff !important;
+}
+
+html.light section[class*="bg-[#030912]"] .bg-[#020711] {
+  background-color: #f8fafc !important;
+}
+
+html.light section[class*="bg-[#030912]"] .bg-[#050d19],
+html.light section[class*="bg-[#030912]"] .bg-[#050d19]\/80,
+html.light section[class*="bg-[#030912]"] .bg-[#050d19]\/98 {
+  background-color: #ffffff !important;
+}
+
+html.light section[class*="bg-[#030912]"] .hover\:bg-[#07111f]:hover {
+  background-color: #f0fdfa !important;
+}
+
+html.light section[class*="bg-[#030912]"] .text-slate-100,
+html.light section[class*="bg-[#030912]"] .text-slate-200 {
+  color: #0f172a !important;
+}
+
+html.light section[class*="bg-[#030912]"] .text-slate-300 {
+  color: #1e293b !important;
+}
+
+html.light section[class*="bg-[#030912]"] .text-slate-400 {
+  color: #334155 !important;
+}
+
+html.light section[class*="bg-[#030912]"] .text-slate-500 {
+  color: #475569 !important;
+}
+
+html.light section[class*="bg-[#030912]"] .border-white\/\[0\.16\],
+html.light section[class*="bg-[#030912]"] .border-white\/\[0\.1\] {
+  border-color: rgba(15, 118, 110, 0.45) !important;
+}
+
+html.light section[class*="bg-[#030912]"] .bg-white\/\[0\.055\] {
+  background-color: #f0fdfa !important;
+}
+
+html.light section[class*="bg-[#030912]"] .bg-white\/\[0\.1\] {
+  background-color: rgba(15, 118, 110, 0.18) !important;
+}
+
+html.light section[class*="bg-[#030912]"] .hover\:text-white:hover {
+  color: #0f172a !important;
+}
+
+html.light section[class*="bg-[#030912]"] .shadow-\[0_10px_28px_rgba\(0\,0\,0\,0\.28\)\,0_3px_0_rgba\(0\,0\,0\,0\.45\)\] {
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12), 0 3px 0 rgba(15, 118, 110, 0.25) !important;
 }

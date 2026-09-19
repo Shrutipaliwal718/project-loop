@@ -1,10 +1,9 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import LoopIcon from "./LoopIcon";
 import LoopLogo from "./LoopLogo";
-import { getTheme, toggleTheme } from "@/lib/theme";
 
 const links = [
   { label: "Preview", href: "#preview" },
@@ -19,17 +18,8 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    setLightMode(getTheme() === "light");
-
-    const onThemeChange = () => {
-      setLightMode(getTheme() === "light");
-    };
-
-    window.addEventListener("loop-theme-change", onThemeChange);
-    return () => {
-      window.removeEventListener("loop-theme-change", onThemeChange);
-    };
-  }, []);
+    document.documentElement.classList.toggle("light", lightMode);
+  }, [lightMode]);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
@@ -50,7 +40,11 @@ export default function Navbar() {
           width: "100%",
           zIndex: 999999,
         }}
-        className="border-b border-white/[0.08] bg-[#020812]/95 backdrop-blur-2xl"
+        className={
+          lightMode
+            ? "border-b border-cyan-200 bg-white/95 backdrop-blur-2xl"
+            : "border-b border-white/[0.08] bg-[#020812]/95 backdrop-blur-2xl"
+        }
       >
         <div className="relative mx-auto flex h-[72px] w-full max-w-[1440px] items-center px-6 sm:px-8 lg:px-10 xl:px-12">
           {/* LOGO */}
@@ -63,11 +57,23 @@ export default function Navbar() {
             <LoopLogo size={40} />
 
             <div className="leading-none">
-              <div className="text-[21px] font-extrabold tracking-[-0.035em] text-white transition-colors duration-200 group-hover:text-cyan-300">
+              <div
+                className={
+                  lightMode
+                    ? "text-[21px] font-extrabold tracking-[-0.035em] text-slate-900 transition-colors duration-200 group-hover:text-cyan-700"
+                    : "text-[21px] font-extrabold tracking-[-0.035em] text-white transition-colors duration-200 group-hover:text-cyan-300"
+                }
+              >
                 LOOP
               </div>
 
-              <div className="mt-1 text-[7px] font-semibold tracking-[0.18em] text-slate-500">
+              <div
+                className={
+                  lightMode
+                    ? "mt-1 text-[7px] font-semibold tracking-[0.18em] text-slate-700"
+                    : "mt-1 text-[7px] font-semibold tracking-[0.18em] text-slate-500"
+                }
+              >
                 FEEDBACK INTELLIGENCE
               </div>
             </div>
@@ -80,11 +86,15 @@ export default function Navbar() {
               <a
                 key={link.label}
                 href={link.href}
-                className="group relative whitespace-nowrap px-1 py-2 text-[14px] font-semibold tracking-[-0.01em] text-slate-300 transition-colors duration-200 hover:text-white xl:text-[15px]"
+                className={
+                  lightMode
+                    ? "group relative whitespace-nowrap px-1 py-2 text-[14px] font-semibold tracking-[-0.01em] text-slate-900 transition-colors duration-200 hover:text-cyan-700 xl:text-[15px]"
+                    : "group relative whitespace-nowrap px-1 py-2 text-[14px] font-semibold tracking-[-0.01em] text-slate-300 transition-colors duration-200 hover:text-white xl:text-[15px]"
+                }
               >
                 {link.label}
 
-                <span className="absolute bottom-0 left-1/2 h-[2px] w-0 -translate-x-1/2 rounded-full bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 opacity-90 transition-all duration-300 group-hover:w-full" />
+                <span className="absolute bottom-0 left-1/2 h-[2px] w-0 -translate-x-1/2 rounded-full bg-gradient-to-r from-cyan-500 via-blue-500 to-violet-500 opacity-90 transition-all duration-300 group-hover:w-full" />
               </a>
             ))}
           </nav>
@@ -96,8 +106,12 @@ export default function Navbar() {
 
             <button
               type="button"
-              onClick={() => toggleTheme()}
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/[0.035] text-slate-300 transition-all duration-200 hover:-translate-y-0.5 hover:border-cyan-300/35 hover:bg-cyan-300/[0.06] hover:text-cyan-300"
+              onClick={() => setLightMode((value) => !value)}
+              className={
+                lightMode
+                  ? "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-cyan-400/50 bg-cyan-50 text-cyan-700 transition-all duration-200 hover:-translate-y-0.5 hover:border-cyan-500 hover:bg-cyan-100 hover:text-cyan-800"
+                  : "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/[0.035] text-slate-300 transition-all duration-200 hover:-translate-y-0.5 hover:border-cyan-300/35 hover:bg-cyan-300/[0.06] hover:text-cyan-300"
+              }
               aria-label={
                 lightMode ? "Switch to dark mode" : "Switch to light mode"
               }
@@ -109,7 +123,11 @@ export default function Navbar() {
 
             <Link
               href="/login"
-              className="whitespace-nowrap rounded-lg border border-transparent px-3 py-2.5 text-[14px] font-semibold text-slate-400 transition-all duration-300 hover:-translate-y-0.5 hover:border-cyan-300/25 hover:bg-cyan-300/[0.05] hover:text-cyan-300 hover:shadow-[0_0_20px_rgba(0,229,212,0.10)]"
+              className={
+                lightMode
+                  ? "whitespace-nowrap rounded-lg border border-transparent px-3 py-2.5 text-[14px] font-semibold text-slate-900 transition-all duration-300 hover:-translate-y-0.5 hover:border-cyan-400/50 hover:bg-cyan-50 hover:text-cyan-700 hover:shadow-[0_0_20px_rgba(0,180,170,0.10)]"
+                  : "whitespace-nowrap rounded-lg border border-transparent px-3 py-2.5 text-[14px] font-semibold text-slate-400 transition-all duration-300 hover:-translate-y-0.5 hover:border-cyan-300/25 hover:bg-cyan-300/[0.05] hover:text-cyan-300 hover:shadow-[0_0_20px_rgba(0,229,212,0.10)]"
+              }
             >
               Sign in
             </Link>
@@ -118,7 +136,11 @@ export default function Navbar() {
 
             <Link
               href="/signup"
-              className="whitespace-nowrap rounded-lg bg-gradient-to-r from-cyan-300 to-teal-400 px-4 py-2.5 text-[14px] font-bold text-[#031017] shadow-[0_0_25px_rgba(0,229,212,0.14)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_36px_rgba(0,229,212,0.28)]"
+              className={
+                lightMode
+                  ? "whitespace-nowrap rounded-lg border border-cyan-600/30 bg-gradient-to-r from-cyan-500 to-teal-500 px-4 py-2.5 text-[14px] font-bold text-slate-950 shadow-[0_0_25px_rgba(0,180,170,0.18)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_36px_rgba(0,180,170,0.30)]"
+                  : "whitespace-nowrap rounded-lg bg-gradient-to-r from-cyan-300 to-teal-400 px-4 py-2.5 text-[14px] font-bold text-[#031017] shadow-[0_0_25px_rgba(0,229,212,0.14)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_36px_rgba(0,229,212,0.28)]"
+              }
             >
               Get started
             </Link>
@@ -129,7 +151,11 @@ export default function Navbar() {
           <button
             type="button"
             onClick={() => setMenuOpen((value) => !value)}
-            className="ml-auto flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-white/[0.035] text-slate-300 transition-all duration-200 hover:border-cyan-300/30 hover:text-cyan-300 lg:hidden"
+            className={
+              lightMode
+                ? "ml-auto flex h-10 w-10 items-center justify-center rounded-lg border border-cyan-300/50 bg-cyan-50 text-slate-900 transition-all duration-200 hover:border-cyan-500 hover:bg-cyan-100 hover:text-cyan-700 lg:hidden"
+                : "ml-auto flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-white/[0.035] text-slate-300 transition-all duration-200 hover:border-cyan-300/30 hover:text-cyan-300 lg:hidden"
+            }
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
           >
@@ -140,11 +166,19 @@ export default function Navbar() {
         {/* MOBILE MENU */}
 
         <div
-          className={`border-t border-white/[0.07] bg-[#030912]/98 px-5 backdrop-blur-2xl transition-all duration-300 lg:hidden ${
-            menuOpen
-              ? "max-h-[600px] py-5 opacity-100"
-              : "pointer-events-none max-h-0 overflow-hidden py-0 opacity-0"
-          }`}
+          className={
+            lightMode
+              ? `border-t border-cyan-200 bg-white/98 px-5 backdrop-blur-2xl transition-all duration-300 lg:hidden ${
+                  menuOpen
+                    ? "max-h-[600px] py-5 opacity-100"
+                    : "pointer-events-none max-h-0 overflow-hidden py-0 opacity-0"
+                }`
+              : `border-t border-white/[0.07] bg-[#030912]/98 px-5 backdrop-blur-2xl transition-all duration-300 lg:hidden ${
+                  menuOpen
+                    ? "max-h-[600px] py-5 opacity-100"
+                    : "pointer-events-none max-h-0 overflow-hidden py-0 opacity-0"
+                }`
+          }
         >
           <nav className="mx-auto flex max-w-xl flex-col gap-1">
             {links.map((link) => (
@@ -152,19 +186,33 @@ export default function Navbar() {
                 key={link.label}
                 href={link.href}
                 onClick={() => setMenuOpen(false)}
-                className="rounded-lg px-3 py-3 text-[14px] font-semibold text-slate-300 transition-all duration-200 hover:bg-white/[0.04] hover:text-cyan-300"
+                className={
+                  lightMode
+                    ? "rounded-lg px-3 py-3 text-[14px] font-semibold text-slate-900 transition-all duration-200 hover:bg-cyan-50 hover:text-cyan-700"
+                    : "rounded-lg px-3 py-3 text-[14px] font-semibold text-slate-300 transition-all duration-200 hover:bg-white/[0.04] hover:text-cyan-300"
+                }
               >
                 {link.label}
               </a>
             ))}
 
-            <div className="mt-3 border-t border-white/[0.07] pt-4">
+            <div
+              className={
+                lightMode
+                  ? "mt-3 border-t border-cyan-200 pt-4"
+                  : "mt-3 border-t border-white/[0.07] pt-4"
+              }
+            >
               {/* MOBILE THEME */}
 
               <button
                 type="button"
-                onClick={() => toggleTheme()}
-                className="mb-3 flex w-full items-center justify-between rounded-lg border border-white/10 bg-white/[0.035] px-4 py-3 text-[14px] font-medium text-slate-300 transition hover:border-cyan-300/25 hover:text-cyan-300"
+                onClick={() => setLightMode((value) => !value)}
+                className={
+                  lightMode
+                    ? "mb-3 flex w-full items-center justify-between rounded-lg border border-cyan-300/50 bg-cyan-50 px-4 py-3 text-[14px] font-medium text-slate-900 transition hover:border-cyan-500 hover:text-cyan-700"
+                    : "mb-3 flex w-full items-center justify-between rounded-lg border border-white/10 bg-white/[0.035] px-4 py-3 text-[14px] font-medium text-slate-300 transition hover:border-cyan-300/25 hover:text-cyan-300"
+                }
               >
                 <span>{lightMode ? "Light mode" : "Dark mode"}</span>
 
@@ -177,7 +225,11 @@ export default function Navbar() {
                 <Link
                   href="/login"
                   onClick={() => setMenuOpen(false)}
-                  className="rounded-lg border border-white/10 px-4 py-3 text-center text-[14px] font-semibold text-slate-300 transition hover:border-cyan-300/25 hover:text-white"
+                  className={
+                    lightMode
+                      ? "rounded-lg border border-cyan-300/50 px-4 py-3 text-center text-[14px] font-semibold text-slate-900 transition hover:border-cyan-500 hover:bg-cyan-50 hover:text-cyan-700"
+                      : "rounded-lg border border-white/10 px-4 py-3 text-center text-[14px] font-semibold text-slate-300 transition hover:border-cyan-300/25 hover:text-white"
+                  }
                 >
                   Sign in
                 </Link>
@@ -187,7 +239,7 @@ export default function Navbar() {
                 <Link
                   href="/signup"
                   onClick={() => setMenuOpen(false)}
-                  className="rounded-lg bg-gradient-to-r from-cyan-300 to-teal-400 px-4 py-2.5 text-center text-[14px] font-bold text-[#031017]"
+                  className="rounded-lg border border-cyan-600/30 bg-gradient-to-r from-cyan-500 to-teal-500 px-4 py-2.5 text-center text-[14px] font-bold text-slate-950"
                 >
                   Get started
                 </Link>

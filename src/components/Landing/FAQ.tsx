@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 
@@ -110,7 +110,7 @@ function getAccentClasses(accent: string, open: boolean) {
     cyan: {
       border: open
         ? "border-loop-cyan/35"
-        : "border-white/[0.07] hover:border-loop-cyan/25",
+        : "border-white/[0.07] [html.light_&]:border-slate-300 hover:border-loop-cyan/25",
       icon: "text-loop-cyan",
       glow: open ? "shadow-[0_12px_40px_rgba(25,230,209,0.07)]" : "",
       dot: "bg-loop-cyan",
@@ -119,7 +119,7 @@ function getAccentClasses(accent: string, open: boolean) {
     blue: {
       border: open
         ? "border-loop-blue/35"
-        : "border-white/[0.07] hover:border-loop-blue/25",
+        : "border-white/[0.07] [html.light_&]:border-slate-300 hover:border-loop-blue/25",
       icon: "text-loop-blue",
       glow: open ? "shadow-[0_12px_40px_rgba(40,169,255,0.07)]" : "",
       dot: "bg-loop-blue",
@@ -128,7 +128,7 @@ function getAccentClasses(accent: string, open: boolean) {
     green: {
       border: open
         ? "border-loop-green/35"
-        : "border-white/[0.07] hover:border-loop-green/25",
+        : "border-white/[0.07] [html.light_&]:border-slate-300 hover:border-loop-green/25",
       icon: "text-loop-green",
       glow: open ? "shadow-[0_12px_40px_rgba(53,232,121,0.07)]" : "",
       dot: "bg-loop-green",
@@ -137,7 +137,7 @@ function getAccentClasses(accent: string, open: boolean) {
     purple: {
       border: open
         ? "border-loop-purple/35"
-        : "border-white/[0.07] hover:border-loop-purple/25",
+        : "border-white/[0.07] [html.light_&]:border-slate-300 hover:border-loop-purple/25",
       icon: "text-loop-purple",
       glow: open ? "shadow-[0_12px_40px_rgba(139,92,246,0.07)]" : "",
       dot: "bg-loop-purple",
@@ -146,7 +146,7 @@ function getAccentClasses(accent: string, open: boolean) {
     violet: {
       border: open
         ? "border-loop-violet/35"
-        : "border-white/[0.07] hover:border-loop-violet/25",
+        : "border-white/[0.07] [html.light_&]:border-slate-300 hover:border-loop-violet/25",
       icon: "text-loop-violet",
       glow: open ? "shadow-[0_12px_40px_rgba(196,92,255,0.07)]" : "",
       dot: "bg-loop-violet",
@@ -155,7 +155,7 @@ function getAccentClasses(accent: string, open: boolean) {
     orange: {
       border: open
         ? "border-loop-amber/35"
-        : "border-white/[0.07] hover:border-loop-amber/25",
+        : "border-white/[0.07] [html.light_&]:border-slate-300 hover:border-loop-amber/25",
       icon: "text-loop-amber",
       glow: open ? "shadow-[0_12px_40px_rgba(246,167,35,0.07)]" : "",
       dot: "bg-loop-amber",
@@ -164,7 +164,7 @@ function getAccentClasses(accent: string, open: boolean) {
     red: {
       border: open
         ? "border-loop-red/35"
-        : "border-white/[0.07] hover:border-loop-red/25",
+        : "border-white/[0.07] [html.light_&]:border-slate-300 hover:border-loop-red/25",
       icon: "text-loop-red",
       glow: open ? "shadow-[0_12px_40px_rgba(255,77,114,0.07)]" : "",
       dot: "bg-loop-red",
@@ -196,7 +196,7 @@ function FAQItem({
   return (
     <div
       className={`
-        overflow-hidden rounded-xl border bg-[#050d19]
+        overflow-hidden rounded-xl border bg-[#050d19] [html.light_&]:bg-white
         transition-all duration-300
         ${styles.border}
         ${styles.glow}
@@ -223,7 +223,7 @@ function FAQItem({
             `}
           />
 
-          <span className="text-[13px] font-medium leading-5 text-slate-100 sm:text-sm">
+          <span className="text-[13px] font-medium leading-5 text-slate-100 [html.light_&]:text-slate-900 sm:text-sm">
             {question}
           </span>
         </div>
@@ -242,12 +242,12 @@ function FAQItem({
         <div className="min-h-0 overflow-hidden">
           <div
             className={`
-              border-t border-white/[0.06]
+              border-t border-white/[0.06] [html.light_&]:border-slate-300
               px-5 pb-5 pt-4
               sm:px-6 sm:pb-5
             `}
           >
-            <p className="max-w-3xl text-[12px] leading-6 text-slate-400 sm:text-[13px]">
+            <p className="max-w-3xl text-[12px] leading-6 text-slate-400 [html.light_&]:text-slate-700 sm:text-[13px]">
               {answer}
             </p>
           </div>
@@ -273,7 +273,7 @@ export default function FAQ() {
       id="faqs"
       className="
         relative overflow-hidden
-        bg-[#030912]
+        bg-[#030912] [html.light_&]:bg-slate-50
         px-5 py-20
         sm:px-6
         lg:px-8 lg:py-24
@@ -332,7 +332,7 @@ export default function FAQ() {
             className="
               text-[25px] font-semibold
               tracking-[-0.025em]
-              text-white
+              text-white [html.light_&]:text-slate-900
               sm:text-[29px]
               lg:text-[32px]
             "
@@ -344,7 +344,7 @@ export default function FAQ() {
             className="
               mx-auto mt-3 max-w-xl
               text-[12px] leading-6
-              text-slate-400
+              text-slate-400 [html.light_&]:text-slate-700
               sm:text-[13px]
             "
           >
@@ -378,8 +378,8 @@ export default function FAQ() {
           className="
             mt-7 flex flex-col items-center justify-between
             gap-4 rounded-xl
-            border border-white/[0.07]
-            bg-[#050d19]
+            border border-white/[0.07] [html.light_&]:border-slate-300
+            bg-[#050d19] [html.light_&]:bg-white
             px-5 py-4
             sm:flex-row
             sm:px-6
@@ -398,11 +398,11 @@ export default function FAQ() {
             </div>
 
             <div>
-              <p className="text-[12px] font-medium text-slate-200">
+              <p className="text-[12px] font-medium text-slate-200 [html.light_&]:text-slate-800">
                 Still have questions?
               </p>
 
-              <p className="mt-0.5 text-[10px] text-slate-500">
+              <p className="mt-0.5 text-[10px] text-slate-500 [html.light_&]:text-slate-600">
                 Explore how LOOP closes the feedback loop.
               </p>
             </div>
@@ -441,3 +441,4 @@ export default function FAQ() {
     </section>
   );
 }
+

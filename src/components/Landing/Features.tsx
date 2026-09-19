@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 
@@ -143,7 +143,7 @@ function FeatureCard({
 }) {
   return (
     <div
-      className={`group relative overflow-hidden rounded-2xl border ${border} bg-[#050d19] p-5 shadow-[0_10px_30px_rgba(0,0,0,.25)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_45px_rgba(0,0,0,.48)]`}
+      className={`group relative overflow-hidden rounded-2xl border ${border} bg-[#050d19] [html.light_&]:bg-white p-5 shadow-[0_10px_30px_rgba(0,0,0,.25)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_45px_rgba(0,0,0,.48)]`}
     >
       {/* =================================================
           CORNER GLOW
@@ -185,12 +185,12 @@ function FeatureCard({
 
       <div className="relative mt-5">
         <div className="flex items-center gap-2">
-          <h3 className="text-[15px] font-semibold tracking-[-0.02em] text-white">
+          <h3 className="text-[15px] font-semibold tracking-[-0.02em] text-white [html.light_&]:text-slate-900">
             {title}
           </h3>
         </div>
 
-        <p className="mt-2 text-[11px] leading-[1.65] text-slate-400">
+        <p className="mt-2 text-[11px] leading-[1.65] text-slate-400 [html.light_&]:text-slate-700">
           {description}
         </p>
       </div>
@@ -242,7 +242,7 @@ function FeatureRow({
   color: string;
 }) {
   return (
-    <div className="group flex items-center gap-3 rounded-xl border border-white/[0.08] bg-[#050d19] px-4 py-3 transition-all duration-300 hover:-translate-y-0.5 hover:border-white/[0.16] hover:shadow-[0_10px_28px_rgba(0,0,0,.35)]">
+    <div className="group flex items-center gap-3 rounded-xl border border-white/[0.08] [html.light_&]:border-slate-300 bg-[#050d19] [html.light_&]:bg-white px-4 py-3 transition-all duration-300 hover:-translate-y-0.5 hover:border-white/[0.16] [html.light_&]:hover:border-slate-400 hover:shadow-[0_10px_28px_rgba(0,0,0,.35)]">
       <div
         className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
         style={{
@@ -254,9 +254,9 @@ function FeatureRow({
       </div>
 
       <div className="min-w-0">
-        <p className="text-[10px] font-semibold text-slate-100">{title}</p>
+        <p className="text-[10px] font-semibold text-slate-100 [html.light_&]:text-slate-900">{title}</p>
 
-        <p className="mt-0.5 text-[9px] leading-4 text-slate-500">{text}</p>
+        <p className="mt-0.5 text-[9px] leading-4 text-slate-500 [html.light_&]:text-slate-600">{text}</p>
       </div>
     </div>
   );
@@ -270,7 +270,7 @@ export default function Features() {
   return (
     <section
       id="features"
-      className="relative overflow-hidden bg-[#010711] py-16 text-white sm:py-20"
+      className="relative overflow-hidden bg-[#010711] [html.light_&]:bg-slate-50 py-16 text-white [html.light_&]:text-slate-900 sm:py-20"
     >
       {/* ===================================================
           BACKGROUND
@@ -308,14 +308,14 @@ export default function Features() {
             </span>
           </div>
 
-          <h2 className="mt-5 text-[32px] font-bold leading-[1.08] tracking-[-0.045em] text-slate-100 sm:text-[38px]">
+          <h2 className="mt-5 text-[32px] font-bold leading-[1.08] tracking-[-0.045em] text-slate-100 [html.light_&]:text-slate-900 sm:text-[38px]">
             Everything your team needs to
             <span className="block bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 bg-clip-text text-transparent">
               understand the customer voice.
             </span>
           </h2>
 
-          <p className="mx-auto mt-4 max-w-[690px] text-[13px] leading-6 text-slate-400 sm:text-[14px]">
+          <p className="mx-auto mt-4 max-w-[690px] text-[13px] leading-6 text-slate-400 [html.light_&]:text-slate-700 sm:text-[14px]">
             From raw feedback to AI-powered insights, LOOP gives every team the
             tools to discover what customers are saying and decide what to do
             next.
@@ -419,18 +419,18 @@ export default function Features() {
             BOTTOM CTA
            ================================================= */}
 
-        <div className="mt-7 flex flex-col items-center justify-between gap-4 rounded-2xl border border-white/[0.09] bg-[#050d19] px-5 py-4 shadow-[0_10px_30px_rgba(0,0,0,.22)] sm:flex-row sm:px-6">
+        <div className="mt-7 flex flex-col items-center justify-between gap-4 rounded-2xl border border-white/[0.09] [html.light_&]:border-slate-300 bg-[#050d19] [html.light_&]:bg-white px-5 py-4 shadow-[0_10px_30px_rgba(0,0,0,.22)] sm:flex-row sm:px-6">
           <div className="flex items-center gap-3">
             <div className="flex h-9 w-9 items-center justify-center rounded-full bg-cyan-400/[0.09] text-cyan-300">
               <Icon name="brain" size={18} />
             </div>
 
             <div>
-              <p className="text-[11px] font-semibold text-slate-100">
+              <p className="text-[11px] font-semibold text-slate-100 [html.light_&]:text-slate-900">
                 One platform. One customer voice.
               </p>
 
-              <p className="mt-0.5 text-[9px] text-slate-500">
+              <p className="mt-0.5 text-[9px] text-slate-500 [html.light_&]:text-slate-600">
                 Turn feedback into intelligence your team can act on.
               </p>
             </div>
@@ -450,3 +450,4 @@ export default function Features() {
     </section>
   );
 }
+
